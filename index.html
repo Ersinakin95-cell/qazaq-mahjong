@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v4.0</title>
-    <!-- Monetag Integration -->
+    <title>Qazaq Mahjong v4.1</title>
+    <!-- Monetag Official Tag Integration -->
     <script src="https://alwingulla.com/88/tag.min.js" data-zone="e5e4318e5ca58d6b7eb38b03155d67fb" async data-cfasync="false"></script>
     <meta name="monetag" content="e5e4318e5ca58d6b7eb38b03155d67fb">
     <style>
@@ -637,13 +637,13 @@
     <div id="ad-popup" class="ad-overlay hidden">
         <div class="ad-box">
             <div class="ad-header-bar">
-                <span>Monetag Демеуші Жарнама (v4.0)</span>
+                <span>Monetag Демеуші Жарнама</span>
                 <button class="ad-close-x" onclick="closeAdPopup(false)">✕</button>
             </div>
             <div style="padding: 15px; background: #f8fafc;">
                 <div style="font-weight: bold; font-size: 16px; color: #1e293b; margin-bottom: 8px;">🎁 Жарнаманы көріп, +50 монета алыңыз!</div>
                 <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Әр 5-ші деңгей сайын сыйлық монеталарға ие болыңыз.</div>
-                <button onclick="closeAdPopup(true)" style="background: #22c55e; color: #fff; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 14px; border:none; cursor:pointer; width:100%;">Жарнаманы көру (+50 🪙)</button>
+                <button onclick="triggerRealMonetagAd()" style="background: #22c55e; color: #fff; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 14px; border:none; cursor:pointer; width:100%;">Жарнаманы көру (+50 🪙)</button>
             </div>
         </div>
     </div>
@@ -870,10 +870,19 @@
 
     <script>
         const whatsappNum = "77000000000";
-        let coins = 100;
+
+        // Жадыдан деректерді жүктеу (Data Persistence)
+        let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
+        let currentLevel = parseInt(localStorage.getItem('qazaq_mahjong_level')) || 1;
+        let username = localStorage.getItem('qazaq_mahjong_username') || "Абылай хан";
         let diamonds = 5;
-        let currentLevel = 1;
-        let username = "Абылай хан";
+
+        function saveUserData() {
+            localStorage.setItem('qazaq_mahjong_coins', coins);
+            localStorage.setItem('qazaq_mahjong_level', currentLevel);
+            localStorage.setItem('qazaq_mahjong_username', username);
+        }
+
         let isBattleMode = false;
         let battleTimerInterval = null;
         let oppBattleInterval = null;
@@ -922,13 +931,18 @@
             }
         }
 
+        function triggerRealMonetagAd() {
+            document.getElementById('ad-popup').classList.add('hidden');
+            // Monetag негізгі жарнама тегіне бағыттау
+            window.open("https://alwingulla.com/88/tag.min.js", "_blank");
+            coins += 50;
+            saveUserData();
+            updateUI();
+            showToast("🎁 Жарнама үшін +50 монета берілді!");
+        }
+
         function closeAdPopup(watched) {
             document.getElementById('ad-popup').classList.add('hidden');
-            if (watched) {
-                coins += 50;
-                updateUI();
-                showToast("🎁 Жарнама үшін +50 монета берілді!");
-            }
         }
 
         const langData = {
@@ -980,6 +994,7 @@
             document.getElementById('user-name-display').innerText = username;
             document.getElementById('home-level-label').innerText = `${currentLevel}-ші Деңгей`;
             document.getElementById('lvl-badge-text').innerText = `${currentLevel}-ші`;
+            saveUserData();
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -999,6 +1014,7 @@
 
         function checkAdminCode(val) {
             username = val;
+            saveUserData();
             const adminPanel = document.getElementById('admin-panel');
             if (val === "Ersin 1995") {
                 adminPanel.classList.remove('hidden');
@@ -1231,12 +1247,14 @@
                 if (isBattleMode) {
                     coins += 20;
                     playSound(950, 0.3);
+                    updateUI();
                     showToast("🎉 Дуэльде жеңіске жеттіңіз! +20 🪙");
                     setTimeout(exitGame, 1500);
                 } else {
                     playSound(880, 0.3);
                     showToast("🎉 Келесі кезеңге өттіңіз!");
                     currentLevel++;
+                    updateUI();
                     
                     checkAndShowAdForLevel();
 
