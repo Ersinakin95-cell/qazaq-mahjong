@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v4.3</title>
-    <!-- Monetag Official Tag Integration -->
+    <title>Qazaq Mahjong v4.4</title>
+    <!-- Monetag Tag Integration -->
     <script src="https://alwingulla.com/88/tag.min.js" data-zone="e5e4318e5ca58d6b7eb38b03155d67fb" async data-cfasync="false"></script>
     <meta name="monetag" content="e5e4318e5ca58d6b7eb38b03155d67fb">
     <style>
@@ -470,7 +470,6 @@
             align-items: center;
         }
 
-        /* Тіп-тік пирамида қабаттары */
         .tile-stacked {
             position: absolute;
             width: 52px;
@@ -678,7 +677,7 @@
                 <div class="mode-card-arrow">›</div>
             </div>
 
-            <!-- Mode 2: Player Duel Battle -->
+            <!-- Mode 2: Player Duel Battle (Түзетілген Батырма) -->
             <div class="mode-card battle" onclick="startBattleGame()">
                 <div class="mode-card-left">
                     <div class="mode-card-icon">⚔️</div>
@@ -793,11 +792,11 @@
         </div>
     </div>
 
-    <!-- Jeti Qazyna Modal -->
+    <!-- Jeti Qazyna Modal (10-шы деңгейден жоғары бонустар) -->
     <div id="collection-modal" class="modal hidden">
         <div class="modal-card">
             <div class="modal-header">
-                <div class="modal-title">🏆 ЖЕТІ ҚАЗЫНА</div>
+                <div class="modal-title">🏆 ЖЕТІ ҚАЗЫНА (10+ Кезең)</div>
                 <button class="close-btn" onclick="closeModal('collection-modal')">✕</button>
             </div>
             <div id="qazyna-list"></div>
@@ -857,7 +856,7 @@
     <script>
         const whatsappNum = "77000000000";
 
-        // Monetag өзіңіздің Direct Link сілтемесін осы жерге қойыңыз
+        // Monetag тікелей жарнама сілтемесі
         const monetagDirectLink = "https://alwingulla.com/88/tag.min.js";
 
         let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
@@ -919,21 +918,14 @@
             }
         }
 
-        // Нақты жарнама ашу және Monetag-қа ақша түсіру
+        // Ақ экран қатесін болдырмайтын Monetag жарнама бағыттау логикасы
         function openMonetagAdLink() {
             document.getElementById('ad-popup').classList.add('hidden');
-            
-            // Нақты жарнаманы жаңа бетте ашу (Monetag Revenue)
-            const a = document.createElement('a');
-            a.href = monetagDirectLink;
-            a.target = "_blank";
-            a.rel = "noopener noreferrer";
-            a.click();
-
             coins += 50;
             saveUserData();
             updateUI();
             showToast("🎁 Жарнама ашылды! +50 монета берілді!");
+            window.location.href = monetagDirectLink;
         }
 
         function closeAdPopup() {
@@ -966,14 +958,15 @@
             if(event && event.target) event.target.classList.add('active');
         }
 
+        // Жеті Қазына бонусы тек 10 кезеңнен жоғары ашылады
         const jetiQazynaList = [
-            { req: 2, title: "Жүйрік ат", icon: "🐎", reward: 150, claimed: false },
-            { req: 4, title: "Құмай тазы", icon: "🐕", reward: 300, claimed: false },
-            { req: 6, title: "Берен мылтық", icon: "🏹", reward: 500, claimed: false },
-            { req: 8, title: "Пезді кездік", icon: "🗡️", reward: 800, claimed: false },
-            { req: 10, title: "Қыран бүркіт", icon: "🦅", reward: 1200, claimed: false },
-            { req: 12, title: "Ақ отау", icon: "⛺", reward: 2000, claimed: false },
-            { req: 15, title: "Сұлу әйел", icon: "👸", reward: 3500, claimed: false }
+            { req: 10, title: "Жүйрік ат", icon: "🐎", reward: 300, claimed: false },
+            { req: 12, title: "Құмай тазы", icon: "🐕", reward: 500, claimed: false },
+            { req: 15, title: "Берен мылтық", icon: "🏹", reward: 800, claimed: false },
+            { req: 20, title: "Пезді кездік", icon: "🗡️", reward: 1200, claimed: false },
+            { req: 25, title: "Қыран бүркіт", icon: "🦅", reward: 1800, claimed: false },
+            { req: 30, title: "Ақ отау", icon: "⛺", reward: 2500, claimed: false },
+            { req: 40, title: "Сұлу әйел", icon: "👸", reward: 5000, claimed: false }
         ];
 
         const kazakhIcons = ["🇰🇿", "🏛️", "🛖", "🪕", "☀️", "🦅", "🐎", "🗺️"];
@@ -990,6 +983,7 @@
             document.getElementById('home-level-label').innerText = `${currentLevel}-ші Деңгей`;
             document.getElementById('lvl-badge-text').innerText = `${currentLevel}-ші`;
             saveUserData();
+            renderQazyna();
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -1070,6 +1064,7 @@
 
         function renderQazyna() {
             const container = document.getElementById('qazyna-list');
+            if(!container) return;
             container.innerHTML = '';
             jetiQazynaList.forEach((q, i) => {
                 const isUnlocked = currentLevel >= q.req;
@@ -1094,7 +1089,6 @@
                 playSound(880, 0.2);
                 showToast(`🏆 ${jetiQazynaList[i].reward} монета алдыңыз!`);
                 updateUI();
-                renderQazyna();
             }
         }
 
@@ -1108,17 +1102,23 @@
         function startClassicGame() {
             playSound(600, 0.1);
             isBattleMode = false;
+            if (battleTimerInterval) clearInterval(battleTimerInterval);
+            if (oppBattleInterval) clearInterval(oppBattleInterval);
             document.getElementById('battle-timer').classList.add('hidden');
             document.getElementById('opponent-battle-box').classList.add('hidden');
             startGameCommon();
         }
 
+        // Дұрысталған Дуэль шайқасын бастау батырмасы
         function startBattleGame() {
             playSound(600, 0.1);
             isBattleMode = true;
             timeLeft = 35;
             opponentSlots = [];
             renderOpponentSlots();
+
+            if (battleTimerInterval) clearInterval(battleTimerInterval);
+            if (oppBattleInterval) clearInterval(oppBattleInterval);
 
             document.getElementById('battle-timer').classList.remove('hidden');
             document.getElementById('opponent-battle-box').classList.remove('hidden');
@@ -1191,7 +1191,6 @@
                 const col = idx % 3;
                 const row = Math.floor((idx % 5) / 3);
                 
-                // Тіп-тік үсті-үстіне түсетін пирамида тәрізді плиткалар
                 boardTiles.push({
                     id: idx,
                     icon: icon,
@@ -1288,7 +1287,8 @@
             const container = document.getElementById('opponent-slots-container');
             container.innerHTML = '';
             for (let i = 0; i < 4; i++) {
-                const box = document.className = 'opp-slot';
+                const box = document.createElement('div');
+                box.className = 'opp-slot';
                 box.innerText = opponentSlots[i] || '';
                 container.appendChild(box);
             }
