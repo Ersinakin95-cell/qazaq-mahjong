@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v4.1</title>
+    <title>Qazaq Mahjong v4.3</title>
     <!-- Monetag Official Tag Integration -->
     <script src="https://alwingulla.com/88/tag.min.js" data-zone="e5e4318e5ca58d6b7eb38b03155d67fb" async data-cfasync="false"></script>
     <meta name="monetag" content="e5e4318e5ca58d6b7eb38b03155d67fb">
@@ -470,35 +470,21 @@
             align-items: center;
         }
 
-        .tile-3d {
+        /* Тіп-тік пирамида қабаттары */
+        .tile-stacked {
             position: absolute;
-            width: 56px;
-            height: 66px;
+            width: 52px;
+            height: 60px;
             background: #ffffff;
-            border-radius: 12px;
-            border: 2px solid #cbd5e1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #94a3b8, 0 8px 15px rgba(0,0,0,0.4);
-            transition: all 0.1s ease;
-        }
-
-        .tile-flat {
-            position: absolute;
-            width: 56px;
-            height: 66px;
-            background: #ffffff;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 2px solid #94a3b8;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 26px;
             cursor: pointer;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.8);
+            transition: transform 0.1s ease;
         }
 
         .boosters-row {
@@ -633,17 +619,17 @@
 </head>
 <body>
 
-    <!-- Bonus Ad Modal (Every 5th Level) -->
+    <!-- Bonus Ad Pop-up -->
     <div id="ad-popup" class="ad-overlay hidden">
         <div class="ad-box">
             <div class="ad-header-bar">
                 <span>Monetag Демеуші Жарнама</span>
-                <button class="ad-close-x" onclick="closeAdPopup(false)">✕</button>
+                <button class="ad-close-x" onclick="closeAdPopup()">✕</button>
             </div>
             <div style="padding: 15px; background: #f8fafc;">
                 <div style="font-weight: bold; font-size: 16px; color: #1e293b; margin-bottom: 8px;">🎁 Жарнаманы көріп, +50 монета алыңыз!</div>
-                <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Әр 5-ші деңгей сайын сыйлық монеталарға ие болыңыз.</div>
-                <button onclick="triggerRealMonetagAd()" style="background: #22c55e; color: #fff; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 14px; border:none; cursor:pointer; width:100%;">Жарнаманы көру (+50 🪙)</button>
+                <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Әр 5-ші деңгей үшін шотқа +50 монета қосылады.</div>
+                <button onclick="openMonetagAdLink()" style="background: #22c55e; color: #fff; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 14px; border:none; cursor:pointer; width:100%;">Жарнаманы көру (+50 🪙)</button>
             </div>
         </div>
     </div>
@@ -871,7 +857,9 @@
     <script>
         const whatsappNum = "77000000000";
 
-        // Жадыдан деректерді жүктеу (Data Persistence)
+        // Monetag өзіңіздің Direct Link сілтемесін осы жерге қойыңыз
+        const monetagDirectLink = "https://alwingulla.com/88/tag.min.js";
+
         let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
         let currentLevel = parseInt(localStorage.getItem('qazaq_mahjong_level')) || 1;
         let username = localStorage.getItem('qazaq_mahjong_username') || "Абылай хан";
@@ -931,17 +919,24 @@
             }
         }
 
-        function triggerRealMonetagAd() {
+        // Нақты жарнама ашу және Monetag-қа ақша түсіру
+        function openMonetagAdLink() {
             document.getElementById('ad-popup').classList.add('hidden');
-            // Monetag негізгі жарнама тегіне бағыттау
-            window.open("https://alwingulla.com/88/tag.min.js", "_blank");
+            
+            // Нақты жарнаманы жаңа бетте ашу (Monetag Revenue)
+            const a = document.createElement('a');
+            a.href = monetagDirectLink;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.click();
+
             coins += 50;
             saveUserData();
             updateUI();
-            showToast("🎁 Жарнама үшін +50 монета берілді!");
+            showToast("🎁 Жарнама ашылды! +50 монета берілді!");
         }
 
-        function closeAdPopup(watched) {
+        function closeAdPopup() {
             document.getElementById('ad-popup').classList.add('hidden');
         }
 
@@ -1192,16 +1187,17 @@
 
             iconArray.forEach((icon, idx) => {
                 const isFlat = !isBattleMode && currentLevel <= 5;
-                const maxInRow = 2;
-                const layer = isFlat ? 0 : Math.floor(idx / 4);
-                const pos = idx % 4;
+                const layer = isFlat ? 0 : Math.floor(idx / 5);
+                const col = idx % 3;
+                const row = Math.floor((idx % 5) / 3);
+                
+                // Тіп-тік үсті-үстіне түсетін пирамида тәрізді плиткалар
                 boardTiles.push({
                     id: idx,
                     icon: icon,
                     layer: layer,
-                    isFlat: isFlat,
-                    x: (pos % maxInRow) * 60 - 30 + (layer * 4),
-                    y: Math.floor(pos / maxInRow) * 70 - 35 + (layer * 4)
+                    x: (col - 1) * 58,
+                    y: (row - 0.5) * 65 - (layer * 8)
                 });
             });
 
@@ -1213,7 +1209,7 @@
             board.innerHTML = '';
             boardTiles.forEach(tile => {
                 const el = document.createElement('div');
-                el.className = tile.isFlat ? 'tile-flat' : 'tile-3d';
+                el.className = 'tile-stacked';
                 el.style.left = `calc(50% + ${tile.x}px)`;
                 el.style.top = `calc(50% + ${tile.y}px)`;
                 el.style.zIndex = tile.layer * 10;
@@ -1292,8 +1288,7 @@
             const container = document.getElementById('opponent-slots-container');
             container.innerHTML = '';
             for (let i = 0; i < 4; i++) {
-                const box = document.createElement('div');
-                box.className = 'opp-slot';
+                const box = document.className = 'opp-slot';
                 box.innerText = opponentSlots[i] || '';
                 container.appendChild(box);
             }
