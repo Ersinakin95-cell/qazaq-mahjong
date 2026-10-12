@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v4.5</title>
+    <title>Qazaq Mahjong v5.0</title>
     <style>
         * {
             box-sizing: border-box;
@@ -34,7 +34,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 15px 18px;
+            padding: 12px 16px;
             position: relative;
             box-shadow: 0 0 30px rgba(0,0,0,0.9);
             overflow: hidden;
@@ -56,7 +56,7 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .profile-section {
@@ -67,14 +67,14 @@
         }
 
         .avatar-box {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             background: #d97706;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             border: 2px solid #fbbf24;
             position: relative;
         }
@@ -84,7 +84,7 @@
             bottom: -4px;
             background: #d97706;
             color: white;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: bold;
             padding: 1px 4px;
             border-radius: 6px;
@@ -99,12 +99,12 @@
         .user-name {
             color: #fbbf24;
             font-weight: 900;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .user-status {
             color: #4ade80;
-            font-size: 11px;
+            font-size: 10px;
             display: flex;
             align-items: center;
             gap: 4px;
@@ -112,8 +112,8 @@
 
         .user-status::before {
             content: '';
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background: #4ade80;
             border-radius: 50%;
             display: inline-block;
@@ -131,7 +131,7 @@
             padding: 4px 8px;
             border-radius: 14px;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
             color: #fbbf24;
             display: flex;
             align-items: center;
@@ -144,16 +144,84 @@
         .add-btn {
             background: #fbbf24;
             border: none;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             font-weight: 900;
-            font-size: 11px;
+            font-size: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #0f2c23;
+        }
+
+        /* Ad Cash Task Banner */
+        .ad-cash-banner {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 2px solid #fbbf24;
+            border-radius: 16px;
+            padding: 10px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .ad-cash-title {
+            color: #fbbf24;
+            font-size: 12px;
+            font-weight: 900;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ad-cash-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+        }
+
+        .ad-task-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 10px;
+            padding: 6px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ad-task-info {
+            font-size: 10px;
+            color: #cbd5e1;
+            font-weight: bold;
+        }
+
+        .ad-task-prize {
+            font-size: 11px;
+            color: #4ade80;
+            font-weight: 900;
+            margin: 2px 0;
+        }
+
+        .ad-claim-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .ad-claim-btn.disabled {
+            background: #475569;
+            cursor: not-allowed;
         }
 
         /* Main Center Area */
@@ -162,7 +230,7 @@
             flex-direction: column;
             justify-content: center;
             flex-grow: 1;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .center-brand-area {
@@ -173,89 +241,88 @@
             text-align: center;
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 18px 18px;
-            border-radius: 20px;
-            padding: 20px 10px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            padding: 12px 10px;
+            margin-bottom: 10px;
         }
 
         .logo-box {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: #1e3a34;
-            border-radius: 20px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            border: 3px solid #fbbf24;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-            margin-bottom: 10px;
+            font-size: 30px;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            margin-bottom: 6px;
         }
 
         .brand-title {
             font-family: Georgia, serif;
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 900;
             color: #d97706;
             letter-spacing: 1px;
             line-height: 1.1;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             text-transform: uppercase;
         }
 
         .brand-subtitle {
-            font-size: 11px;
+            font-size: 10px;
             color: #64748b;
-            max-width: 260px;
+            max-width: 240px;
         }
 
         /* Mode Cards */
         .mode-card {
             background: linear-gradient(135deg, #f59e0b, #d97706);
-            border-radius: 18px;
-            padding: 16px;
+            border-radius: 16px;
+            padding: 12px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 6px 15px rgba(217, 119, 6, 0.3);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
             cursor: pointer;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border: 2px solid #fef3c7;
         }
 
         .mode-card.battle {
             background: linear-gradient(135deg, #ef4444, #991b1b);
             border-color: #fca5a5;
-            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .mode-card-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .mode-card-icon {
-            width: 46px;
-            height: 46px;
+            width: 40px;
+            height: 40px;
             background: #0f2c23;
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             border: 2px solid #fbbf24;
         }
 
         .mode-card-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
         .mode-card-arrow {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
             color: #ffffff;
         }
@@ -263,8 +330,8 @@
         /* Bottom Navigation Buttons */
         .bottom-nav-btns {
             display: flex;
-            gap: 6px;
-            margin-top: 5px;
+            gap: 4px;
+            margin-top: 4px;
         }
 
         .nav-big-btn {
@@ -272,15 +339,15 @@
             border: 2px solid #fbbf24;
             color: #ffffff;
             font-weight: 900;
-            font-size: 12px;
-            padding: 12px 6px;
-            border-radius: 14px;
+            font-size: 11px;
+            padding: 10px 4px;
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            gap: 2px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         /* Modals */
@@ -299,8 +366,8 @@
             background: linear-gradient(to bottom, #1e3a34, #0f2c23);
             width: 90%;
             max-width: 380px;
-            padding: 20px;
-            border-radius: 25px;
+            padding: 18px;
+            border-radius: 22px;
             border: 3px solid #fbbf24;
             box-shadow: 0 15px 30px rgba(0,0,0,0.5);
             max-height: 85vh;
@@ -313,12 +380,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .modal-title {
             color: #fbbf24;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
         }
 
@@ -326,9 +393,9 @@
             background: #ef4444;
             border: 2px solid #fff;
             color: white;
-            font-size: 14px;
-            width: 34px;
-            height: 34px;
+            font-size: 12px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -340,8 +407,8 @@
         .shop-item-card {
             background: rgba(255,255,255,0.08);
             border: 1px solid rgba(251, 191, 36, 0.4);
-            border-radius: 14px;
-            padding: 10px 14px;
+            border-radius: 12px;
+            padding: 10px;
             margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
@@ -353,9 +420,10 @@
             color: #fff;
             border: 1px solid #fff;
             font-weight: bold;
-            padding: 8px 14px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 10px;
             cursor: pointer;
+            font-size: 11px;
         }
 
         .buy-btn.disabled { background: #64748b; cursor: not-allowed; }
@@ -377,8 +445,8 @@
             background: #14532d;
             border: 2px solid #fbbf24;
             color: #fbbf24;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -388,46 +456,46 @@
         }
 
         .collection-holder {
-            height: 70px;
+            height: 65px;
             background: #022c22;
             border: 3px solid #fbbf24;
-            border-radius: 16px;
+            border-radius: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-            margin: 8px 0;
-            padding: 0 8px;
+            gap: 6px;
+            margin: 6px 0;
+            padding: 0 6px;
         }
 
         .slot-box {
-            width: 48px;
-            height: 54px;
+            width: 44px;
+            height: 50px;
             background: #14532d;
             border: 2px solid rgba(251, 191, 36, 0.6);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
         }
 
         .battle-split-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             width: 100%;
             background: rgba(0,0,0,0.25);
             border: 2px solid #ef4444;
-            border-radius: 14px;
-            padding: 8px;
-            margin-bottom: 6px;
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 4px;
         }
 
         .opponent-header {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             color: #fca5a5;
         }
@@ -439,15 +507,15 @@
         }
 
         .opp-slot {
-            width: 32px;
-            height: 36px;
+            width: 30px;
+            height: 34px;
             background: #7f1d1d;
             border: 1px solid #fca5a5;
             border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .board-area {
@@ -461,7 +529,7 @@
         .layered-board {
             position: relative;
             width: 100%;
-            height: 340px;
+            height: 320px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -469,15 +537,15 @@
 
         .tile-stacked {
             position: absolute;
-            width: 52px;
-            height: 60px;
+            width: 50px;
+            height: 58px;
             background: #ffffff;
             border-radius: 10px;
             border: 2px solid #94a3b8;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.8);
             transition: transform 0.1s ease;
@@ -486,20 +554,20 @@
         .boosters-row {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            margin-bottom: 8px;
+            gap: 14px;
+            margin-bottom: 6px;
         }
 
         .booster-circle {
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             background: #14532d;
             border: 3px solid #fbbf24;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             position: relative;
             color: #fbbf24;
@@ -511,7 +579,7 @@
             right: -4px;
             background: #ef4444;
             color: white;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 900;
             padding: 1px 4px;
             border-radius: 6px;
@@ -525,10 +593,10 @@
             background: #16a34a;
             border: 2px solid #fbbf24;
             border-radius: 16px;
-            padding: 14px 20px;
+            padding: 12px 18px;
             color: white;
             font-weight: 900;
-            font-size: 15px;
+            font-size: 14px;
             text-align: center;
             z-index: 999;
             pointer-events: none;
@@ -574,16 +642,16 @@
             background: #ef4444;
             color: white;
             border: none;
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
         }
 
         .chat-box {
-            height: 180px;
+            height: 160px;
             background: rgba(0,0,0,0.2);
             border-radius: 10px;
             padding: 8px;
@@ -592,13 +660,12 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .chat-msg { background: rgba(255,255,255,0.1); padding: 5px 8px; border-radius: 6px; }
-        
         .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
-        .lang-card { background: rgba(255,255,255,0.1); border: 1px solid #fbbf24; color: white; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: center; }
+        .lang-card { background: rgba(255,255,255,0.1); border: 1px solid #fbbf24; color: white; padding: 6px; border-radius: 8px; font-size: 10px; font-weight: bold; cursor: pointer; text-align: center; }
         .lang-card.active { background: #22c55e; }
         
         .leaderboard-row {
@@ -609,7 +676,7 @@
             padding: 8px 12px;
             border-radius: 10px;
             margin-bottom: 6px;
-            font-size: 13px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -623,10 +690,22 @@
                 <button class="ad-close-x" onclick="closeAdPopup()">✕</button>
             </div>
             <div style="padding: 15px; background: #f8fafc;">
-                <div style="font-weight: bold; font-size: 16px; color: #1e293b; margin-bottom: 8px;">🎁 Жарнаманы көріп, +50 монета алыңыз!</div>
-                <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Әр 5-ші деңгей үшін шотқа +50 монета қосылады.</div>
-                <button onclick="openMonetagAdLink()" style="background: #22c55e; color: #fff; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 14px; border:none; cursor:pointer; width:100%;">Жарнаманы көру (+50 🪙)</button>
+                <div style="font-weight: bold; font-size: 15px; color: #1e293b; margin-bottom: 6px;">🎁 Жарнама көріп монета алу!</div>
+                <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Жарнаманы ашып, +50 монетаға ие болыңыз!</div>
+                <button onclick="openMonetagAdLink()" style="background: #22c55e; color: #fff; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 13px; border:none; cursor:pointer; width:100%;">Жарнаманы көру (+50 🪙)</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Wish / Blessing Popup (Қазына Баталары) -->
+    <div id="wish-popup" class="modal hidden">
+        <div class="modal-card" style="text-align: center;">
+            <div style="font-size: 50px; margin-bottom: 10px;" id="wish-icon">🏆</div>
+            <div style="color: #fbbf24; font-size: 18px; font-weight: 900; margin-bottom: 8px;" id="wish-title">Жүйрік ат</div>
+            <div style="font-size: 13px; color: #f8fafc; line-height: 1.5; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; border: 1px solid #fbbf24; margin-bottom: 15px;" id="wish-text">
+                "Әрбір бастаған ісіңіз сәтті болып, атыңыз бәйгеде алда келсін! Өміріңізге береке тілейміз!"
+            </div>
+            <button class="buy-btn" style="width:100%; padding:10px;" onclick="closeModal('wish-popup')">Қабыл болсын! (Жабу)</button>
         </div>
     </div>
 
@@ -655,6 +734,31 @@
             </div>
         </div>
 
+        <!-- Ad Cash Tasks Banner (5 жарнама=200тг, 10=500тг, 30=1000тг) -->
+        <div class="ad-cash-banner">
+            <div class="ad-cash-title">
+                <span>💵 ЖАРНАМАЛЫҚ БОНУСТАР</span>
+                <span style="font-size:10px; color:#cbd5e1;">Көрілген: <b id="ad-count-txt" style="color:#fbbf24">0</b> жарнама</span>
+            </div>
+            <div class="ad-cash-grid">
+                <div class="ad-task-card">
+                    <div class="ad-task-info">5 Жарнама</div>
+                    <div class="ad-task-prize">200 ТГ</div>
+                    <button class="ad-claim-btn disabled" id="ad-btn-5" onclick="claimCashReward(5, 200)">Алу</button>
+                </div>
+                <div class="ad-task-card">
+                    <div class="ad-task-info">10 Жарнама</div>
+                    <div class="ad-task-prize">500 ТГ</div>
+                    <button class="ad-claim-btn disabled" id="ad-btn-10" onclick="claimCashReward(10, 500)">Алу</button>
+                </div>
+                <div class="ad-task-card">
+                    <div class="ad-task-info">30 Жарнама</div>
+                    <div class="ad-task-prize">1000 ТГ</div>
+                    <button class="ad-claim-btn disabled" id="ad-btn-30" onclick="claimCashReward(30, 1000)">Алу</button>
+                </div>
+            </div>
+        </div>
+
         <div class="main-content-wrapper">
             <div class="center-brand-area">
                 <div class="logo-box">🏛️</div>
@@ -668,19 +772,19 @@
                     <div class="mode-card-icon">🏛️</div>
                     <div>
                         <div class="mode-card-title" id="mode-classic-txt">Классикалық Жорық</div>
-                        <div style="font-size: 12px; color: #fef3c7;" id="home-level-label">1-ші Деңгей</div>
+                        <div style="font-size: 11px; color: #fef3c7;" id="home-level-label">1-ші Деңгей</div>
                     </div>
                 </div>
                 <div class="mode-card-arrow">›</div>
             </div>
 
             <!-- Mode 2: Player Duel Battle -->
-            <div class="mode-card battle" onclick="startBattleGame()">
+            <div class="mode-card battle" onclick="openModal('battle-select-modal')">
                 <div class="mode-card-left">
                     <div class="mode-card-icon">⚔️</div>
                     <div>
                         <div class="mode-card-title" id="mode-battle-txt">Ойыншылар Шайқасы</div>
-                        <div style="font-size: 12px; color: #fecaca;" id="mode-battle-sub">Екі ойыншылы дуэль</div>
+                        <div style="font-size: 11px; color: #fecaca;" id="mode-battle-sub">Дуэль таңдау</div>
                     </div>
                 </div>
                 <div class="mode-card-arrow">›</div>
@@ -692,7 +796,31 @@
                 <button class="nav-big-btn" style="flex:1;" onclick="openModal('leaderboard-modal')" id="btn-leader">📊 Рейтинг</button>
                 <button class="nav-big-btn" style="flex:1;" onclick="openModal('chat-modal')" id="btn-chat">💬 Чат</button>
                 <button class="nav-big-btn" style="flex:1; background:#25d366; border-color:#fff;" onclick="shareGameWithFriends()">📲 Бөлісу</button>
-                <button class="nav-big-btn" style="width: 44px;" onclick="openModal('settings-modal')">⚙️</button>
+                <button class="nav-big-btn" style="width: 38px;" onclick="openModal('settings-modal')">⚙️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battle Type Selection Modal (Сот / Шынайы ойыншы) -->
+    <div id="battle-select-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">⚔️ ШАЙҚАС ТҮРІН ТАҢДАҢЫЗ</div>
+                <button class="close-btn" onclick="closeModal('battle-select-modal')">✕</button>
+            </div>
+            <div class="shop-item-card" onclick="startBattleGame('bot')" style="cursor:pointer;">
+                <div>
+                    <div style="font-weight:bold; color:#fbbf24;">🤖 Ботпен (Сотпен) Шайқас</div>
+                    <div style="font-size:11px; color:#cbd5e1;">Жеңіс сыйақысы: +5 Монета</div>
+                </div>
+                <button class="buy-btn">Бастау</button>
+            </div>
+            <div class="shop-item-card" onclick="startBattleGame('real')" style="cursor:pointer;">
+                <div>
+                    <div style="font-weight:bold; color:#4ade80;">👤 Шынайы Ойыншымен Шайқас</div>
+                    <div style="font-size:11px; color:#cbd5e1;">Жеңіс сыйақысы: +15 Монета</div>
+                </div>
+                <button class="buy-btn" style="background:#2563eb;">Бастау</button>
             </div>
         </div>
     </div>
@@ -720,42 +848,38 @@
                 <button class="close-btn" onclick="closeModal('settings-modal')">✕</button>
             </div>
             
-            <div style="display:flex; justify-content:space-around; margin-bottom:15px; background:rgba(255,255,255,0.06); padding:10px; border-radius:12px;">
-                <button onclick="toggleAudio('music')" id="music-toggle-btn" style="background:#22c55e; border:none; padding:8px 12px; border-radius:10px; color:white; font-weight:bold; cursor:pointer;">🎵 Музыка: Қосулы</button>
-                <button onclick="toggleAudio('sound')" id="sound-toggle-btn" style="background:#22c55e; border:none; padding:8px 12px; border-radius:10px; color:white; font-weight:bold; cursor:pointer;">🔊 Дыбыс: Қосулы</button>
+            <div style="display:flex; justify-content:space-around; margin-bottom:12px; background:rgba(255,255,255,0.06); padding:8px; border-radius:12px;">
+                <button onclick="toggleAudio('music')" id="music-toggle-btn" style="background:#22c55e; border:none; padding:6px 10px; border-radius:8px; color:white; font-weight:bold; cursor:pointer; font-size:11px;">🎵 Музыка: Қосулы</button>
+                <button onclick="toggleAudio('sound')" id="sound-toggle-btn" style="background:#22c55e; border:none; padding:6px 10px; border-radius:8px; color:white; font-weight:bold; cursor:pointer; font-size:11px;">🔊 Дыбыс: Қосулы</button>
             </div>
 
             <div style="margin-bottom: 12px;">
-                <label style="font-size:12px; color:#fbbf24; font-weight:bold;">Ойыншы аты:</label>
+                <label style="font-size:11px; color:#fbbf24; font-weight:bold;">Ойыншы аты:</label>
                 <input type="text" id="username-input" class="shop-item-card" style="width:100%; color:#fff; background:rgba(0,0,0,0.3); margin-top:4px;" value="Абылай хан" oninput="checkAdminCode(this.value)">
             </div>
 
             <!-- Hidden Admin Panel -->
-            <div id="admin-panel" class="hidden" style="background:rgba(239,68,68,0.2); border:2px solid #ef4444; border-radius:12px; padding:10px; margin-bottom:12px;">
-                <div style="color:#fca5a5; font-weight:bold; font-size:12px; margin-bottom:6px;">🛠️ Ерсін басқару панелі (Тек сізге):</div>
+            <div id="admin-panel" class="hidden" style="background:rgba(239,68,68,0.2); border:2px solid #ef4444; border-radius:12px; padding:8px; margin-bottom:12px;">
+                <div style="color:#fca5a5; font-weight:bold; font-size:11px; margin-bottom:6px;">🛠️ Ерсін басқару панелі:</div>
                 <div style="display:flex; gap:6px; margin-bottom:6px;">
-                    <button class="buy-btn" style="flex:1; font-size:11px;" onclick="adminAddCoins()">+1000 Монета</button>
-                    <button class="buy-btn" style="flex:1; font-size:11px; background:#3b82f6;" onclick="adminNextLevel()">Келесі деңгей</button>
+                    <button class="buy-btn" style="flex:1; font-size:10px;" onclick="adminAddCoins()">+1000 Монета</button>
+                    <button class="buy-btn" style="flex:1; font-size:10px; background:#3b82f6;" onclick="adminNextLevel()">Келесі деңгей</button>
                 </div>
                 <div style="display:flex; gap:6px;">
-                    <button class="buy-btn" style="flex:1; font-size:11px; background:#8b5cf6;" onclick="exportGameCode()">📥 Кодты сақтау</button>
-                    <button class="buy-btn" style="flex:1; font-size:11px; background:#f59e0b;" onclick="document.getElementById('import-file').click()">📂 Жүктеу</button>
+                    <button class="buy-btn" style="flex:1; font-size:10px; background:#8b5cf6;" onclick="exportGameCode()">📥 Сақтау</button>
+                    <button class="buy-btn" style="flex:1; font-size:10px; background:#f59e0b;" onclick="document.getElementById('import-file').click()">📂 Жүктеу</button>
                     <input type="file" id="import-file" class="hidden" onchange="importGameCode(event)">
                 </div>
             </div>
 
-            <div style="font-size:12px; color:#fbbf24; font-weight:bold; margin-bottom:4px;">Тілді таңдау / Language:</div>
+            <div style="font-size:11px; color:#fbbf24; font-weight:bold; margin-bottom:4px;">Тілді таңдау / Language:</div>
             <div class="lang-grid">
                 <button class="lang-card active" onclick="changeLang('kk')">🇰🇿 Қазақша</button>
                 <button class="lang-card" onclick="changeLang('ru')">🇷🇺 Русский</button>
                 <button class="lang-card" onclick="changeLang('en')">🇬🇧 English</button>
                 <button class="lang-card" onclick="changeLang('tr')">🇹🇷 Türkçe</button>
-                <button class="lang-card" onclick="changeLang('zh')">🇨🇳 中文</button>
-                <button class="lang-card" onclick="changeLang('ko')">🇰🇷 한국어</button>
-                <button class="lang-card" onclick="changeLang('ja')">🇯🇵 日本語</button>
-                <button class="lang-card" onclick="changeLang('ar')">🇸🇦 العربية</button>
             </div>
-            <button class="buy-btn" style="width:100%; margin-top:15px; background:#25d366;" onclick="openWhatsAppSupport()">💬 WhatsApp Қолдау</button>
+            <button class="buy-btn" style="width:100%; margin-top:12px; background:#25d366;" onclick="openWhatsAppSupport()">💬 WhatsApp Қолдау</button>
         </div>
     </div>
 
@@ -766,34 +890,19 @@
                 <div class="modal-title">🛒 ДҮКЕН (KASPI)</div>
                 <button class="close-btn" onclick="closeModal('shop-modal')">✕</button>
             </div>
-            <div class="shop-item-card">
-                <div>🪙 300 Монета</div>
-                <button class="buy-btn" onclick="buyViaWhatsApp('300 Монета', '100 ТГ')">100 ТГ</button>
-            </div>
-            <div class="shop-item-card">
-                <div>🪙 600 Монета</div>
-                <button class="buy-btn" onclick="buyViaWhatsApp('600 Монета', '300 ТГ')">300 ТГ</button>
-            </div>
-            <div class="shop-item-card">
-                <div>🪙 1500 Монета</div>
-                <button class="buy-btn" onclick="buyViaWhatsApp('1500 Монета', '600 ТГ')">600 ТГ</button>
-            </div>
-            <div class="shop-item-card">
-                <div>🪙 3500 Монета</div>
-                <button class="buy-btn" onclick="buyViaWhatsApp('3500 Монета', '1200 ТГ')">1200 ТГ</button>
-            </div>
-            <div class="shop-item-card">
-                <div>🪙 10000 Монета</div>
-                <button class="buy-btn" onclick="buyViaWhatsApp('10000 Монета', '3000 ТГ')">3000 ТГ</button>
-            </div>
+            <div class="shop-item-card"><div>🪙 300 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('300 Монета', '100 ТГ')">100 ТГ</button></div>
+            <div class="shop-item-card"><div>🪙 600 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('600 Монета', '300 ТГ')">300 ТГ</button></div>
+            <div class="shop-item-card"><div>🪙 1500 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('1500 Монета', '600 ТГ')">600 ТГ</button></div>
+            <div class="shop-item-card"><div>🪙 3500 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('3500 Монета', '1200 ТГ')">1200 ТГ</button></div>
+            <div class="shop-item-card"><div>🪙 10000 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('10000 Монета', '3000 ТГ')">3000 ТГ</button></div>
         </div>
     </div>
 
-    <!-- Jeti Qazyna Modal (10-шы деңгейден жоғары бонустар) -->
+    <!-- Jeti Qazyna Modal (Монетаға ашылады + Тілектер) -->
     <div id="collection-modal" class="modal hidden">
         <div class="modal-card">
             <div class="modal-header">
-                <div class="modal-title">🏆 ЖЕТІ ҚАЗЫНА (10+ Кезең)</div>
+                <div class="modal-title">🏆 ЖЕТІ ҚАЗЫНА (Монетамен ашу)</div>
                 <button class="close-btn" onclick="closeModal('collection-modal')">✕</button>
             </div>
             <div id="qazyna-list"></div>
@@ -809,7 +918,7 @@
             </div>
             <div class="chat-box" id="chat-box"></div>
             <div style="display:flex; gap:6px; margin-top:8px;">
-                <input type="text" id="chat-msg-input" class="shop-item-card" style="flex:1; color:#fff; background:rgba(0,0,0,0.3); padding:8px;" placeholder="Хабарлама...">
+                <input type="text" id="chat-msg-input" class="shop-item-card" style="flex:1; color:#fff; background:rgba(0,0,0,0.3); padding:6px;" placeholder="Хабарлама...">
                 <button class="buy-btn" onclick="sendMsg()">Жіберу</button>
             </div>
         </div>
@@ -822,12 +931,12 @@
         <div class="game-top-bar">
             <button class="action-icon-btn" onclick="exitGame()">⬅️</button>
             <h3 id="game-level-text" style="color:#fbbf24; font-weight:900;">1-Деңгей</h3>
-            <span id="battle-timer" style="color:#ef4444; font-weight:bold; font-size:14px;" class="hidden">⏱️ 35с</span>
+            <span id="battle-timer" style="color:#ef4444; font-weight:bold; font-size:13px;" class="hidden">⏱️ 35с</span>
         </div>
 
         <div id="opponent-battle-box" class="battle-split-container hidden">
             <div class="opponent-header">
-                <span>⚔️ Қарсылас: Бақтияр</span>
+                <span id="opp-name-text">⚔️ Қарсылас: Бот (Сот)</span>
                 <span id="opp-status-text">Ойнап жатыр...</span>
             </div>
             <div class="opponent-slots" id="opponent-slots-container">
@@ -852,23 +961,43 @@
 
     <script>
         const whatsappNum = "77000000000";
-
-        // НАҚТЫ ЖАРНАМА СІЛТЕМЕСІ (Monetag Direct Link немесе Adsterra Smartlink)
-        // Бұл жерге Direct Link (https://...) сілтемесін қоясыз:
-        const adSmartLink = "https://google.com"; // Monetag Direct Link сілтемеңізді осы жерге қойыңыз
+        const adSmartLink = "https://google.com"; // Monetag сілтемесі
 
         let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
         let currentLevel = parseInt(localStorage.getItem('qazaq_mahjong_level')) || 1;
         let username = localStorage.getItem('qazaq_mahjong_username') || "Абылай хан";
+        let watchedAdsCount = parseInt(localStorage.getItem('qazaq_mahjong_ads_count')) || 0;
         let diamonds = 5;
+
+        // Жеті қазына деректері (Бағалары 500 монетадан басталады)
+        let jetiQazynaList = [
+            { id: 0, title: "Жүйрік ат", icon: "🐎", cost: 500, claimed: false, wish: "Атыңыз бәйгеде алда келсін! Өміріңіз сәйгүліктей жүйрік әрі сәтті болсын!" },
+            { id: 1, title: "Құмай тазы", icon: "🐕", cost: 800, claimed: false, wish: "Құмай тазыдай қырағылық пен адалдық серігіңіз болсын!" },
+            { id: 2, title: "Берен мылтық", icon: "🏹", cost: 1200, claimed: false, wish: "Көздеген мақсатыңызға әрдайым мүлт кетпей жете беріңіз!" },
+            { id: 3, title: "Пезді кездік", icon: "🗡️", reward: 0, cost: 1800, claimed: false, wish: "Кез келген қиындықты кесіп өтер өткірлік пен қайрат тілейміз!" },
+            { id: 4, title: "Қыран бүркіт", icon: "🦅", cost: 2500, claimed: false, wish: "Қырандай биіктерден көрініп, еңсеңіз әрдайым биік болсын!" },
+            { id: 5, title: "Ақ отау", icon: "⛺", cost: 3500, claimed: false, wish: "Шаңырағыңызға шаттық пен береке, отбасыңызға амандық тілейміз!" },
+            { id: 6, title: "Сұлу әйел", icon: "👸", cost: 5000, claimed: false, wish: "Махаббат пен сыйластық ошағыңыздың мәңгілік алауы болсын!" }
+        ];
+
+        // Сақталған қазыналарды жүктеу
+        const savedQazyna = JSON.parse(localStorage.getItem('qazaq_mahjong_qazyna_saved'));
+        if (savedQazyna) {
+            savedQazyna.forEach((sq, idx) => {
+                if(jetiQazynaList[idx]) jetiQazynaList[idx].claimed = sq.claimed;
+            });
+        }
 
         function saveUserData() {
             localStorage.setItem('qazaq_mahjong_coins', coins);
             localStorage.setItem('qazaq_mahjong_level', currentLevel);
             localStorage.setItem('qazaq_mahjong_username', username);
+            localStorage.setItem('qazaq_mahjong_ads_count', watchedAdsCount);
+            localStorage.setItem('qazaq_mahjong_qazyna_saved', JSON.stringify(jetiQazynaList.map(q => ({ claimed: q.claimed }))));
         }
 
         let isBattleMode = false;
+        let battleType = 'bot'; // 'bot' немесе 'real'
         let battleTimerInterval = null;
         let oppBattleInterval = null;
         let timeLeft = 35;
@@ -916,15 +1045,13 @@
             }
         }
 
-        // ЖАРНАМА АШУ ЛОГИКАСЫ (Ақ код шықпас үшін браузерде жаңа бетпен ашады)
         function openMonetagAdLink() {
             document.getElementById('ad-popup').classList.add('hidden');
             coins += 50;
+            watchedAdsCount++;
             saveUserData();
             updateUI();
-            showToast("🎁 Жарнама ашылды! +50 монета берілді!");
-
-            // Жаңа терезеде нақты жарнама сайтын ашу
+            showToast("🎁 +50 монета берілді! Жарнама ашылуда...");
             window.open(adSmartLink, '_blank');
         }
 
@@ -932,15 +1059,20 @@
             document.getElementById('ad-popup').classList.add('hidden');
         }
 
+        function claimCashReward(targetCount, amount) {
+            if (watchedAdsCount >= targetCount) {
+                const txt = encodeURIComponent(`Сәлеметсіз бе! Мен Qazaq Mahjong ойынында ${targetCount} жарнама көріп, ${amount} ТГ бонусын аштым. Ник: ${username}`);
+                window.open(`https://wa.me/${whatsappNum}?text=${txt}`, '_blank');
+            } else {
+                showToast(`⚠️ Әлі ${targetCount - watchedAdsCount} жарнама көру қажет!`);
+            }
+        }
+
         const langData = {
-            kk: { subTitle: "Ұлттық нақыштағы дәстүрлі қабатты маджонг ойыны", classic: "Классикалық Жорық", battle: "Ойыншылар Шайқасы", battleSub: "Екі ойыншылы дуэль", qazyna: "🏆 Қазына", leader: "📊 Рейтинг", chat: "💬 Чат" },
-            ru: { subTitle: "Традиционная многослойная игра маджонг в национальном стиле", classic: "Классический поход", battle: "Битва игроков", battleSub: "Дуэль двух игроков", qazyna: "🏆 Сокровища", leader: "📊 Рейтинг", chat: "💬 Чат" },
-            en: { subTitle: "Traditional layered mahjong game with national motifs", classic: "Classic Campaign", battle: "Player Battle", battleSub: "Two player duel", qazyna: "🏆 Treasures", leader: "📊 Leaderboard", chat: "💬 Chat" },
-            tr: { subTitle: "Geleneksel motifli çok katmanlı mahjong oyunu", classic: "Klasik Sefer", battle: "Oyuncu Savaşı", battleSub: "İki kişilik düello", qazyna: "🏆 Hazineler", leader: "📊 Sıralama", chat: "💬 Sohbet" },
-            zh: { subTitle: "具有民族特色的传统多层麻将游戏", classic: "经典战役", battle: "玩家对决", battleSub: "双人对决", qazyna: "🏆 宝藏", leader: "📊 排行榜", chat: "💬 聊天" },
-            ko: { subTitle: "전통 스타일의 다층 마작 게임", classic: "클래식 모드", battle: "플레이어 대결", battleSub: "2인 듀얼", qazyna: "🏆 보물", leader: "📊 순위", chat: "💬 채팅" },
-            ja: { subTitle: "伝統的な多層麻雀ゲーム", classic: "クラシック", battle: "プレイヤーバトル", battleSub: "2人対決", qazyna: "🏆 宝物", leader: "📊 ランキング", chat: "💬 チャット" },
-            ar: { subTitle: "لعبة الماجونغ التقليدية متعددة الطبقات", classic: "الحملة الكلاسيكية", battle: "معركة اللاعبين", battleSub: "مبارزة لشخصين", qazyna: "🏆 الكنوز", leader: "📊 الترتيب", chat: "💬 الدردشة" }
+            kk: { subTitle: "Ұлттық нақыштағы дәстүрлі қабатты маджонг ойыны", classic: "Классикалық Жорық", battle: "Ойыншылар Шайқасы", battleSub: "Дуэль таңдау", qazyna: "🏆 Қазына", leader: "📊 Рейтинг", chat: "💬 Чат" },
+            ru: { subTitle: "Традиционная многослойная игра маджонг в национальном стиле", classic: "Классический поход", battle: "Битва игроков", battleSub: "Выбор дуэли", qazyna: "🏆 Сокровища", leader: "📊 Рейтинг", chat: "💬 Чат" },
+            en: { subTitle: "Traditional layered mahjong game with national motifs", classic: "Classic Campaign", battle: "Player Battle", battleSub: "Choose duel", qazyna: "🏆 Treasures", leader: "📊 Leaderboard", chat: "💬 Chat" },
+            tr: { subTitle: "Geleneksel motifli çok katmanlı mahjong oyunu", classic: "Klasik Sefer", battle: "Oyuncu Savaşı", battleSub: "Düello seçimi", qazyna: "🏆 Hazineler", leader: "📊 Sıralama", chat: "💬 Sohbet" }
         };
 
         function changeLang(lang) {
@@ -958,17 +1090,6 @@
             if(event && event.target) event.target.classList.add('active');
         }
 
-        // Жеті Қазына бонусы 10 кезеңнен жоғары
-        const jetiQazynaList = [
-            { req: 10, title: "Жүйрік ат", icon: "🐎", reward: 300, claimed: false },
-            { req: 12, title: "Құмай тазы", icon: "🐕", reward: 500, claimed: false },
-            { req: 15, title: "Берен мылтық", icon: "🏹", reward: 800, claimed: false },
-            { req: 20, title: "Пезді кездік", icon: "🗡️", reward: 1200, claimed: false },
-            { req: 25, title: "Қыран бүркіт", icon: "🦅", reward: 1800, claimed: false },
-            { req: 30, title: "Ақ отау", icon: "⛺", reward: 2500, claimed: false },
-            { req: 40, title: "Сұлу әйел", icon: "👸", reward: 5000, claimed: false }
-        ];
-
         const kazakhIcons = ["🇰🇿", "🏛️", "🛖", "🪕", "☀️", "🦅", "🐎", "🗺️"];
 
         let boardTiles = [];
@@ -982,8 +1103,26 @@
             document.getElementById('user-name-display').innerText = username;
             document.getElementById('home-level-label').innerText = `${currentLevel}-ші Деңгей`;
             document.getElementById('lvl-badge-text').innerText = `${currentLevel}-ші`;
+            document.getElementById('ad-count-txt').innerText = watchedAdsCount;
+
+            // Жарнама бонус батырмаларының күйі
+            updateAdCashBtn('ad-btn-5', 5);
+            updateAdCashBtn('ad-btn-10', 10);
+            updateAdCashBtn('ad-btn-30', 30);
+
             saveUserData();
             renderQazyna();
+        }
+
+        function updateAdCashBtn(id, target) {
+            const btn = document.getElementById(id);
+            if (watchedAdsCount >= target) {
+                btn.classList.remove('disabled');
+                btn.innerText = "Алу (Kaspi)";
+            } else {
+                btn.classList.add('disabled');
+                btn.innerText = `${watchedAdsCount}/${target}`;
+            }
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -1058,38 +1197,53 @@
                 navigator.share(shareData).catch(() => {});
             } else {
                 navigator.clipboard.writeText(window.location.href);
-                showToast("📋 Сілтеме көшірілді! Достарыңызға жіберіңіз!");
+                showToast("📋 Сілтеме көшірілді!");
             }
         }
 
+        // Жеті қазынаны монетаға ашу және ішінен бата-тілек шығару
         function renderQazyna() {
             const container = document.getElementById('qazyna-list');
             if(!container) return;
             container.innerHTML = '';
             jetiQazynaList.forEach((q, i) => {
-                const isUnlocked = currentLevel >= q.req;
                 container.innerHTML += `
                     <div class="shop-item-card">
                         <div>
                             <div style="font-weight:bold; color:white;">${q.icon} ${q.title}</div>
-                            <div style="font-size:11px; color:#cbd5e1;">${q.req}-деңгейде ашылады</div>
+                            <div style="font-size:11px; color:#cbd5e1;">Бағасы: ${q.cost} Монета</div>
                         </div>
-                        <button class="buy-btn ${isUnlocked && !q.claimed ? '' : 'disabled'}" onclick="claimQazyna(${i})">
-                            ${q.claimed ? 'Алынды' : isUnlocked ? '🪙 ' + q.reward : 'Жабық'}
+                        <button class="buy-btn ${q.claimed ? 'disabled' : ''}" onclick="unlockQazynaWithCoins(${i})">
+                            ${q.claimed ? 'Ашылған' : '🪙 ' + q.cost + ' Ашу'}
                         </button>
                     </div>
                 `;
             });
         }
 
-        function claimQazyna(i) {
-            if (currentLevel >= jetiQazynaList[i].req && !jetiQazynaList[i].claimed) {
-                jetiQazynaList[i].claimed = true;
-                coins += jetiQazynaList[i].reward;
-                playSound(880, 0.2);
-                showToast(`🏆 ${jetiQazynaList[i].reward} монета алдыңыз!`);
-                updateUI();
+        function unlockQazynaWithCoins(i) {
+            const item = jetiQazynaList[i];
+            if (item.claimed) {
+                showWishModal(item);
+                return;
             }
+            if (coins >= item.cost) {
+                coins -= item.cost;
+                item.claimed = true;
+                playSound(880, 0.3);
+                saveUserData();
+                updateUI();
+                showWishModal(item);
+            } else {
+                showToast(`⚠️ Қазынаны ашуға ${item.cost - coins} монета жетпейді!`);
+            }
+        }
+
+        function showWishModal(item) {
+            document.getElementById('wish-icon').innerText = item.icon;
+            document.getElementById('wish-title').innerText = item.title;
+            document.getElementById('wish-text').innerText = item.wish;
+            openModal('wish-popup');
         }
 
         function showToast(msg) {
@@ -1109,9 +1263,12 @@
             startGameCommon();
         }
 
-        function startBattleGame() {
+        // Ботпен немесе Шынайы ойыншымен шайқасты бастау
+        function startBattleGame(type) {
+            closeModal('battle-select-modal');
             playSound(600, 0.1);
             isBattleMode = true;
+            battleType = type;
             timeLeft = 35;
             opponentSlots = [];
             renderOpponentSlots();
@@ -1123,6 +1280,8 @@
             document.getElementById('opponent-battle-box').classList.remove('hidden');
             document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}с`;
             
+            document.getElementById('opp-name-text').innerText = type === 'bot' ? "⚔️ Қарсылас: Бот (Сот)" : "⚔️ Қарсылас: Бақтияр (Шынайы)";
+
             battleTimerInterval = setInterval(() => {
                 timeLeft--;
                 document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}с`;
@@ -1134,6 +1293,8 @@
                 }
             }, 1000);
 
+            // Бот / Ойыншының жылдамдық логикасы
+            const speed = type === 'bot' ? 3000 : 2000;
             oppBattleInterval = setInterval(() => {
                 if (Math.random() > 0.4 && opponentSlots.length < 3) {
                     opponentSlots.push(kazakhIcons[Math.floor(Math.random() * kazakhIcons.length)]);
@@ -1143,7 +1304,7 @@
                     opponentSlots.pop();
                     renderOpponentSlots();
                 }
-            }, 2500);
+            }, speed);
 
             startGameCommon();
         }
@@ -1151,7 +1312,7 @@
         function startGameCommon() {
             document.getElementById('home-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
-            document.getElementById('game-level-text').innerText = isBattleMode ? "⚔️ Дуэль Шайқасы" : `${currentLevel}-Деңгей`;
+            document.getElementById('game-level-text').innerText = isBattleMode ? "⚔️ Шайқас" : `${currentLevel}-Деңгей`;
             initBoard();
         }
 
@@ -1168,14 +1329,7 @@
             renderSlots();
             boardTiles = [];
 
-            let totalPairs;
-            if (isBattleMode) {
-                totalPairs = 4;
-            } else if (currentLevel <= 5) {
-                totalPairs = 2 + currentLevel;
-            } else {
-                totalPairs = 7 + (currentLevel - 5) * 2;
-            }
+            let totalPairs = isBattleMode ? 4 : (currentLevel <= 5 ? 2 + currentLevel : 7 + (currentLevel - 5) * 2);
 
             let iconArray = [];
             for (let i = 0; i < totalPairs; i++) {
@@ -1194,8 +1348,8 @@
                     id: idx,
                     icon: icon,
                     layer: layer,
-                    x: (col - 1) * 58,
-                    y: (row - 0.5) * 65 - (layer * 8)
+                    x: (col - 1) * 56,
+                    y: (row - 0.5) * 62 - (layer * 8)
                 });
             });
 
@@ -1220,7 +1374,7 @@
         function tapTile(tile) {
             if (slots.length >= 4) {
                 playSound(300, 0.2);
-                showToast("⚠️ Ұяшық толды! Монета қажет!");
+                showToast("⚠️ Ұяшық толды!");
                 openModal('shop-modal');
                 return;
             }
@@ -1239,10 +1393,12 @@
                 if (oppBattleInterval) clearInterval(oppBattleInterval);
 
                 if (isBattleMode) {
-                    coins += 20;
+                    // Жеңіс сыйақысы: Ботпен = +5 монета, Шынайы ойыншымен = +15 монета
+                    const reward = battleType === 'bot' ? 5 : 15;
+                    coins += reward;
                     playSound(950, 0.3);
                     updateUI();
-                    showToast("🎉 Дуэльде жеңіске жеттіңіз! +20 🪙");
+                    showToast(`🎉 Жеңіс! +${reward} 🪙 таптыңыз!`);
                     setTimeout(exitGame, 1500);
                 } else {
                     playSound(880, 0.3);
