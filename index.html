@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong</title>
+    <title>Qazaq Mahjong v4.0</title>
     <!-- Monetag Official Tag Integration -->
     <script src="https://alwingulla.com/88/tag.min.js" data-zone="e5e4318e5ca58d6b7eb38b03155d67fb" async data-cfasync="false"></script>
     <meta name="monetag" content="e5e4318e5ca58d6b7eb38b03155d67fb">
@@ -634,11 +634,11 @@
 </head>
 <body>
 
-    <!-- Rewarded / 5th Level Ad Popup -->
+    <!-- Rewarded / 5th Level Ad Popup (Monetag Bonus Ad) -->
     <div id="ad-popup" class="ad-overlay hidden">
         <div class="ad-box">
             <div class="ad-header-bar">
-                <span>Демеуші жарнама (Bonus Ad)</span>
+                <span>Monetag Демеуші Жарнама (v4.0)</span>
                 <button class="ad-close-x" onclick="closeAdPopup(false)">✕</button>
             </div>
             <div style="padding: 15px; background: #f8fafc;">
@@ -917,101 +917,4 @@
             }
         }
 
-        // Жарнаманы тек әр 5-ші деңгей сайын шығару және монета беру
-        function checkAndShowAdForLevel() {
-            if (currentLevel > 0 && currentLevel % 5 === 0) {
-                document.getElementById('ad-popup').classList.remove('hidden');
-            }
-        }
-
-        function closeAdPopup(watched) {
-            document.getElementById('ad-popup').classList.add('hidden');
-            if (watched) {
-                coins += 50;
-                updateUI();
-                showToast("🎁 Жарнама үшін +50 монета берілді!");
-            }
-        }
-
-        const langData = {
-            kk: { subTitle: "Ұлттық нақыштағы дәстүрлі қабатты маджонг ойыны", classic: "Классикалық Жорық", battle: "Ойыншылар Шайқасы", battleSub: "Екі ойыншылы дуэль", qazyna: "🏆 Қазына", leader: "📊 Рейтинг", chat: "💬 Чат" },
-            ru: { subTitle: "Традиционная многослойная игра маджонг в национальном стиле", classic: "Классический поход", battle: "Битва игроков", battleSub: "Дуэль двух игроков", qazyna: "🏆 Сокровища", leader: "📊 Рейтинг", chat: "💬 Чат" },
-            en: { subTitle: "Traditional layered mahjong game with national motifs", classic: "Classic Campaign", battle: "Player Battle", battleSub: "Two player duel", qazyna: "🏆 Treasures", leader: "📊 Leaderboard", chat: "💬 Chat" },
-            tr: { subTitle: "Geleneksel motifli çok katmanlı mahjong oyunu", classic: "Klasik Sefer", battle: "Oyuncu Savaşı", battleSub: "İki kişilik düello", qazyna: "🏆 Hazineler", leader: "📊 Sıralama", chat: "💬 Sohbet" },
-            zh: { subTitle: "具有民族特色的传统多层麻将游戏", classic: "经典战役", battle: "玩家对决", battleSub: "双人对决", qazyna: "🏆 宝藏", leader: "📊 排行榜", chat: "💬 聊天" },
-            ko: { subTitle: "전통 스타일의 다층 마작 게임", classic: "클래식 모드", battle: "플레이어 대결", battleSub: "2인 듀얼", qazyna: "🏆 보물", leader: "📊 순위", chat: "💬 채팅" },
-            ja: { subTitle: "伝統的な多層麻雀ゲーム", classic: "クラシック", battle: "プレイヤーバトル", battleSub: "2人対決", qazyna: "🏆 宝物", leader: "📊 ランキング", chat: "💬 チャット" },
-            ar: { subTitle: "لعبة الماجونغ التقليدية متعددة الطبقات", classic: "الحملة الكلاسيكية", battle: "معركة اللاعبين", battleSub: "مبارزة لشخصين", qazyna: "🏆 الكنوز", leader: "📊 الترتيب", chat: "💬 الدردشة" }
-        };
-
-        function changeLang(lang) {
-            const d = langData[lang];
-            if (!d) return;
-            document.getElementById('sub-title-txt').innerText = d.subTitle;
-            document.getElementById('mode-classic-txt').innerText = d.classic;
-            document.getElementById('mode-battle-txt').innerText = d.battle;
-            document.getElementById('mode-battle-sub').innerText = d.battleSub;
-            document.getElementById('btn-qazyna').innerText = d.qazyna;
-            document.getElementById('btn-leader').innerText = d.leader;
-            document.getElementById('btn-chat').innerText = d.chat;
-
-            document.querySelectorAll('.lang-card').forEach(b => b.classList.remove('active'));
-            if(event && event.target) event.target.classList.add('active');
-        }
-
-        const jetiQazynaList = [
-            { req: 2, title: "Жүйрік ат", icon: "🐎", reward: 150, claimed: false },
-            { req: 4, title: "Құмай тазы", icon: "🐕", reward: 300, claimed: false },
-            { req: 6, title: "Берен мылтық", icon: "🏹", reward: 500, claimed: false },
-            { req: 8, title: "Пезді кездік", icon: "🗡️", reward: 800, claimed: false },
-            { req: 10, title: "Қыран бүркіт", icon: "🦅", reward: 1200, claimed: false },
-            { req: 12, title: "Ақ отау", icon: "⛺", reward: 2000, claimed: false },
-            { req: 15, title: "Сұлу әйел", icon: "👸", reward: 3500, claimed: false }
-        ];
-
-        const kazakhIcons = ["🇰🇿", "🏛️", "🛖", "🪕", "☀️", "🦅", "🐎", "🗺️"];
-
-        let boardTiles = [];
-        let slots = [];
-        let historyStack = [];
-        let opponentSlots = [];
-
-        function updateUI() {
-            document.getElementById('coin-display').innerText = coins;
-            document.getElementById('diamond-display').innerText = diamonds;
-            document.getElementById('user-name-display').innerText = username;
-            document.getElementById('home-level-label').innerText = `${currentLevel}-ші Деңгей`;
-            document.getElementById('lvl-badge-text').innerText = `${currentLevel}-ші`;
-        }
-
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-        function buyViaWhatsApp(item, price) {
-            playSound(500, 0.1);
-            const txt = encodeURIComponent(`Сәлеметсіз бе! Qazaq Mahjong ойынында ${item} (${price}) сатып алу үшін код сұраймын. Ойыншы: ${username}`);
-            window.open(`https://wa.me/${whatsappNum}?text=${txt}`, '_blank');
-        }
-
-        function openWhatsAppSupport() {
-            playSound(500, 0.1);
-            const txt = encodeURIComponent(`Сәлеметсіз бе! Qazaq Mahjong қолдау қызметі бойынша.`);
-            window.open(`https://wa.me/${whatsappNum}?text=${txt}`, '_blank');
-        }
-
-        function checkAdminCode(val) {
-            username = val;
-            const adminPanel = document.getElementById('admin-panel');
-            if (val === "Ersin 1995") {
-                adminPanel.classList.remove('hidden');
-                showToast("🔑 Ерсін, басқару панелі ашылды!");
-            } else {
-                adminPanel.classList.add('hidden');
-            }
-        }
-
-        function adminAddCoins() {
-            coins += 1000;
-            updateUI();
-            showToast("🪙 +1000 монета қосылды!");
-        }
+        // Жарнаманы тек әр 5-ші деңгей аяқталғанда ғана шығару және
