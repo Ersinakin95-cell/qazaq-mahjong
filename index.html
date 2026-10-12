@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v5.0</title>
+    <title>Qazaq Mahjong v5.1</title>
     <style>
         * {
             box-sizing: border-box;
@@ -697,7 +697,22 @@
         </div>
     </div>
 
-    <!-- Wish / Blessing Popup (Қазына Баталары) -->
+    <!-- Promo Code Modal (Промокод Енгізу) -->
+    <div id="promo-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">🎟️ ПРОМОКОД ЕНГІЗУ</div>
+                <button class="close-btn" onclick="closeModal('promo-modal')">✕</button>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size:11px; color:#fbbf24; font-weight:bold;">Сатып алған промокодты жазыңыз:</label>
+                <input type="text" id="promo-code-input" class="shop-item-card" style="width:100%; color:#fff; background:rgba(0,0,0,0.3); margin-top:6px; text-transform:uppercase;" placeholder="Мысалы: QAZAQ300">
+            </div>
+            <button class="buy-btn" style="width:100%; padding:10px; background:#22c55e;" onclick="activatePromoCode()">Активтендіру</button>
+        </div>
+    </div>
+
+    <!-- Wish / Blessing Popup -->
     <div id="wish-popup" class="modal hidden">
         <div class="modal-card" style="text-align: center;">
             <div style="font-size: 50px; margin-bottom: 10px;" id="wish-icon">🏆</div>
@@ -734,7 +749,7 @@
             </div>
         </div>
 
-        <!-- Ad Cash Tasks Banner (5 жарнама=200тг, 10=500тг, 30=1000тг) -->
+        <!-- Ad Cash Tasks Banner -->
         <div class="ad-cash-banner">
             <div class="ad-cash-title">
                 <span>💵 ЖАРНАМАЛЫҚ БОНУСТАР</span>
@@ -801,7 +816,7 @@
         </div>
     </div>
 
-    <!-- Battle Type Selection Modal (Сот / Шынайы ойыншы) -->
+    <!-- Battle Type Selection Modal -->
     <div id="battle-select-modal" class="modal hidden">
         <div class="modal-card">
             <div class="modal-header">
@@ -872,6 +887,8 @@
                 </div>
             </div>
 
+            <button class="buy-btn" style="width:100%; margin-bottom:8px; background:#3b82f6;" onclick="openModal('promo-modal')">🎟️ Промокод енгізу</button>
+
             <div style="font-size:11px; color:#fbbf24; font-weight:bold; margin-bottom:4px;">Тілді таңдау / Language:</div>
             <div class="lang-grid">
                 <button class="lang-card active" onclick="changeLang('kk')">🇰🇿 Қазақша</button>
@@ -879,11 +896,11 @@
                 <button class="lang-card" onclick="changeLang('en')">🇬🇧 English</button>
                 <button class="lang-card" onclick="changeLang('tr')">🇹🇷 Türkçe</button>
             </div>
-            <button class="buy-btn" style="width:100%; margin-top:12px; background:#25d366;" onclick="openWhatsAppSupport()">💬 WhatsApp Қолдау</button>
+            <button class="buy-btn" style="width:100%; margin-top:12px; background:#25d366;" onclick="openWhatsAppSupport()">💬 WhatsApp Қолдау (87477099901)</button>
         </div>
     </div>
 
-    <!-- Shop Modal -->
+    <!-- Shop Modal (WhatsApp: 87477099901) -->
     <div id="shop-modal" class="modal hidden">
         <div class="modal-card">
             <div class="modal-header">
@@ -895,10 +912,12 @@
             <div class="shop-item-card"><div>🪙 1500 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('1500 Монета', '600 ТГ')">600 ТГ</button></div>
             <div class="shop-item-card"><div>🪙 3500 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('3500 Монета', '1200 ТГ')">1200 ТГ</button></div>
             <div class="shop-item-card"><div>🪙 10000 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('10000 Монета', '3000 ТГ')">3000 ТГ</button></div>
+            
+            <button class="buy-btn" style="width:100%; margin-top:10px; background:#3b82f6;" onclick="openModal('promo-modal')">🎟️ Промокод енгізу</button>
         </div>
     </div>
 
-    <!-- Jeti Qazyna Modal (Монетаға ашылады + Тілектер) -->
+    <!-- Jeti Qazyna Modal -->
     <div id="collection-modal" class="modal hidden">
         <div class="modal-card">
             <div class="modal-header">
@@ -960,8 +979,20 @@
     </div>
 
     <script>
-        const whatsappNum = "77000000000";
-        const adSmartLink = "https://google.com"; // Monetag сілтемесі
+        // Дұрыс WhatsApp нөмірі (87477099901)
+        const whatsappNum = "77477099901";
+
+        // Өзіңіздің Monetag Direct Link сілтемеңізді осы жерге қоясыз:
+        const monetagDirectLink = "https://alwingulla.com/88/tag.min.js"; 
+
+        // Промокодтар тізімі (Ойыншыларға сатқанда беретін кодтар)
+        const activePromoCodes = {
+            "QAZAQ300": 300,
+            "QAZAQ600": 600,
+            "QAZAQ1500": 1500,
+            "QAZAQ3500": 3500,
+            "QAZAQ10000": 10000
+        };
 
         let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
         let currentLevel = parseInt(localStorage.getItem('qazaq_mahjong_level')) || 1;
@@ -969,18 +1000,16 @@
         let watchedAdsCount = parseInt(localStorage.getItem('qazaq_mahjong_ads_count')) || 0;
         let diamonds = 5;
 
-        // Жеті қазына деректері (Бағалары 500 монетадан басталады)
         let jetiQazynaList = [
             { id: 0, title: "Жүйрік ат", icon: "🐎", cost: 500, claimed: false, wish: "Атыңыз бәйгеде алда келсін! Өміріңіз сәйгүліктей жүйрік әрі сәтті болсын!" },
             { id: 1, title: "Құмай тазы", icon: "🐕", cost: 800, claimed: false, wish: "Құмай тазыдай қырағылық пен адалдық серігіңіз болсын!" },
             { id: 2, title: "Берен мылтық", icon: "🏹", cost: 1200, claimed: false, wish: "Көздеген мақсатыңызға әрдайым мүлт кетпей жете беріңіз!" },
-            { id: 3, title: "Пезді кездік", icon: "🗡️", reward: 0, cost: 1800, claimed: false, wish: "Кез келген қиындықты кесіп өтер өткірлік пен қайрат тілейміз!" },
+            { id: 3, title: "Пезді кездік", icon: "🗡️", cost: 1800, claimed: false, wish: "Кез келген қиындықты кесіп өтер өткірлік пен қайрат тілейміз!" },
             { id: 4, title: "Қыран бүркіт", icon: "🦅", cost: 2500, claimed: false, wish: "Қырандай биіктерден көрініп, еңсеңіз әрдайым биік болсын!" },
             { id: 5, title: "Ақ отау", icon: "⛺", cost: 3500, claimed: false, wish: "Шаңырағыңызға шаттық пен береке, отбасыңызға амандық тілейміз!" },
             { id: 6, title: "Сұлу әйел", icon: "👸", cost: 5000, claimed: false, wish: "Махаббат пен сыйластық ошағыңыздың мәңгілік алауы болсын!" }
         ];
 
-        // Сақталған қазыналарды жүктеу
         const savedQazyna = JSON.parse(localStorage.getItem('qazaq_mahjong_qazyna_saved'));
         if (savedQazyna) {
             savedQazyna.forEach((sq, idx) => {
@@ -997,7 +1026,7 @@
         }
 
         let isBattleMode = false;
-        let battleType = 'bot'; // 'bot' немесе 'real'
+        let battleType = 'bot';
         let battleTimerInterval = null;
         let oppBattleInterval = null;
         let timeLeft = 35;
@@ -1051,8 +1080,8 @@
             watchedAdsCount++;
             saveUserData();
             updateUI();
-            showToast("🎁 +50 монета берілді! Жарнама ашылуда...");
-            window.open(adSmartLink, '_blank');
+            showToast("🎁 +50 монета берілді!");
+            window.open(monetagDirectLink, '_blank');
         }
 
         function closeAdPopup() {
@@ -1065,6 +1094,21 @@
                 window.open(`https://wa.me/${whatsappNum}?text=${txt}`, '_blank');
             } else {
                 showToast(`⚠️ Әлі ${targetCount - watchedAdsCount} жарнама көру қажет!`);
+            }
+        }
+
+        function activatePromoCode() {
+            const input = document.getElementById('promo-code-input').value.trim().toUpperCase();
+            if (activePromoCodes[input]) {
+                const reward = activePromoCodes[input];
+                coins += reward;
+                saveUserData();
+                updateUI();
+                closeModal('promo-modal');
+                showToast(`🎉 Промокод сәтті енгізілді! +${reward} 🪙 қосылды!`);
+                document.getElementById('promo-code-input').value = '';
+            } else {
+                showToast("❌ Қате немесе жарамсыз промокод!");
             }
         }
 
@@ -1105,7 +1149,6 @@
             document.getElementById('lvl-badge-text').innerText = `${currentLevel}-ші`;
             document.getElementById('ad-count-txt').innerText = watchedAdsCount;
 
-            // Жарнама бонус батырмаларының күйі
             updateAdCashBtn('ad-btn-5', 5);
             updateAdCashBtn('ad-btn-10', 10);
             updateAdCashBtn('ad-btn-30', 30);
@@ -1130,7 +1173,7 @@
 
         function buyViaWhatsApp(item, price) {
             playSound(500, 0.1);
-            const txt = encodeURIComponent(`Сәлеметсіз бе! Qazaq Mahjong ойынында ${item} (${price}) сатып алу үшін код сұраймын. Ойыншы: ${username}`);
+            const txt = encodeURIComponent(`Сәлеметсіз бе! Qazaq Mahjong ойынында ${item} (${price}) сатып алу үшін промокод сұраймын. Ойыншы: ${username}`);
             window.open(`https://wa.me/${whatsappNum}?text=${txt}`, '_blank');
         }
 
@@ -1201,7 +1244,6 @@
             }
         }
 
-        // Жеті қазынаны монетаға ашу және ішінен бата-тілек шығару
         function renderQazyna() {
             const container = document.getElementById('qazyna-list');
             if(!container) return;
@@ -1263,7 +1305,6 @@
             startGameCommon();
         }
 
-        // Ботпен немесе Шынайы ойыншымен шайқасты бастау
         function startBattleGame(type) {
             closeModal('battle-select-modal');
             playSound(600, 0.1);
@@ -1293,7 +1334,6 @@
                 }
             }, 1000);
 
-            // Бот / Ойыншының жылдамдық логикасы
             const speed = type === 'bot' ? 3000 : 2000;
             oppBattleInterval = setInterval(() => {
                 if (Math.random() > 0.4 && opponentSlots.length < 3) {
@@ -1393,7 +1433,6 @@
                 if (oppBattleInterval) clearInterval(oppBattleInterval);
 
                 if (isBattleMode) {
-                    // Жеңіс сыйақысы: Ботпен = +5 монета, Шынайы ойыншымен = +15 монета
                     const reward = battleType === 'bot' ? 5 : 15;
                     coins += reward;
                     playSound(950, 0.3);
