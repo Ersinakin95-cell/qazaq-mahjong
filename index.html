@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Monetag сайтыңызды растауға арналған тег -->
+    <!-- Monetag сайтыңызды растауға арналған мета-тег -->
     <meta name="monetag" content="266282acd9c50e949a8c9cd6024e6ed0">
-    <title>Махджонг Нақыштары - Қазақы стиль</title>
-
-    <!-- Monetag жарнама скрипті -->
-    <script src="https://alwingulla.com/88/tag.min.js" data-zone="123456" async data-cfasync="false"></script>
-
+    <title>Махджонг Нақыштары: Хандық Киіз Үй</title>
     <style>
         * {
             box-sizing: border-box;
@@ -44,34 +40,65 @@
             overflow: hidden;
         }
 
-        header {
+        .hidden {
+            display: none !important;
+        }
+
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
+            z-index: 10;
         }
 
-        .logo {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #38bdf8;
-            letter-spacing: 1px;
-        }
-
-        .stats {
+        .profile-badge {
+            background: #8b4513;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
-            gap: 15px;
-            font-size: 0.9rem;
-            color: #94a3b8;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            border: 3px solid #ffcc00;
+            box-shadow: 0 0 10px rgba(255,204,0,0.5);
+            cursor: pointer;
         }
 
-        .stats span b {
-            color: #f8fafc;
+        .top-right-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .game-board {
-            flex: 1;
+        .coin-badge, .crown-badge {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #ffcc00;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #ffcc00;
+            font-size: 14px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+
+        .settings-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #ffcc00;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .yurt-center {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -79,187 +106,756 @@
             position: relative;
         }
 
-        .tile-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+        .yurt-card {
             width: 100%;
-            max-width: 320px;
-        }
-
-        .tile {
-            aspect-ratio: 3/4;
-            background: linear-gradient(135deg, #334155, #1e293b);
-            border: 2px solid #475569;
-            border-radius: 8px;
+            max-width: 380px;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 3px solid #ffcc00;
+            border-radius: 30px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.25);
             display: flex;
             flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .yurt-graphic {
+            width: 220px;
+            height: 140px;
+            background: radial-gradient(ellipse at bottom, #94a3b8, #475569, #1e293b);
+            border-radius: 120px 120px 20px 20px;
+            border: 4px solid #ffcc00;
+            position: relative;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.6), 0 0 20px rgba(56, 189, 248, 0.4);
+            margin-bottom: 20px;
+            display: flex;
             justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
+            align-items: flex-end;
         }
 
-        .tile:active {
-            transform: scale(0.95);
+        .yurt-door {
+            width: 36px;
+            height: 55px;
+            background: #8b4513;
+            border: 2px solid #ffcc00;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 0 10px #38bdf8;
         }
 
-        .tile.selected {
-            border-color: #38bdf8;
-            background: linear-gradient(135deg, #0369a1, #0284c7);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
-        }
-
-        .tile.matched {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.5);
-        }
-
-        footer {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-            padding-bottom: 10px;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 25px;
-            cursor: pointer;
+        .yurt-ornament {
+            position: absolute;
+            top: 25px;
             width: 100%;
-            max-width: 250px;
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
-            transition: opacity 0.2s;
-        }
-
-        .btn:active {
+            height: 12px;
+            background: #ffcc00;
             opacity: 0.8;
         }
 
-        .msg {
-            font-size: 0.95rem;
-            color: #38bdf8;
-            min-height: 24px;
-            text-align: center;
+        .yurt-title {
+            font-size: 20px;
+            color: #ffcc00;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            text-shadow: 0 0 10px rgba(255,204,0,0.6);
+        }
+
+        .bottom-action {
+            margin-bottom: 15px;
+            z-index: 10;
+        }
+
+        .level-btn {
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(to bottom, #22c55e, #15803d);
+            color: white;
+            font-size: 26px;
+            font-weight: 900;
+            border: 3px solid #ffcc00;
+            border-radius: 35px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #14532d, 0 10px 20px rgba(0,0,0,0.6);
+            transition: 0.05s;
+            text-shadow: 1px 2px 2px rgba(0,0,0,0.5);
+        }
+
+        .level-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #14532d;
+        }
+
+        .modal {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.88);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            width: 90%;
+            max-width: 390px;
+            padding: 22px;
+            border-radius: 25px;
+            border: 3px solid #ffcc00;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-header h3 {
+            color: #ffcc00;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .close-btn {
+            background: #ef4444;
+            border: 2px solid #ffcc00;
+            color: white;
+            font-size: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .settings-profile-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255,204,0,0.3);
+        }
+
+        .profile-edit-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .settings-avatar {
+            background: #8b4513;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            border: 2px solid #ffcc00;
+        }
+
+        .username-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #ffcc00;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            padding: 6px 10px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .avatar-selector {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            padding: 6px;
+            border-radius: 10px;
+        }
+
+        .avatar-option {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+        }
+
+        .avatar-option.selected {
+            background: #ffcc00;
+        }
+
+        .settings-toggles {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 18px;
+        }
+
+        .toggle-icon {
+            background: #1e293b;
+            border: 2px solid #ffcc00;
+            font-size: 22px;
+            width: 52px; 
+            height: 52px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .toggle-icon.off {
+            background: #dc2626;
+            opacity: 0.8;
+        }
+
+        .settings-menu {
+            list-style: none;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 5px 15px;
+            border: 1px solid rgba(255,204,0,0.2);
+        }
+
+        .settings-menu li {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .settings-menu li:last-child {
+            border-bottom: none;
+        }
+
+        #game-screen {
+            background: #061c12;
+        }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+
+        .back-btn {
+            background: #14532d;
+            color: #ffcc00;
+            border: 2px solid #ffcc00;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .game-header h3 {
+            color: #ffcc00;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .collection-box {
+            height: 80px;
+            background: #022c22;
+            border: 3px solid #ffcc00;
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 15px 0;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
+        }
+
+        .slot {
+            width: 55px;
+            height: 55px;
+            background: #14532d;
+            border-radius: 12px;
+            border: 2px solid rgba(255,204,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+        }
+
+        .board-container {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 10px;
+        }
+
+        .layered-board {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tile {
+            position: absolute;
+            width: 65px;
+            height: 72px;
+            background: #fff8e7;
+            border-radius: 12px;
+            border: 2px solid #8b4513;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #b38642, 0 8px 12px rgba(0,0,0,0.5);
+            transition: all 0.1s ease;
+        }
+
+        .tile.blocked {
+            filter: brightness(0.5) grayscale(0.4);
+            cursor: not-allowed;
+            box-shadow: 0 2px 0 #555;
+        }
+
+        .booster-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .booster-btn {
+            background: #1e293b;
+            border: 2px solid #ffcc00;
+            color: #ffcc00;
+            padding: 8px 14px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
         }
     </style>
 </head>
 <body>
 
-    <div class="screen">
-        <header>
-            <div class="logo">МАХДЖОНГ</div>
-            <div class="stats">
-                <span>Ұпай: <b id="score">0</b></span>
-                <span>Уақыт: <b id="timer">00:00</b></span>
-            </div>
-        </header>
-
-        <div class="game-board">
-            <div class="msg" id="message">Бірдей нақыштарды тауып, жұптаңыз!</div>
-            <div class="tile-container" id="tileContainer">
-                <!-- Ойын плиткалары скрипт арқылы қосылады -->
+    <div id="home-screen" class="screen">
+        <div class="top-bar">
+            <div class="profile-badge" id="main-avatar" onclick="openSettings()">🧔🏽‍♂️</div>
+            <div class="top-right-group">
+                <div class="coin-badge" id="coin-display" onclick="openShop()">🪙 50</div>
+                <div class="crown-badge">👑 x1</div>
+                <button class="settings-btn" onclick="openSettings()">⚙️</button>
             </div>
         </div>
 
-        <footer>
-            <button class="btn" onclick="startGame()">Қайта бастау</button>
-        </footer>
+        <div class="yurt-center">
+            <div class="yurt-card">
+                <div class="yurt-graphic">
+                    <div class="yurt-ornament"></div>
+                    <div class="yurt-door"></div>
+                </div>
+                <div class="yurt-title" id="lbl-castle">ХАНДЫҚ КИІЗ ҮЙ</div>
+            </div>
+        </div>
+
+        <div class="bottom-action">
+            <button class="level-btn" id="btn-level" onclick="startGame()">1-ші Деңгей</button>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="lbl-settings-title">Баптаулар</h3>
+                <button class="close-btn" onclick="closeSettings()">✕</button>
+            </div>
+            <div class="settings-profile-card">
+                <div class="profile-edit-row">
+                    <div class="settings-avatar" id="edit-avatar">🧔🏽‍♂️</div>
+                    <input type="text" class="username-input" id="username-input" value="Огонь-Парень" onchange="updateUsername(this.value)">
+                </div>
+                <div class="avatar-selector">
+                    <span class="avatar-option selected" onclick="selectAvatar('🧔🏽‍♂️', this)">🧔🏽‍♂️</span>
+                    <span class="avatar-option" onclick="selectAvatar('👨‍💼', this)">👨‍💼</span>
+                    <span class="avatar-option" onclick="selectAvatar('🤴', this)">🤴</span>
+                    <span class="avatar-option" onclick="selectAvatar('🧕', this)">🧕</span>
+                    <span class="avatar-option" onclick="selectAvatar('🇰🇿', this)">🇰🇿</span>
+                </div>
+            </div>
+            <div class="settings-toggles">
+                <button id="btn-music" class="toggle-icon" onclick="toggleMusic()">🎵</button>
+                <button id="btn-sound" class="toggle-icon" onclick="toggleSound()">🔊</button>
+                <button id="btn-vibrate" class="toggle-icon" onclick="toggleVibrate()">📳</button>
+            </div>
+            <ul class="settings-menu">
+                <li onclick="nextLanguage()">
+                    <span id="lbl-lang">🌐 Тіл (Қазақша)</span> <span>›</span>
+                </li>
+                <li onclick="openWhatsApp()">
+                    <span id="lbl-contact">💬 WhatsApp Қолдау</span> <span>›</span>
+                </li>
+                <li onclick="alert(translations[currentLang].aboutText)">
+                    <span id="lbl-about">ℹ️ Біз туралы</span> <span>›</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
+        <div class="game-header">
+            <button class="back-btn" id="lbl-back" onclick="exitGame()">⬅️ Қайту</button>
+            <h3 id="level-title">Деңгей 1</h3>
+        </div>
+
+        <div class="collection-box" id="collection-box">
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+        </div>
+
+        <div class="booster-bar">
+            <button class="booster-btn" onclick="useBooster('undo')">↩️ Артқа (10 🪙)</button>
+            <button class="booster-btn" onclick="useBooster('shuffle')">🔀 Араластыру (15 🪙)</button>
+        </div>
+
+        <div class="board-container">
+            <div class="layered-board" id="layered-board"></div>
+        </div>
     </div>
 
     <script>
-        const symbols = ['🀄', '⚜️', '⭐', '🌙', '🔥', '💎', '🎯', '🍀'];
-        let tiles = [];
-        let selectedTile = null;
-        let score = 0;
-        let matchesFound = 0;
-        let timerInterval = null;
-        let secondsElapsed = 0;
+        const tileThemes = [
+            ['⛺', '🪕', '🐎', '⚜️', '🪙', '🦅', '☀️', '🏹'],
+            ['🦁', '🐯', '🐘', '🦒', '🦊', '🐺', '🐻', '🐼'],
+            ['🍎', '🍇', '🍉', '🍓', '🍑', '🍍', '🥝', '🍌'],
+            ['🚀', '🛸', '⭐', '🌙', '🪐', '☄️', '🌌', '👾']
+        ];
 
-        function startGame() {
-            clearInterval(timerInterval);
-            secondsElapsed = 0;
-            score = 0;
-            matchesFound = 0;
-            document.getElementById('score').innerText = score;
-            document.getElementById('timer').innerText = '00:00';
-            document.getElementById('message').innerText = 'Ойын басталды!';
+        let currentLevel = 1;
+        let coins = 50;
+        let boardTiles = [];
+        let collectedBox = [];
+        let currentAvatar = '🧔🏽‍♂️';
+        let currentUsername = 'Огонь-Парень';
+        
+        let musicOn = true;
+        let soundOn = true;
+        let vibrateOn = true;
 
-            startTimer();
+        const languages = ['kk', 'ru', 'en', 'tr', 'zh'];
+        let langIndex = 0;
+        let currentLang = 'kk';
 
-            // 8 жұп элемент құру (барлығы 16 плитка)
-            tiles = [...symbols, ...symbols]
-                .sort(() => Math.random() - 0.5)
-                .map((symbol, index) => ({ id: index, symbol, matched: false, selected: false }));
+        const translations = {
+            kk: {
+                castle: "ХАНДЫҚ КИІЗ ҮЙ",
+                levelBtn: "Деңгей",
+                settings: "Баптаулар",
+                langName: "🌐 Тіл (Қазақша)",
+                contact: "💬 WhatsApp Қолдау",
+                about: "ℹ️ Біз туралы",
+                back: "⬅️ Қайту",
+                aboutText: "Махджонг Нақыштары v1.0.0 — 5000 деңгейлік Махджонг.",
+                winMsg: "🎉 Құттықтаймыз! Деңгей сәтті өтті!",
+                tierWinMsg: "🏆 Тамаша! 10 кезеңді еңсердіңіз! Сыйлыққа +500 монета берілді!",
+                fullMsg: "❌ Орын толып қалды! Монета сатып алып жалғастырасыз ба?"
+            },
+            ru: {
+                castle: "ХАНСКАЯ ЮРТА",
+                levelBtn: "Уровень",
+                settings: "Настройки",
+                langName: "🌐 Язык (Русский)",
+                contact: "💬 WhatsApp Поддержка",
+                about: "ℹ️ О Нас",
+                back: "⬅️ Назад",
+                aboutText: "Махджонг Нақыштары v1.0.0 — 3D многоуровневый Махджонг.",
+                winMsg: "🎉 Поздравляем! Уровень пройден!",
+                tierWinMsg: "🏆 Отлично! Пройдено 10 уровней! Награда: +500 монет!",
+                fullMsg: "❌ Место заполнено! Купить монеты для продолжения?"
+            }
+        };
 
-            renderBoard();
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playClickSound() {
+            if (!soundOn) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
         }
 
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                secondsElapsed++;
-                let mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
-                let secs = (secondsElapsed % 60).toString().padStart(2, '0');
-                document.getElementById('timer').innerText = `${mins}:${secs}`;
-            }, 1000);
+        function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
+        function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+
+        function selectAvatar(emoji, el) {
+            currentAvatar = emoji;
+            document.getElementById('main-avatar').innerText = emoji;
+            document.getElementById('edit-avatar').innerText = emoji;
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function updateUsername(val) { if(val.trim() !== '') currentUsername = val; }
+
+        function toggleMusic() {
+            musicOn = !musicOn;
+            document.getElementById('btn-music').classList.toggle('off', !musicOn);
+        }
+
+        function toggleSound() {
+            soundOn = !soundOn;
+            document.getElementById('btn-sound').classList.toggle('off', !soundOn);
+        }
+
+        function toggleVibrate() {
+            vibrateOn = !vibrateOn;
+            document.getElementById('btn-vibrate').classList.toggle('off', !vibrateOn);
+        }
+
+        function nextLanguage() {
+            langIndex = (langIndex + 1) % languages.length;
+            currentLang = languages[langIndex] || 'kk';
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            let t = translations[currentLang] || translations['kk'];
+            document.getElementById('lbl-settings-title').innerText = t.settings;
+            document.getElementById('lbl-lang').innerText = t.langName;
+            document.getElementById('lbl-contact').innerText = t.contact;
+            document.getElementById('lbl-about').innerText = t.about;
+            document.getElementById('lbl-castle').innerText = t.castle;
+            document.getElementById('lbl-back').innerText = t.back;
+            updateLevelTitle();
+        }
+
+        function openWhatsApp() {
+            window.location.href = "https://wa.me/77477099901?text=Salem,%20oyyn%20boyynsha%20habarlasyp%20trmyn!";
+        }
+
+        function openShop() {
+            let choice = prompt(currentLang === 'kk' ? 
+                "🪙 МОНЕТА АЛУ ДҮКЕНІ:\n\n1 - Kaspi-мен сатып алу (WhatsApp)\n2 - Промокод енгізу (Пароль)\n\nСанды таңдаңыз (1 немесе 2):" : 
+                "🪙 МАГАЗИН МОНЕТ:\n\n1 - Купить через Kaspi (WhatsApp)\n2 - Ввести промокод\n\nВыберите число (1 или 2):");
+
+            if (choice === '1') {
+                window.location.href = "https://wa.me/77477099901?text=Salem,%201000%20moneta%20satybalgynym%20keledi,%20Kaspi%20rekvizit%20jiberinizshi!";
+            } else if (choice === '2') {
+                let promo = prompt("🔑 Промокодты (парольді) жазыңыз:");
+                if (promo === "GOLD1000") {
+                    coins += 1000;
+                    alert("🎉 Құттықтаймыз! +1000 монета есепшотқа түсті!");
+                    updateCoinsDisplay();
+                } else if (promo === "GOLD5000") {
+                    coins += 5000;
+                    alert("🎉 Құттықтаймыз! +5000 монета есепшотқа түсті!");
+                    updateCoinsDisplay();
+                } else if (promo !== null) {
+                    alert("❌ Промокод қате!");
+                }
+            }
+        }
+
+        function buyCoins() {
+            openShop();
+        }
+
+        function useBooster(type) {
+            if (type === 'undo' && coins >= 10 && collectedBox.length > 0) {
+                coins -= 10;
+                let last = collectedBox.pop();
+                boardTiles.push(last);
+                updateCoinsDisplay();
+                renderBoard();
+                renderCollection();
+            } else if (type === 'shuffle' && coins >= 15 && boardTiles.length > 0) {
+                coins -= 15;
+                boardTiles.sort(() => Math.random() - 0.5);
+                updateCoinsDisplay();
+                renderBoard();
+            }
+        }
+
+        function startGame() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            updateLevelTitle();
+            updateCoinsDisplay();
+            setupLevel();
+        }
+
+        function exitGame() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+        }
+
+        function updateLevelTitle() {
+            let t = translations[currentLang] || translations['kk'];
+            let text = `${t.levelBtn} ${currentLevel}`;
+            document.getElementById('level-title').innerText = text;
+            document.getElementById('btn-level').innerText = text;
+        }
+
+        function updateCoinsDisplay() {
+            document.getElementById('coin-display').innerText = `🪙 ${coins}`;
+        }
+
+        function setupLevel() {
+            boardTiles = [];
+            collectedBox = [];
+            
+            let activeIcons = tileThemes[(currentLevel - 1) % tileThemes.length];
+            let numPairs = 4 + Math.min(currentLevel * 2, 16);
+
+            for (let i = 0; i < numPairs; i++) {
+                let icon = activeIcons[i % activeIcons.length];
+                boardTiles.push({ id: i * 2, icon: icon, x: 0, y: 0, layer: 0 });
+                boardTiles.push({ id: i * 2 + 1, icon: icon, x: 0, y: 0, layer: 0 });
+            }
+
+            boardTiles.sort(() => Math.random() - 0.5);
+
+            let isLayered = currentLevel >= 5;
+            let cols = 4;
+            
+            boardTiles.forEach((tile, index) => {
+                if (isLayered) {
+                    tile.layer = Math.floor(index / 6); 
+                    let posInLayer = index % 6;
+                    tile.x = (posInLayer % 3) * 72 + (tile.layer * 12) + 35;
+                    tile.y = Math.floor(posInLayer / 3) * 78 + (tile.layer * 12) + 20;
+                } else {
+                    tile.layer = 0;
+                    tile.x = (index % cols) * 72 + 20;
+                    tile.y = Math.floor(index / cols) * 78 + 10;
+                }
+            });
+
+            renderBoard();
+            renderCollection();
         }
 
         function renderBoard() {
-            const container = document.getElementById('tileContainer');
-            container.innerHTML = '';
+            const board = document.getElementById('layered-board');
+            board.innerHTML = '';
 
-            tiles.forEach((tile, index) => {
-                const el = document.createElement('div');
-                el.classList.add('tile');
-                if (tile.matched) el.classList.add('matched');
-                if (tile.selected) el.classList.add('selected');
-                
-                el.innerText = tile.matched ? '' : tile.symbol;
-                el.onclick = () => handleTileClick(index);
-                container.appendChild(el);
+            boardTiles.forEach((tile, index) => {
+                const div = document.createElement('div');
+                div.className = 'tile';
+                div.innerText = tile.icon;
+                div.style.left = `${tile.x}px`;
+                div.style.top = `${tile.y}px`;
+                div.style.zIndex = tile.layer * 10 + index;
+
+                let isBlocked = boardTiles.some(other => 
+                    other.layer > tile.layer && 
+                    Math.abs(other.x - tile.x) < 45 && 
+                    Math.abs(other.y - tile.y) < 45
+                );
+
+                if (isBlocked) {
+                    div.classList.add('blocked');
+                } else {
+                    div.onclick = () => onTileClick(index);
+                }
+
+                board.appendChild(div);
             });
         }
 
-        function handleTileClick(index) {
-            let clicked = tiles[index];
-            if (clicked.matched || clicked.selected) return;
-
-            if (!selectedTile) {
-                selectedTile = index;
-                clicked.selected = true;
-            } else {
-                let first = tiles[selectedTile];
-                if (first.symbol === clicked.symbol && selectedTile !== index) {
-                    first.matched = true;
-                    clicked.matched = true;
-                    score += 10;
-                    matchesFound++;
-                    document.getElementById('score').innerText = score;
-                    document.getElementById('message').innerText = 'Жұп табылды! Керемет!';
-
-                    if (matchesFound === symbols.length) {
-                        clearInterval(timerInterval);
-                        document.getElementById('message').innerText = `Жеңіс! Уақыт: ${document.getElementById('timer').innerText}`;
-                    }
-                } else {
-                    first.selected = false;
-                    document.getElementById('message').innerText = 'Қате, басқасын байқап көріңіз.';
-                }
-                selectedTile = null;
-            }
-            renderBoard();
+        function renderCollection() {
+            const slots = document.querySelectorAll('.slot');
+            slots.forEach((slot, index) => {
+                slot.innerText = collectedBox[index] ? collectedBox[index].icon : '';
+            });
         }
 
-        startGame();
+        function onTileClick(index) {
+            if (collectedBox.length >= 4) return;
+            playClickSound();
+            if (vibrateOn && navigator.vibrate) navigator.vibrate(30);
+
+            let tapped = boardTiles.splice(index, 1)[0];
+            collectedBox.push(tapped);
+            
+            checkMatches();
+            renderBoard();
+            renderCollection();
+        }
+
+        function checkMatches() {
+            let counts = {};
+            collectedBox.forEach(item => {
+                counts[item.icon] = (counts[item.icon] || 0) + 1;
+            });
+
+            for (let key in counts) {
+                if (counts[key] >= 2) {
+                    collectedBox = collectedBox.filter(item => item.icon !== key);
+                }
+            }
+
+            let t = translations[currentLang] || translations['kk'];
+
+            if (boardTiles.length === 0 && collectedBox.length === 0) {
+                setTimeout(() => {
+                    if (currentLevel % 10 === 0) {
+                        alert(t.tierWinMsg);
+                        coins += 500;
+                    } else {
+                        alert(t.winMsg);
+                    }
+                    updateCoinsDisplay();
+                    currentLevel++;
+                    updateLevelTitle();
+                    setupLevel();
+                }, 150);
+            } else if (collectedBox.length >= 4) {
+                setTimeout(() => {
+                    let action = confirm(t.fullMsg);
+                    if (action) {
+                        openShop();
+                    } else {
+                        setupLevel();
+                    }
+                }, 150);
+            }
+        }
     </script>
 </body>
 </html>
