@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Qazaq Mahjong</title>
-    <!-- Monetag Script Integration -->
+    <!-- Monetag Official Tag Integration -->
     <script src="https://alwingulla.com/88/tag.min.js" data-zone="e5e4318e5ca58d6b7eb38b03155d67fb" async data-cfasync="false"></script>
     <meta name="monetag" content="e5e4318e5ca58d6b7eb38b03155d67fb">
     <style>
@@ -552,7 +552,7 @@
             pointer-events: none;
         }
 
-        /* Ad Overlay Simulator & Real Interstitial */
+        /* Rewarded / 5th Level Ad Overlay */
         .ad-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -574,6 +574,7 @@
             text-align: center;
             position: relative;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            color: #1e293b;
         }
 
         .ad-header-bar {
@@ -633,17 +634,17 @@
 </head>
 <body>
 
-    <!-- Ad Overlay Popup (Monetag Interstitial Simulation) -->
+    <!-- Rewarded / 5th Level Ad Popup -->
     <div id="ad-popup" class="ad-overlay hidden">
         <div class="ad-box">
             <div class="ad-header-bar">
-                <span>Реклама</span>
-                <button class="ad-close-x" onclick="closeAdPopup()">✕</button>
+                <span>Демеуші жарнама (Bonus Ad)</span>
+                <button class="ad-close-x" onclick="closeAdPopup(false)">✕</button>
             </div>
             <div style="padding: 15px; background: #f8fafc;">
-                <div style="font-weight: bold; font-size: 16px; color: #1e293b; margin-bottom: 8px;">TEMU New Arrivals</div>
-                <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Exclusive style collections just for you! T&Cs apply.</div>
-                <div style="background: #fbbf24; color: #0f2c23; font-weight: bold; padding: 10px; border-radius: 8px; font-size: 14px;">Қазір көру / Shop Now</div>
+                <div style="font-weight: bold; font-size: 16px; color: #1e293b; margin-bottom: 8px;">🎁 Жарнаманы көріп, +50 монета алыңыз!</div>
+                <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Әр 5-ші деңгей сайын сыйлық монеталарға ие болыңыз.</div>
+                <button onclick="closeAdPopup(true)" style="background: #22c55e; color: #fff; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 14px; border:none; cursor:pointer; width:100%;">Жарнаманы көру (+50 🪙)</button>
             </div>
         </div>
     </div>
@@ -748,7 +749,7 @@
                 <input type="text" id="username-input" class="shop-item-card" style="width:100%; color:#fff; background:rgba(0,0,0,0.3); margin-top:4px;" value="Абылай хан" oninput="checkAdminCode(this.value)">
             </div>
 
-            <!-- Hidden Admin Panel (Visible ONLY when 'Ersin 1995' is entered) -->
+            <!-- Hidden Admin Panel -->
             <div id="admin-panel" class="hidden" style="background:rgba(239,68,68,0.2); border:2px solid #ef4444; border-radius:12px; padding:10px; margin-bottom:12px;">
                 <div style="color:#fca5a5; font-weight:bold; font-size:12px; margin-bottom:6px;">🛠️ Ерсін басқару панелі (Тек сізге):</div>
                 <div style="display:flex; gap:6px; margin-bottom:6px;">
@@ -916,13 +917,20 @@
             }
         }
 
-        // Жарнаманы шығару функциясы (Монетизация)
-        function triggerAd() {
-            document.getElementById('ad-popup').classList.remove('hidden');
+        // Жарнаманы тек әр 5-ші деңгей сайын шығару және монета беру
+        function checkAndShowAdForLevel() {
+            if (currentLevel > 0 && currentLevel % 5 === 0) {
+                document.getElementById('ad-popup').classList.remove('hidden');
+            }
         }
 
-        function closeAdPopup() {
+        function closeAdPopup(watched) {
             document.getElementById('ad-popup').classList.add('hidden');
+            if (watched) {
+                coins += 50;
+                updateUI();
+                showToast("🎁 Жарнама үшін +50 монета берілді!");
+            }
         }
 
         const langData = {
@@ -1007,317 +1015,3 @@
             updateUI();
             showToast("🪙 +1000 монета қосылды!");
         }
-
-        function adminNextLevel() {
-            currentLevel++;
-            updateUI();
-            showToast(`🚀 Деңгей ${currentLevel} өзгертілді!`);
-        }
-
-        function exportGameCode() {
-            const htmlContent = document.documentElement.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'qazaq-mahjong-saved.html';
-            a.click();
-            showToast("💾 Ойын коды сәтті сақталды!");
-        }
-
-        function importGameCode(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.open();
-                document.write(e.target.result);
-                document.close();
-            };
-            reader.readAsText(file);
-        }
-
-        function shareGameWithFriends() {
-            playSound(600, 0.1);
-            const shareData = {
-                title: 'Qazaq Mahjong',
-                text: 'Қазақы стильдегі ұлттық маджонг ойынын менімен бірге ойнаңыз!',
-                url: window.location.href
-            };
-            if (navigator.share) {
-                navigator.share(shareData).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                showToast("📋 Сілтеме көшірілді! Достарыңызға жіберіңіз!");
-            }
-        }
-
-        function renderQazyna() {
-            const container = document.getElementById('qazyna-list');
-            container.innerHTML = '';
-            jetiQazynaList.forEach((q, i) => {
-                const isUnlocked = currentLevel >= q.req;
-                container.innerHTML += `
-                    <div class="shop-item-card">
-                        <div>
-                            <div style="font-weight:bold; color:white;">${q.icon} ${q.title}</div>
-                            <div style="font-size:11px; color:#cbd5e1;">${q.req}-деңгейде ашылады</div>
-                        </div>
-                        <button class="buy-btn ${isUnlocked && !q.claimed ? '' : 'disabled'}" onclick="claimQazyna(${i})">
-                            ${q.claimed ? 'Алынды' : isUnlocked ? '🪙 ' + q.reward : 'Жабық'}
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        function claimQazyna(i) {
-            if (currentLevel >= jetiQazynaList[i].req && !jetiQazynaList[i].claimed) {
-                jetiQazynaList[i].claimed = true;
-                coins += jetiQazynaList[i].reward;
-                playSound(880, 0.2);
-                showToast(`🏆 ${jetiQazynaList[i].reward} монета алдыңыз!`);
-                updateUI();
-                renderQazyna();
-            }
-        }
-
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 2000);
-        }
-
-        function startClassicGame() {
-            playSound(600, 0.1);
-            isBattleMode = false;
-            document.getElementById('battle-timer').classList.add('hidden');
-            document.getElementById('opponent-battle-box').classList.add('hidden');
-            triggerAd(); // Жарнама шығару
-            startGameCommon();
-        }
-
-        function startBattleGame() {
-            playSound(600, 0.1);
-            isBattleMode = true;
-            timeLeft = 35;
-            opponentSlots = [];
-            renderOpponentSlots();
-
-            document.getElementById('battle-timer').classList.remove('hidden');
-            document.getElementById('opponent-battle-box').classList.remove('hidden');
-            document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}с`;
-            
-            battleTimerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}с`;
-                if (timeLeft <= 0) {
-                    clearInterval(battleTimerInterval);
-                    if (oppBattleInterval) clearInterval(oppBattleInterval);
-                    showToast("⏰ Уақыт бітті! Жеңілдіңіз!");
-                    exitGame();
-                }
-            }, 1000);
-
-            oppBattleInterval = setInterval(() => {
-                if (Math.random() > 0.4 && opponentSlots.length < 3) {
-                    opponentSlots.push(kazakhIcons[Math.floor(Math.random() * kazakhIcons.length)]);
-                    renderOpponentSlots();
-                } else if (opponentSlots.length >= 2 && Math.random() > 0.5) {
-                    opponentSlots.pop();
-                    opponentSlots.pop();
-                    renderOpponentSlots();
-                }
-            }, 2500);
-
-            triggerAd(); // Жарнама шығару
-            startGameCommon();
-        }
-
-        function startGameCommon() {
-            document.getElementById('home-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            document.getElementById('game-level-text').innerText = isBattleMode ? "⚔️ Дуэль Шайқасы" : `${currentLevel}-Деңгей`;
-            initBoard();
-        }
-
-        function exitGame() {
-            if (battleTimerInterval) clearInterval(battleTimerInterval);
-            if (oppBattleInterval) clearInterval(oppBattleInterval);
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('home-screen').classList.remove('hidden');
-            updateUI();
-        }
-
-        function initBoard() {
-            slots = [];
-            renderSlots();
-            boardTiles = [];
-
-            let totalPairs;
-            if (isBattleMode) {
-                totalPairs = 4;
-            } else if (currentLevel <= 5) {
-                totalPairs = 2 + currentLevel;
-            } else {
-                totalPairs = 7 + (currentLevel - 5) * 2;
-            }
-
-            let iconArray = [];
-            for (let i = 0; i < totalPairs; i++) {
-                const icon = kazakhIcons[i % kazakhIcons.length];
-                iconArray.push(icon, icon);
-            }
-            iconArray.sort(() => Math.random() - 0.5);
-
-            iconArray.forEach((icon, idx) => {
-                const isFlat = !isBattleMode && currentLevel <= 5;
-                const maxInRow = 2;
-                const layer = isFlat ? 0 : Math.floor(idx / 4);
-                const pos = idx % 4;
-                boardTiles.push({
-                    id: idx,
-                    icon: icon,
-                    layer: layer,
-                    isFlat: isFlat,
-                    x: (pos % maxInRow) * 60 - 30 + (layer * 4),
-                    y: Math.floor(pos / maxInRow) * 70 - 35 + (layer * 4)
-                });
-            });
-
-            renderTiles();
-        }
-
-        function renderTiles() {
-            const board = document.getElementById('layered-board');
-            board.innerHTML = '';
-            boardTiles.forEach(tile => {
-                const el = document.createElement('div');
-                el.className = tile.isFlat ? 'tile-flat' : 'tile-3d';
-                el.style.left = `calc(50% + ${tile.x}px)`;
-                el.style.top = `calc(50% + ${tile.y}px)`;
-                el.style.zIndex = tile.layer * 10;
-                el.innerText = tile.icon;
-                el.onclick = () => tapTile(tile);
-                board.appendChild(el);
-            });
-        }
-
-        function tapTile(tile) {
-            if (slots.length >= 4) {
-                playSound(300, 0.2);
-                showToast("⚠️ Ұяшық толды! Монета қажет!");
-                openModal('shop-modal');
-                return;
-            }
-
-            playSound(580, 0.08);
-            historyStack.push([...boardTiles]);
-            boardTiles = boardTiles.filter(t => t.id !== tile.id);
-            slots.push(tile.icon);
-
-            checkMatches();
-            renderSlots();
-            renderTiles();
-
-            if (boardTiles.length === 0 && slots.length === 0) {
-                if (battleTimerInterval) clearInterval(battleTimerInterval);
-                if (oppBattleInterval) clearInterval(oppBattleInterval);
-
-                if (isBattleMode) {
-                    coins += 20;
-                    playSound(950, 0.3);
-                    triggerAd(); // Дуэль біткенде жарнама шығару
-                    showToast("🎉 Дуэльде жеңіске жеттіңіз! +20 🪙");
-                    setTimeout(exitGame, 1500);
-                } else {
-                    playSound(880, 0.3);
-                    triggerAd(); // Келесі деңгейге өткенде жарнама шығару
-                    showToast("🎉 Келесі кезеңге өттіңіз!");
-                    currentLevel++;
-                    setTimeout(() => {
-                        document.getElementById('game-level-text').innerText = `${currentLevel}-Деңгей`;
-                        initBoard();
-                    }, 1200);
-                }
-            }
-        }
-
-        function checkMatches() {
-            const counts = {};
-            slots.forEach(icon => counts[icon] = (counts[icon] || 0) + 1);
-            for (let icon in counts) {
-                if (counts[icon] >= 2) {
-                    playSound(1200, 0.15);
-                    slots = slots.filter(s => s !== icon);
-                }
-            }
-        }
-
-        function renderSlots() {
-            const container = document.getElementById('collection-holder');
-            container.innerHTML = '';
-            for (let i = 0; i < 4; i++) {
-                const box = document.createElement('div');
-                box.className = 'slot-box';
-                box.innerText = slots[i] || '';
-                container.appendChild(box);
-            }
-        }
-
-        function renderOpponentSlots() {
-            const container = document.getElementById('opponent-slots-container');
-            container.innerHTML = '';
-            for (let i = 0; i < 4; i++) {
-                const box = document.createElement('div');
-                box.className = 'opp-slot';
-                box.innerText = opponentSlots[i] || '';
-                container.appendChild(box);
-            }
-        }
-
-        function useBooster(type) {
-            if (type === 'undo' && coins >= 28 && historyStack.length > 0) {
-                coins -= 28;
-                boardTiles = historyStack.pop();
-                slots.pop();
-                renderSlots();
-                renderTiles();
-                updateUI();
-            } else if (type === 'shuffle' && coins >= 15) {
-                coins -= 15;
-                const icons = boardTiles.map(t => t.icon).sort(() => Math.random() - 0.5);
-                boardTiles.forEach((t, i) => t.icon = icons[i]);
-                renderTiles();
-                updateUI();
-            }
-        }
-
-        const dummyChat = [
-            { name: "Арман", text: "Дуэль шайқасы өте қарқынды өтуде!" },
-            { name: "Айгерім", text: "Баршаға сәлем!" }
-        ];
-
-        function renderChat() {
-            const box = document.getElementById('chat-box');
-            box.innerHTML = '';
-            dummyChat.forEach(c => {
-                box.innerHTML += `<div class="chat-msg"><strong style="color:#fbbf24">${c.name}:</strong> ${c.text}</div>`;
-            });
-        }
-
-        function sendMsg() {
-            const inp = document.getElementById('chat-msg-input');
-            if (inp.value.trim()) {
-                dummyChat.push({ name: username, text: inp.value });
-                inp.value = '';
-                renderChat();
-            }
-        }
-
-        renderQazyna();
-        renderChat();
-        updateUI();
-    </script>
-</body>
-</html>
