@@ -1005,4 +1005,429 @@
                 coinWord: "عملة",
                 diamondWord: "ألماسة",
                 bonusTitle: "🎁 مكافآت المستويات",
-                collectionTitle: "🏆 الكن
+                collectionTitle: "🏆 الكنوز السبعة",
+                settingsTitle: "⚙️ الإعدادات",
+                selectLang: "🌐 اختر اللغة / LANGUAGE:",
+                supportBtn: "💬 دعم WhatsApp",
+                backBtn: "⬅️ عودة",
+                undoBtn: "↩️ تراجع (10 🪙)",
+                shuffleBtn: "🔀 خلط (15 🪙)",
+                winToast: "🎉 مبروك! لقد اجتزت المستوى!",
+                fullToast: "❌ لا توجد مساحة!",
+                copySuccess: "✅ تم نسخ الكود بنجاح!",
+                adminOpen: "🔑 تم فتح وضع المسؤول!"
+            }
+        };
+
+        let currentLang = 'kk';
+
+        function changeLanguage(lang) {
+            playSound('click');
+            currentLang = lang;
+            const t = translations[lang];
+
+            if (lang === 'ar') {
+                document.body.classList.add('rtl');
+            } else {
+                document.body.classList.remove('rtl');
+            }
+
+            document.getElementById('t-game-title').innerText = t.title;
+            document.getElementById('t-btn-shop').innerText = t.shop;
+            document.getElementById('t-btn-bonuses').innerText = t.bonuses;
+            document.getElementById('t-btn-collection').innerText = t.collection;
+            document.getElementById('t-shop-title').innerText = t.shopTitle;
+            document.getElementById('t-coins-label').innerText = t.coinsLabel;
+            document.getElementById('t-diamonds-label').innerText = t.diamondsLabel;
+            document.getElementById('t-bonus-title').innerText = t.bonusTitle;
+            document.getElementById('t-collection-title').innerText = t.collectionTitle;
+            document.getElementById('t-settings-title').innerText = t.settingsTitle;
+            document.getElementById('t-select-lang').innerText = t.selectLang;
+            document.getElementById('t-support-btn').innerText = t.supportBtn;
+            document.getElementById('t-back-btn').innerText = t.backBtn;
+            document.getElementById('t-booster-undo').innerText = t.undoBtn;
+            document.getElementById('t-booster-shuffle').innerText = t.shuffleBtn;
+
+            document.querySelectorAll('.t-coin-word').forEach(el => el.innerText = t.coinWord);
+            document.querySelectorAll('.t-diamond-word').forEach(el => el.innerText = t.diamondWord);
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.innerHTML = btn.innerHTML.replace(' <span>✓</span>', '');
+            });
+            const activeBtn = document.getElementById(`lang-${lang}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.innerHTML += ' <span>✓</span>';
+            }
+
+            updateLevelTitle();
+            showToast(`🌐 ${lang.toUpperCase()}`);
+        }
+
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSound(type) {
+            try {
+                if (document.getElementById('btn-sound').classList.contains('off')) return;
+                const ctx = getAudioContext();
+
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.08);
+                } else if (type === 'match') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.25);
+                } else if (type === 'win') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    osc.frequency.setValueAtTime(554.37, ctx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.2);
+                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.5);
+                }
+            } catch (e) {
+                console.log("Audio error", e);
+            }
+        }
+
+        const tileThemes = [
+            ['⛺', '🪕', '🐎', '⚜️', '🪙', '🦅', '☀️', '🏹'],
+            ['🗡️', '👑', '🐺', '🫖', '⛺', '🪕', '🐎', '⚜️']
+        ];
+
+        let currentLevel = 1;
+        let coins = 100;
+        let diamonds = 5;
+        let boardTiles = [];
+        let collectedBox = [];
+
+        const levelBonuses = [
+            { level: 10, reward: 100, claimed: false },
+            { level: 50, reward: 500, claimed: false },
+            { level: 100, reward: 1000, claimed: false }
+        ];
+
+        const jetiKazyna = [
+            { level: 10, name: "Берен мылтық", icon: "🔫" },
+            { level: 20, name: "Тазы мен Бүркіт", icon: "🦅" },
+            { level: 30, name: "Жүйрік ат", icon: "🐎" },
+            { level: 40, name: "Семсер (Алмас кездік)", icon: "🗡️" },
+            { level: 50, name: "Домбыра", icon: "🪕" },
+            { level: 75, name: "Хан тағы", icon: "👑" },
+            { level: 100, name: "Алтын Орда", icon: "⛺" }
+        ];
+
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function openShop() { playSound('click'); document.getElementById('shop-modal').classList.remove('hidden'); }
+        function openSettings() { playSound('click'); document.getElementById('settings-modal').classList.remove('hidden'); }
+
+        function toggleToggle(id) {
+            playSound('click');
+            document.getElementById(id).classList.toggle('off');
+        }
+
+        function selectAvatar(emoji, el) {
+            playSound('click');
+            document.getElementById('main-avatar').innerText = emoji;
+            document.getElementById('edit-avatar').innerText = emoji;
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function checkAdminPass(val) {
+            const btn = document.getElementById('admin-copy-btn');
+            const cleanVal = val.toLowerCase().replace(/\s+/g, '');
+            if (cleanVal === "ersin1995") {
+                btn.classList.remove('hidden');
+                showToast(translations[currentLang].adminOpen);
+            }
+        }
+
+        function copyGameSourceCode() {
+            playSound('click');
+            const area = document.getElementById('hidden-code-area');
+            area.value = document.documentElement.outerHTML;
+            area.select();
+            area.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                showToast(translations[currentLang].copySuccess);
+            } catch (err) {
+                showToast("❌ Error");
+            }
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast-banner');
+            toast.innerText = text;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2000);
+        }
+
+        function buyItem(itemName, price) {
+            playSound('click');
+            let phone = "77477099901";
+            let text = encodeURIComponent(`Сәлем! Мен Kaspi арқылы ${itemName} (${price}) сатып алғым келеді. Маған промокод бересіз бе?`);
+            window.location.href = `https://wa.me/${phone}?text=${text}`;
+        }
+
+        function openBonusModal() {
+            playSound('click');
+            const list = document.getElementById('bonus-list');
+            list.innerHTML = '';
+
+            levelBonuses.forEach((b, index) => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+
+                let isUnlocked = currentLevel >= b.level;
+                let btnText = b.claimed ? "Алынды" : (isUnlocked ? "Алу" : `${b.level}-деңгей`);
+                let btnClass = (isUnlocked && !b.claimed) ? "claim-btn" : "claim-btn disabled";
+
+                div.innerHTML = `
+                    <div>
+                        <div class="item-title">${b.level}-кезең бонусы</div>
+                        <div class="item-desc">+${b.reward} Монета 🪙</div>
+                    </div>
+                    <button class="${btnClass}" onclick="claimBonus(${index})">${btnText}</button>
+                `;
+                list.appendChild(div);
+            });
+
+            document.getElementById('bonus-modal').classList.remove('hidden');
+        }
+
+        function claimBonus(index) {
+            playSound('click');
+            let b = levelBonuses[index];
+            if (currentLevel >= b.level && !b.claimed) {
+                b.claimed = true;
+                coins += b.reward;
+                updateDisplays();
+                openBonusModal();
+                showToast(`🎉 +${b.reward} 🪙`);
+            }
+        }
+
+        function openCollectionModal() {
+            playSound('click');
+            const list = document.getElementById('collection-list');
+            list.innerHTML = '';
+
+            jetiKazyna.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+
+                let isUnlocked = currentLevel >= item.level;
+
+                div.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 26px;">${isUnlocked ? item.icon : "🔒"}</span>
+                        <div>
+                            <div class="item-title">${isUnlocked ? item.name : "Бұғатталған"}</div>
+                            <div class="item-desc">${item.level}-деңгейде ашылады</div>
+                        </div>
+                    </div>
+                    <span style="color: ${isUnlocked ? '#22c55e' : '#f59e0b'}; font-weight: bold; font-size: 12px;">
+                        ${isUnlocked ? "Ашылды ✅" : "Күтуде 🔒"}
+                    </span>
+                `;
+                list.appendChild(div);
+            });
+
+            document.getElementById('collection-modal').classList.remove('hidden');
+        }
+
+        function useBooster(type) {
+            playSound('click');
+            if (type === 'undo' && coins >= 10 && collectedBox.length > 0) {
+                coins -= 10;
+                let last = collectedBox.pop();
+                boardTiles.push(last);
+                updateDisplays();
+                renderBoard();
+                renderCollection();
+            } else if (type === 'shuffle' && coins >= 15 && boardTiles.length > 0) {
+                coins -= 15;
+                boardTiles.sort(() => Math.random() - 0.5);
+                updateDisplays();
+                renderBoard();
+            }
+        }
+
+        function startGame() {
+            playSound('click');
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            updateLevelTitle();
+            updateDisplays();
+            setupLevel();
+        }
+
+        function exitGame() {
+            playSound('click');
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+        }
+
+        function updateLevelTitle() {
+            let word = translations[currentLang].levelBtn;
+            let text = `${word} ${currentLevel}`;
+            document.getElementById('level-title').innerText = text;
+            document.getElementById('btn-level').innerText = `${currentLevel}-${word}`;
+        }
+
+        function updateDisplays() {
+            document.getElementById('coin-display').innerText = `🪙 ${coins}`;
+            document.getElementById('diamond-display').innerText = `💎 ${diamonds}`;
+        }
+
+        function setupLevel() {
+            boardTiles = [];
+            collectedBox = [];
+            
+            let activeIcons = tileThemes[(currentLevel - 1) % tileThemes.length];
+            let numPairs = 4 + Math.min(currentLevel * 2, 16);
+
+            for (let i = 0; i < numPairs; i++) {
+                let icon = activeIcons[i % activeIcons.length];
+                boardTiles.push({ id: i * 2, icon: icon, x: 0, y: 0, layer: 0 });
+                boardTiles.push({ id: i * 2 + 1, icon: icon, x: 0, y: 0, layer: 0 });
+            }
+
+            boardTiles.sort(() => Math.random() - 0.5);
+
+            let isLayered = currentLevel >= 5;
+            let cols = 4;
+            
+            boardTiles.forEach((tile, index) => {
+                if (isLayered) {
+                    tile.layer = Math.floor(index / 6); 
+                    let posInLayer = index % 6;
+                    tile.x = (posInLayer % 3) * 70 + (tile.layer * 10) + 30;
+                    tile.y = Math.floor(posInLayer / 3) * 76 + (tile.layer * 10) + 20;
+                } else {
+                    tile.layer = 0;
+                    tile.x = (index % cols) * 70 + 20;
+                    tile.y = Math.floor(index / cols) * 76 + 10;
+                }
+            });
+
+            renderBoard();
+            renderCollection();
+        }
+
+        function renderBoard() {
+            const board = document.getElementById('layered-board');
+            board.innerHTML = '';
+
+            boardTiles.forEach((tile, index) => {
+                const div = document.createElement('div');
+                div.className = 'tile';
+                div.innerText = tile.icon;
+                div.style.left = `${tile.x}px`;
+                div.style.top = `${tile.y}px`;
+                div.style.zIndex = tile.layer * 10 + index;
+
+                let isBlocked = boardTiles.some(other => 
+                    other.layer > tile.layer && 
+                    Math.abs(other.x - tile.x) < 42 && 
+                    Math.abs(other.y - tile.y) < 42
+                );
+
+                if (isBlocked) {
+                    div.classList.add('blocked');
+                } else {
+                    div.onclick = () => onTileClick(index);
+                }
+
+                board.appendChild(div);
+            });
+        }
+
+        function renderCollection() {
+            const slots = document.querySelectorAll('.slot');
+            slots.forEach((slot, index) => {
+                slot.innerText = collectedBox[index] ? collectedBox[index].icon : '';
+            });
+        }
+
+        function onTileClick(index) {
+            if (collectedBox.length >= 4) return;
+            playSound('click');
+
+            let tapped = boardTiles.splice(index, 1)[0];
+            collectedBox.push(tapped);
+            
+            renderBoard();
+            renderCollection();
+            checkMatches();
+        }
+
+        function checkMatches() {
+            let counts = {};
+            collectedBox.forEach(item => {
+                counts[item.icon] = (counts[item.icon] || 0) + 1;
+            });
+
+            for (let key in counts) {
+                if (counts[key] >= 2) {
+                    playSound('match');
+                    collectedBox = collectedBox.filter(item => item.icon !== key);
+                }
+            }
+
+            renderCollection();
+
+            if (boardTiles.length === 0) {
+                playSound('win');
+                showToast(translations[currentLang].winToast);
+                
+                setTimeout(() => {
+                    updateDisplays();
+                    currentLevel++;
+                    updateLevelTitle();
+                    setupLevel();
+                }, 1500);
+                return;
+            }
+
+            if (collectedBox.length >= 4) {
+                setTimeout(() => {
+                    showToast(translations[currentLang].fullToast);
+                    openShop();
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
