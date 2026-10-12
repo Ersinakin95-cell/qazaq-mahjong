@@ -2,10 +2,10 @@
 <html lang="kk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Monetag сайтыңызды растауға арналған мета-тег -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Қазақ стиліндегі жинау ойыны</title>
+    <!-- Monetag -->
     <meta name="monetag" content="e5e4318e5ca58d6b7eb38b03155d67fb">
-    <title>Махджонг Нақыштары: Хандық Киіз Үй</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,15 +13,17 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
             background-color: #020617;
             color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             overflow: hidden;
         }
 
@@ -38,10 +40,14 @@
             position: relative;
             box-shadow: 0 0 30px rgba(0,0,0,0.9);
             overflow: hidden;
+            z-index: 1;
         }
 
         .hidden {
             display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            z-index: -9999 !important;
         }
 
         .top-bar {
@@ -53,13 +59,13 @@
 
         .profile-badge {
             background: #8b4513;
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
             border: 3px solid #ffcc00;
             box-shadow: 0 0 10px rgba(255,204,0,0.5);
             cursor: pointer;
@@ -68,28 +74,33 @@
         .top-right-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
-        .coin-badge, .crown-badge {
+        .coin-badge, .diamond-badge {
             background: rgba(30, 41, 59, 0.8);
             border: 2px solid #ffcc00;
-            padding: 6px 14px;
+            padding: 5px 10px;
             border-radius: 20px;
             font-weight: bold;
             color: #ffcc00;
-            font-size: 14px;
+            font-size: 13px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.5);
             cursor: pointer;
+        }
+
+        .diamond-badge {
+            border-color: #38bdf8;
+            color: #38bdf8;
         }
 
         .settings-btn {
             background: rgba(30, 41, 59, 0.8);
             border: 2px solid #ffcc00;
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -113,7 +124,7 @@
             backdrop-filter: blur(12px);
             border: 3px solid #ffcc00;
             border-radius: 30px;
-            padding: 30px 20px;
+            padding: 20px 15px;
             text-align: center;
             box-shadow: 0 0 30px rgba(255, 204, 0, 0.25);
             display: flex;
@@ -123,22 +134,22 @@
         }
 
         .yurt-graphic {
-            width: 220px;
-            height: 140px;
+            width: 180px;
+            height: 100px;
             background: radial-gradient(ellipse at bottom, #94a3b8, #475569, #1e293b);
-            border-radius: 120px 120px 20px 20px;
+            border-radius: 100px 100px 20px 20px;
             border: 4px solid #ffcc00;
             position: relative;
             box-shadow: inset 0 -10px 20px rgba(0,0,0,0.6), 0 0 20px rgba(56, 189, 248, 0.4);
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
         .yurt-door {
-            width: 36px;
-            height: 55px;
+            width: 30px;
+            height: 45px;
             background: #8b4513;
             border: 2px solid #ffcc00;
             border-radius: 8px 8px 0 0;
@@ -147,33 +158,69 @@
 
         .yurt-ornament {
             position: absolute;
-            top: 25px;
+            top: 18px;
             width: 100%;
-            height: 12px;
+            height: 8px;
             background: #ffcc00;
             opacity: 0.8;
         }
 
         .yurt-title {
-            font-size: 20px;
+            font-size: 17px;
             color: #ffcc00;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             text-shadow: 0 0 10px rgba(255,204,0,0.6);
+            margin-bottom: 12px;
+        }
+
+        .home-menu-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .menu-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .menu-btn {
+            flex: 1;
+            background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+            color: white;
+            border: 2px solid #ffcc00;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .menu-btn.bonus-btn {
+            background: linear-gradient(to bottom, #eab308, #ca8a04);
+        }
+
+        .menu-btn.collection-btn {
+            background: linear-gradient(to bottom, #8b5cf6, #6d28d9);
         }
 
         .bottom-action {
             margin-bottom: 15px;
             z-index: 10;
+            width: 100%;
         }
 
         .level-btn {
             width: 100%;
-            height: 70px;
+            height: 65px;
             background: linear-gradient(to bottom, #22c55e, #15803d);
             color: white;
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 900;
             border: 3px solid #ffcc00;
             border-radius: 35px;
@@ -191,49 +238,49 @@
         .modal {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.88);
+            background: rgba(2, 6, 23, 0.92);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 500;
         }
 
         .modal-content {
             background: linear-gradient(to bottom, #1e293b, #0f172a);
             width: 90%;
             max-width: 390px;
-            padding: 22px;
+            padding: 20px;
             border-radius: 25px;
             border: 3px solid #ffcc00;
             box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 501;
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+        .shop-modal-content {
+            background: linear-gradient(135deg, #7f1d1d, #450a0a, #7f1d1d);
+            width: 92%;
+            max-width: 390px;
+            padding: 20px;
+            border-radius: 25px;
+            border: 4px solid #ffcc00;
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.6), inset 0 0 15px rgba(0,0,0,0.6);
+            text-align: center;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 501;
         }
 
-        .modal-header h3 {
+        .modal-title {
             color: #ffcc00;
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        .close-btn {
-            background: #ef4444;
-            border: 2px solid #ffcc00;
-            color: white;
-            font-size: 16px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            text-align: center;
         }
 
         .settings-profile-card {
@@ -243,7 +290,7 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 12px;
             border-radius: 15px;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
             border: 1px solid rgba(255,204,0,0.3);
         }
 
@@ -255,13 +302,13 @@
 
         .settings-avatar {
             background: #8b4513;
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
             border: 2px solid #ffcc00;
         }
 
@@ -270,7 +317,7 @@
             border: 1px solid #ffcc00;
             border-radius: 8px;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             padding: 6px 10px;
             font-weight: bold;
             width: 100%;
@@ -286,9 +333,9 @@
         }
 
         .avatar-option {
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
-            padding: 4px;
+            padding: 3px;
             border-radius: 50%;
         }
 
@@ -299,15 +346,15 @@
         .settings-toggles {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
         }
 
         .toggle-icon {
             background: #1e293b;
             border: 2px solid #ffcc00;
-            font-size: 22px;
-            width: 52px; 
-            height: 52px;
+            font-size: 20px;
+            width: 48px; 
+            height: 48px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -321,12 +368,52 @@
             opacity: 0.8;
         }
 
+        .lang-select-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 10px;
+            border: 1px solid rgba(255,204,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        .lang-box-title {
+            grid-column: 1 / -1;
+            font-weight: bold;
+            font-size: 12px;
+            color: #ffcc00;
+            margin-bottom: 2px;
+            text-align: center;
+        }
+
+        .lang-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,204,0,0.3);
+            color: white;
+            padding: 8px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(to right, #15803d, #22c55e);
+            border-color: #ffcc00;
+        }
+
         .settings-menu {
             list-style: none;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding: 5px 15px;
             border: 1px solid rgba(255,204,0,0.2);
+            margin-bottom: 15px;
         }
 
         .settings-menu li {
@@ -336,11 +423,108 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .settings-menu li:last-child {
             border-bottom: none;
+        }
+
+        .admin-code-btn {
+            background: linear-gradient(to bottom, #dc2626, #991b1b);
+            color: #fff;
+            border: 2px solid #ffcc00;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            margin-bottom: 10px;
+        }
+
+        .shop-section-label {
+            color: #fca5a5;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            text-align: left;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 204, 0, 0.4);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-title {
+            font-weight: bold;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .item-desc {
+            font-size: 11px;
+            color: #cbd5e1;
+        }
+
+        .claim-btn {
+            background: linear-gradient(to bottom, #22c55e, #16a34a);
+            color: #fff;
+            border: 1px solid #ffcc00;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .claim-btn.disabled {
+            background: #475569;
+            border-color: #64748b;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .close-btn {
+            background: #ef4444;
+            border: 2px solid #ffcc00;
+            color: white;
+            font-size: 16px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .toast-banner {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(to bottom, #22c55e, #15803d);
+            border: 3px solid #ffcc00;
+            border-radius: 20px;
+            padding: 18px 22px;
+            color: #fff;
+            font-weight: 900;
+            font-size: 16px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.8);
+            z-index: 999;
+            width: 85%;
+            max-width: 350px;
+            pointer-events: none;
         }
 
         #game-screen {
@@ -362,17 +546,17 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .game-header h3 {
             color: #ffcc00;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
         }
 
         .collection-box {
-            height: 80px;
+            height: 75px;
             background: #022c22;
             border: 3px solid #ffcc00;
             border-radius: 18px;
@@ -380,20 +564,20 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
-            margin: 15px 0;
+            margin: 12px 0;
             box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
         }
 
         .slot {
-            width: 55px;
-            height: 55px;
+            width: 52px;
+            height: 52px;
             background: #14532d;
             border-radius: 12px;
             border: 2px solid rgba(255,204,0,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 26px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.4);
         }
 
@@ -409,7 +593,7 @@
         .layered-board {
             position: relative;
             width: 100%;
-            height: 420px;
+            height: 400px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -417,15 +601,15 @@
 
         .tile {
             position: absolute;
-            width: 65px;
-            height: 72px;
+            width: 62px;
+            height: 70px;
             background: #fff8e7;
             border-radius: 12px;
             border: 2px solid #8b4513;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 30px;
             cursor: pointer;
             box-shadow: 0 5px 0 #b38642, 0 8px 12px rgba(0,0,0,0.5);
             transition: all 0.1s ease;
@@ -440,7 +624,7 @@
         .booster-bar {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 10px;
         }
 
@@ -448,26 +632,31 @@
             background: #1e293b;
             border: 2px solid #ffcc00;
             color: #ffcc00;
-            padding: 8px 14px;
-            border-radius: 15px;
+            padding: 8px 12px;
+            border-radius: 14px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 5px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.4);
         }
+
+        .rtl {
+            direction: rtl;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Бас экран -->
     <div id="home-screen" class="screen">
         <div class="top-bar">
             <div class="profile-badge" id="main-avatar" onclick="openSettings()">🧔🏽‍♂️</div>
             <div class="top-right-group">
-                <div class="coin-badge" id="coin-display" onclick="openShop()">🪙 50</div>
-                <div class="crown-badge">👑 x1</div>
+                <div class="coin-badge" id="coin-display" onclick="openShop()">🪙 100</div>
+                <div class="diamond-badge" id="diamond-display" onclick="openShop()">💎 5</div>
                 <button class="settings-btn" onclick="openSettings()">⚙️</button>
             </div>
         </div>
@@ -478,7 +667,15 @@
                     <div class="yurt-ornament"></div>
                     <div class="yurt-door"></div>
                 </div>
-                <div class="yurt-title" id="lbl-castle">ХАНДЫҚ КИІЗ ҮЙ</div>
+                <div class="yurt-title" id="t-game-title">ҚАЗАҚ СТИЛІНДЕГІ ЖИНАУ ОЙЫНЫ</div>
+                
+                <div class="home-menu-btns">
+                    <div class="menu-row">
+                        <button class="menu-btn" id="t-btn-shop" onclick="openShop()">🛒 ДҮКЕН</button>
+                        <button class="menu-btn bonus-btn" id="t-btn-bonuses" onclick="openBonusModal()">🎁 БОНУСТАР</button>
+                    </div>
+                    <button class="menu-btn collection-btn" id="t-btn-collection" onclick="openCollectionModal()">🏆 ЖЕТІ ҚАЗЫНА</button>
+                </div>
             </div>
         </div>
 
@@ -487,16 +684,77 @@
         </div>
     </div>
 
+    <!-- Дүкен Модалі -->
+    <div id="shop-modal" class="modal hidden">
+        <div class="shop-modal-content">
+            <div class="modal-title" id="t-shop-title">🛒 ДҮКЕН (KASPI)</div>
+            
+            <div class="shop-section-label" id="t-coins-label">🪙 МОНЕТАЛАР:</div>
+            <div class="item-card">
+                <div>
+                    <div class="item-title">🪙 500 <span class="t-coin-word">Монета</span></div>
+                </div>
+                <button class="claim-btn" onclick="buyItem('500 Монета', '100 ТГ')">100 ТГ</button>
+            </div>
+            <div class="item-card">
+                <div>
+                    <div class="item-title">🪙 3000 <span class="t-coin-word">Монета</span></div>
+                </div>
+                <button class="claim-btn" onclick="buyItem('3000 Монета', '400 ТГ')">400 ТГ</button>
+            </div>
+
+            <div class="shop-section-label" id="t-diamonds-label">💎 АЛМАЗДАР:</div>
+            <div class="item-card">
+                <div>
+                    <div class="item-title">💎 10 <span class="t-diamond-word">Алмаз</span></div>
+                </div>
+                <button class="claim-btn" onclick="buyItem('10 Алмаз', '200 ТГ')">200 ТГ</button>
+            </div>
+            <div class="item-card">
+                <div>
+                    <div class="item-title">💎 50 <span class="t-diamond-word">Алмаз</span></div>
+                </div>
+                <button class="claim-btn" onclick="buyItem('50 Алмаз', '800 ТГ')">800 ТГ</button>
+            </div>
+
+            <button class="close-btn" style="margin: 15px auto 0 auto;" onclick="closeModal('shop-modal')">✕</button>
+        </div>
+    </div>
+
+    <!-- Бонустар Модалі -->
+    <div id="bonus-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-title" id="t-bonus-title">🎁 ДЕҢГЕЙ БОНУСТАРЫ</div>
+            
+            <div id="bonus-list"></div>
+
+            <button class="close-btn" style="margin: 15px auto 0 auto;" onclick="closeModal('bonus-modal')">✕</button>
+        </div>
+    </div>
+
+    <!-- Жеті Қазына Коллекция Модалі -->
+    <div id="collection-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-title" id="t-collection-title">🏆 ЖЕТІ ҚАЗЫНА</div>
+            
+            <div id="collection-list"></div>
+
+            <button class="close-btn" style="margin: 15px auto 0 auto;" onclick="closeModal('collection-modal')">✕</button>
+        </div>
+    </div>
+
+    <!-- Баптаулар Модалі -->
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="lbl-settings-title">Баптаулар</h3>
-                <button class="close-btn" onclick="closeSettings()">✕</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: #ffcc00; font-size: 20px;" id="t-settings-title">⚙️ Баптаулар</h3>
+                <button class="close-btn" onclick="closeModal('settings-modal')">✕</button>
             </div>
+
             <div class="settings-profile-card">
                 <div class="profile-edit-row">
                     <div class="settings-avatar" id="edit-avatar">🧔🏽‍♂️</div>
-                    <input type="text" class="username-input" id="username-input" value="Огонь-Парень" onchange="updateUsername(this.value)">
+                    <input type="text" class="username-input" id="username-input" value="Ойыншы" oninput="checkAdminPass(this.value)" onkeyup="checkAdminPass(this.value)">
                 </div>
                 <div class="avatar-selector">
                     <span class="avatar-option selected" onclick="selectAvatar('🧔🏽‍♂️', this)">🧔🏽‍♂️</span>
@@ -506,28 +764,45 @@
                     <span class="avatar-option" onclick="selectAvatar('🇰🇿', this)">🇰🇿</span>
                 </div>
             </div>
+
             <div class="settings-toggles">
-                <button id="btn-music" class="toggle-icon" onclick="toggleMusic()">🎵</button>
-                <button id="btn-sound" class="toggle-icon" onclick="toggleSound()">🔊</button>
-                <button id="btn-vibrate" class="toggle-icon" onclick="toggleVibrate()">📳</button>
+                <button id="btn-music" class="toggle-icon" onclick="toggleToggle('btn-music')">🎵</button>
+                <button id="btn-sound" class="toggle-icon" onclick="toggleToggle('btn-sound')">🔊</button>
+                <button id="btn-vibrate" class="toggle-icon" onclick="toggleToggle('btn-vibrate')">📳</button>
             </div>
+
+            <!-- Тіл Таңдау Боксы -->
+            <div class="lang-select-box">
+                <div class="lang-box-title" id="t-select-lang">🌐 ТІЛДІ ТАҢДАУ / LANGUAGE:</div>
+                <button class="lang-btn active" id="lang-kk" onclick="changeLanguage('kk')">🇰🇿 Қазақша <span>✓</span></button>
+                <button class="lang-btn" id="lang-ru" onclick="changeLanguage('ru')">🇷🇺 Русский</button>
+                <button class="lang-btn" id="lang-en" onclick="changeLanguage('en')">🇬🇧 English</button>
+                <button class="lang-btn" id="lang-tr" onclick="changeLanguage('tr')">🇹🇷 Türkçe</button>
+                <button class="lang-btn" id="lang-zh" onclick="changeLanguage('zh')">🇨🇳 中文</button>
+                <button class="lang-btn" id="lang-ko" onclick="changeLanguage('ko')">🇰🇷 한국어</button>
+                <button class="lang-btn" id="lang-ja" onclick="changeLanguage('ja')">🇯🇵 日本語</button>
+                <button class="lang-btn" id="lang-ar" onclick="changeLanguage('ar')">🇸🇦 العربية</button>
+            </div>
+
             <ul class="settings-menu">
-                <li onclick="nextLanguage()">
-                    <span id="lbl-lang">🌐 Тіл (Қазақша)</span> <span>›</span>
-                </li>
-                <li onclick="openWhatsApp()">
-                    <span id="lbl-contact">💬 WhatsApp Қолдау</span> <span>›</span>
-                </li>
-                <li onclick="alert(translations[currentLang].aboutText)">
-                    <span id="lbl-about">ℹ️ Біз туралы</span> <span>›</span>
+                <li onclick="buyItem('Қолдау', 'Сұрақ')">
+                    <span id="t-support-btn">💬 WhatsApp Қолдау</span> <span>›</span>
                 </li>
             </ul>
+
+            <button id="admin-copy-btn" class="admin-code-btn hidden" onclick="copyGameSourceCode()">📋 Кодты көшіру (Иесіне)</button>
         </div>
     </div>
 
+    <!-- Қалқымалы баннер -->
+    <div id="toast-banner" class="toast-banner hidden"></div>
+
+    <textarea id="hidden-code-area" style="position: absolute; left: -9999px; top: -9999px;"></textarea>
+
+    <!-- Ойын Алаңы -->
     <div id="game-screen" class="screen hidden">
         <div class="game-header">
-            <button class="back-btn" id="lbl-back" onclick="exitGame()">⬅️ Қайту</button>
+            <button class="back-btn" id="t-back-btn" onclick="exitGame()">⬅️ Қайту</button>
             <h3 id="level-title">Деңгей 1</h3>
         </div>
 
@@ -539,8 +814,8 @@
         </div>
 
         <div class="booster-bar">
-            <button class="booster-btn" onclick="useBooster('undo')">↩️ Артқа (10 🪙)</button>
-            <button class="booster-btn" onclick="useBooster('shuffle')">🔀 Араластыру (15 🪙)</button>
+            <button class="booster-btn" id="t-booster-undo" onclick="useBooster('undo')">↩️ Артқа (10 🪙)</button>
+            <button class="booster-btn" id="t-booster-shuffle" onclick="useBooster('shuffle')">🔀 Араластыру (15 🪙)</button>
         </div>
 
         <div class="board-container">
@@ -549,313 +824,185 @@
     </div>
 
     <script>
-        const tileThemes = [
-            ['⛺', '🪕', '🐎', '⚜️', '🪙', '🦅', '☀️', '🏹'],
-            ['🦁', '🐯', '🐘', '🦒', '🦊', '🐺', '🐻', '🐼'],
-            ['🍎', '🍇', '🍉', '🍓', '🍑', '🍍', '🥝', '🍌'],
-            ['🚀', '🛸', '⭐', '🌙', '🪐', '☄️', '🌌', '👾']
-        ];
-
-        let currentLevel = 1;
-        let coins = 50;
-        let boardTiles = [];
-        let collectedBox = [];
-        let currentAvatar = '🧔🏽‍♂️';
-        let currentUsername = 'Огонь-Парень';
-        
-        let musicOn = true;
-        let soundOn = true;
-        let vibrateOn = true;
-
-        const languages = ['kk', 'ru', 'en', 'tr', 'zh'];
-        let langIndex = 0;
-        let currentLang = 'kk';
-
         const translations = {
             kk: {
-                castle: "ХАНДЫҚ КИІЗ ҮЙ",
+                title: "ҚАЗАҚ СТИЛІНДЕГІ ЖИНАУ ОЙЫНЫ",
+                shop: "🛒 ДҮКЕН",
+                bonuses: "🎁 БОНУСТАР",
+                collection: "🏆 ЖЕТІ ҚАЗЫНА",
                 levelBtn: "Деңгей",
-                settings: "Баптаулар",
-                langName: "🌐 Тіл (Қазақша)",
-                contact: "💬 WhatsApp Қолдау",
-                about: "ℹ️ Біз туралы",
-                back: "⬅️ Қайту",
-                aboutText: "Махджонг Нақыштары v1.0.0 — 5000 деңгейлік Махджонг.",
-                winMsg: "🎉 Құттықтаймыз! Деңгей сәтті өтті!",
-                tierWinMsg: "🏆 Тамаша! 10 кезеңді еңсердіңіз! Сыйлыққа +500 монета берілді!",
-                fullMsg: "❌ Орын толып қалды! Монета сатып алып жалғастырасыз ба?"
+                shopTitle: "🛒 ДҮКЕН (KASPI)",
+                coinsLabel: "🪙 МОНЕТАЛАР:",
+                diamondsLabel: "💎 АЛМАЗДАР:",
+                coinWord: "Монета",
+                diamondWord: "Алмаз",
+                bonusTitle: "🎁 ДЕҢГЕЙ БОНУСТАРЫ",
+                collectionTitle: "🏆 ЖЕТІ ҚАЗЫНА",
+                settingsTitle: "⚙️ Баптаулар",
+                selectLang: "🌐 ТІЛДІ ТАҢДАУ / LANGUAGE:",
+                supportBtn: "💬 WhatsApp Қолдау",
+                backBtn: "⬅️ Қайту",
+                undoBtn: "↩️ Артқа (10 🪙)",
+                shuffleBtn: "🔀 Араластыру (15 🪙)",
+                winToast: "🎉 Құттықтаймыз! Келесі деңгейге өттіңіз!",
+                fullToast: "❌ Орын толып қалды!",
+                copySuccess: "✅ Ойын коды сәтті көшірілді!",
+                adminOpen: "🔑 Әкімші режимі ашылды!"
             },
             ru: {
-                castle: "ХАНСКАЯ ЮРТА",
+                title: "ИГРА В КАЗАХСКОМ СТИЛЕ",
+                shop: "🛒 МАГАЗИН",
+                bonuses: "🎁 БОНУСЫ",
+                collection: "🏆 СЕМЬ СОКРОВИЩ",
                 levelBtn: "Уровень",
-                settings: "Настройки",
-                langName: "🌐 Язык (Русский)",
-                contact: "💬 WhatsApp Поддержка",
-                about: "ℹ️ О Нас",
-                back: "⬅️ Назад",
-                aboutText: "Махджонг Нақыштары v1.0.0 — 3D многоуровневый Махджонг.",
-                winMsg: "🎉 Поздравляем! Уровень пройден!",
-                tierWinMsg: "🏆 Отлично! Пройдено 10 уровней! Награда: +500 монет!",
-                fullMsg: "❌ Место заполнено! Купить монеты для продолжения?"
-            }
-        };
-
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playClickSound() {
-            if (!soundOn) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.08);
-        }
-
-        function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
-        function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
-
-        function selectAvatar(emoji, el) {
-            currentAvatar = emoji;
-            document.getElementById('main-avatar').innerText = emoji;
-            document.getElementById('edit-avatar').innerText = emoji;
-            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
-        function updateUsername(val) { if(val.trim() !== '') currentUsername = val; }
-
-        function toggleMusic() {
-            musicOn = !musicOn;
-            document.getElementById('btn-music').classList.toggle('off', !musicOn);
-        }
-
-        function toggleSound() {
-            soundOn = !soundOn;
-            document.getElementById('btn-sound').classList.toggle('off', !soundOn);
-        }
-
-        function toggleVibrate() {
-            vibrateOn = !vibrateOn;
-            document.getElementById('btn-vibrate').classList.toggle('off', !vibrateOn);
-        }
-
-        function nextLanguage() {
-            langIndex = (langIndex + 1) % languages.length;
-            currentLang = languages[langIndex] || 'kk';
-            applyTranslations();
-        }
-
-        function applyTranslations() {
-            let t = translations[currentLang] || translations['kk'];
-            document.getElementById('lbl-settings-title').innerText = t.settings;
-            document.getElementById('lbl-lang').innerText = t.langName;
-            document.getElementById('lbl-contact').innerText = t.contact;
-            document.getElementById('lbl-about').innerText = t.about;
-            document.getElementById('lbl-castle').innerText = t.castle;
-            document.getElementById('lbl-back').innerText = t.back;
-            updateLevelTitle();
-        }
-
-        function openWhatsApp() {
-            window.location.href = "https://wa.me/77477099901?text=Salem,%20oyyn%20boyynsha%20habarlasyp%20trmyn!";
-        }
-
-        function openShop() {
-            let choice = prompt(currentLang === 'kk' ? 
-                "🪙 МОНЕТА АЛУ ДҮКЕНІ:\n\n1 - Kaspi-мен сатып алу (WhatsApp)\n2 - Промокод енгізу (Пароль)\n\nСанды таңдаңыз (1 немесе 2):" : 
-                "🪙 МАГАЗИН МОНЕТ:\n\n1 - Купить через Kaspi (WhatsApp)\n2 - Ввести промокод\n\nВыберите число (1 или 2):");
-
-            if (choice === '1') {
-                window.location.href = "https://wa.me/77477099901?text=Salem,%201000%20moneta%20satybalgynym%20keledi,%20Kaspi%20rekvizit%20jiberinizshi!";
-            } else if (choice === '2') {
-                let promo = prompt("🔑 Промокодты (парольді) жазыңыз:");
-                if (promo === "GOLD1000") {
-                    coins += 1000;
-                    alert("🎉 Құттықтаймыз! +1000 монета есепшотқа түсті!");
-                    updateCoinsDisplay();
-                } else if (promo === "GOLD5000") {
-                    coins += 5000;
-                    alert("🎉 Құттықтаймыз! +5000 монета есепшотқа түсті!");
-                    updateCoinsDisplay();
-                } else if (promo !== null) {
-                    alert("❌ Промокод қате!");
-                }
-            }
-        }
-
-        function buyCoins() {
-            openShop();
-        }
-
-        function useBooster(type) {
-            if (type === 'undo' && coins >= 10 && collectedBox.length > 0) {
-                coins -= 10;
-                let last = collectedBox.pop();
-                boardTiles.push(last);
-                updateCoinsDisplay();
-                renderBoard();
-                renderCollection();
-            } else if (type === 'shuffle' && coins >= 15 && boardTiles.length > 0) {
-                coins -= 15;
-                boardTiles.sort(() => Math.random() - 0.5);
-                updateCoinsDisplay();
-                renderBoard();
-            }
-        }
-
-        function startGame() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            document.getElementById('home-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            updateLevelTitle();
-            updateCoinsDisplay();
-            setupLevel();
-        }
-
-        function exitGame() {
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('home-screen').classList.remove('hidden');
-        }
-
-        function updateLevelTitle() {
-            let t = translations[currentLang] || translations['kk'];
-            let text = `${t.levelBtn} ${currentLevel}`;
-            document.getElementById('level-title').innerText = text;
-            document.getElementById('btn-level').innerText = text;
-        }
-
-        function updateCoinsDisplay() {
-            document.getElementById('coin-display').innerText = `🪙 ${coins}`;
-        }
-
-        function setupLevel() {
-            boardTiles = [];
-            collectedBox = [];
-            
-            let activeIcons = tileThemes[(currentLevel - 1) % tileThemes.length];
-            let numPairs = 4 + Math.min(currentLevel * 2, 16);
-
-            for (let i = 0; i < numPairs; i++) {
-                let icon = activeIcons[i % activeIcons.length];
-                boardTiles.push({ id: i * 2, icon: icon, x: 0, y: 0, layer: 0 });
-                boardTiles.push({ id: i * 2 + 1, icon: icon, x: 0, y: 0, layer: 0 });
-            }
-
-            boardTiles.sort(() => Math.random() - 0.5);
-
-            let isLayered = currentLevel >= 5;
-            let cols = 4;
-            
-            boardTiles.forEach((tile, index) => {
-                if (isLayered) {
-                    tile.layer = Math.floor(index / 6); 
-                    let posInLayer = index % 6;
-                    tile.x = (posInLayer % 3) * 72 + (tile.layer * 12) + 35;
-                    tile.y = Math.floor(posInLayer / 3) * 78 + (tile.layer * 12) + 20;
-                } else {
-                    tile.layer = 0;
-                    tile.x = (index % cols) * 72 + 20;
-                    tile.y = Math.floor(index / cols) * 78 + 10;
-                }
-            });
-
-            renderBoard();
-            renderCollection();
-        }
-
-        function renderBoard() {
-            const board = document.getElementById('layered-board');
-            board.innerHTML = '';
-
-            boardTiles.forEach((tile, index) => {
-                const div = document.createElement('div');
-                div.className = 'tile';
-                div.innerText = tile.icon;
-                div.style.left = `${tile.x}px`;
-                div.style.top = `${tile.y}px`;
-                div.style.zIndex = tile.layer * 10 + index;
-
-                let isBlocked = boardTiles.some(other => 
-                    other.layer > tile.layer && 
-                    Math.abs(other.x - tile.x) < 45 && 
-                    Math.abs(other.y - tile.y) < 45
-                );
-
-                if (isBlocked) {
-                    div.classList.add('blocked');
-                } else {
-                    div.onclick = () => onTileClick(index);
-                }
-
-                board.appendChild(div);
-            });
-        }
-
-        function renderCollection() {
-            const slots = document.querySelectorAll('.slot');
-            slots.forEach((slot, index) => {
-                slot.innerText = collectedBox[index] ? collectedBox[index].icon : '';
-            });
-        }
-
-        function onTileClick(index) {
-            if (collectedBox.length >= 4) return;
-            playClickSound();
-            if (vibrateOn && navigator.vibrate) navigator.vibrate(30);
-
-            let tapped = boardTiles.splice(index, 1)[0];
-            collectedBox.push(tapped);
-            
-            checkMatches();
-            renderBoard();
-            renderCollection();
-        }
-
-        function checkMatches() {
-            let counts = {};
-            collectedBox.forEach(item => {
-                counts[item.icon] = (counts[item.icon] || 0) + 1;
-            });
-
-            for (let key in counts) {
-                if (counts[key] >= 2) {
-                    collectedBox = collectedBox.filter(item => item.icon !== key);
-                }
-            }
-
-            let t = translations[currentLang] || translations['kk'];
-
-            if (boardTiles.length === 0 && collectedBox.length === 0) {
-                setTimeout(() => {
-                    if (currentLevel % 10 === 0) {
-                        alert(t.tierWinMsg);
-                        coins += 500;
-                    } else {
-                        alert(t.winMsg);
-                    }
-                    updateCoinsDisplay();
-                    currentLevel++;
-                    updateLevelTitle();
-                    setupLevel();
-                }, 150);
-            } else if (collectedBox.length >= 4) {
-                setTimeout(() => {
-                    let action = confirm(t.fullMsg);
-                    if (action) {
-                        openShop();
-                    } else {
-                        setupLevel();
-                    }
-                }, 150);
-            }
-        }
-    </script>
-</body>
-</html>
+                shopTitle: "🛒 МАГАЗИН (KASPI)",
+                coinsLabel: "🪙 МОНЕТЫ:",
+                diamondsLabel: "💎 АЛМАЗЫ:",
+                coinWord: "Монет",
+                diamondWord: "Алмазов",
+                bonusTitle: "🎁 БОНУСЫ УРОВНЕЙ",
+                collectionTitle: "🏆 СЕМЬ СОКРОВИЩ",
+                settingsTitle: "⚙️ Настройки",
+                selectLang: "🌐 ВЫБОР ЯЗЫКА / LANGUAGE:",
+                supportBtn: "💬 Поддержка WhatsApp",
+                backBtn: "⬅️ Назад",
+                undoBtn: "↩️ Назад (10 🪙)",
+                shuffleBtn: "🔀 Перемешать (15 🪙)",
+                winToast: "🎉 Поздравляем! Вы прошли уровень!",
+                fullToast: "❌ Нет свободных мест!",
+                copySuccess: "✅ Код игры успешно скопирован!",
+                adminOpen: "🔑 Режим администратора открыт!"
+            },
+            en: {
+                title: "KAZAKH MATCH GAME",
+                shop: "🛒 SHOP",
+                bonuses: "🎁 BONUSES",
+                collection: "🏆 7 TREASURES",
+                levelBtn: "Level",
+                shopTitle: "🛒 SHOP (KASPI)",
+                coinsLabel: "🪙 COINS:",
+                diamondsLabel: "💎 DIAMONDS:",
+                coinWord: "Coins",
+                diamondWord: "Diamonds",
+                bonusTitle: "🎁 LEVEL BONUSES",
+                collectionTitle: "🏆 7 KAZAKH TREASURES",
+                settingsTitle: "⚙️ Settings",
+                selectLang: "🌐 SELECT LANGUAGE:",
+                supportBtn: "💬 WhatsApp Support",
+                backBtn: "⬅️ Back",
+                undoBtn: "↩️ Undo (10 🪙)",
+                shuffleBtn: "🔀 Shuffle (15 🪙)",
+                winToast: "🎉 Congratulations! Level completed!",
+                fullToast: "❌ Board is full!",
+                copySuccess: "✅ Source code copied!",
+                adminOpen: "🔑 Admin mode unlocked!"
+            },
+            tr: {
+                title: "KAZAK STİLİ EŞLEŞTİRME OYUNU",
+                shop: "🛒 MAĞAZA",
+                bonuses: "🎁 BONUSLAR",
+                collection: "🏆 7 HAZİNE",
+                levelBtn: "Seviye",
+                shopTitle: "🛒 MAĞAZA (KASPI)",
+                coinsLabel: "🪙 JETONLAR:",
+                diamondsLabel: "💎 ELMASLAR:",
+                coinWord: "Jeton",
+                diamondWord: "Elmas",
+                bonusTitle: "🎁 SEVİYE BONUSLARI",
+                collectionTitle: "🏆 7 KAZAK HAZİNESİ",
+                settingsTitle: "⚙️ Ayarlar",
+                selectLang: "🌐 DİL SEÇİMİ / LANGUAGE:",
+                supportBtn: "💬 WhatsApp Destek",
+                backBtn: "⬅️ Geri",
+                undoBtn: "↩️ Geri (10 🪙)",
+                shuffleBtn: "🔀 Karıştır (15 🪙)",
+                winToast: "🎉 Tebrikler! Seviyeyi geçtiniz!",
+                fullToast: "❌ Yer kalmadı!",
+                copySuccess: "✅ Kod başarıyla kopyalandı!",
+                adminOpen: "🔑 Yönetici modu açıldı!"
+            },
+            zh: {
+                title: "哈萨克风格消除游戏",
+                shop: "🛒 商店",
+                bonuses: "🎁 奖励",
+                collection: "🏆 七大宝藏",
+                levelBtn: "关卡",
+                shopTitle: "🛒 商店 (KASPI)",
+                coinsLabel: "🪙 金币:",
+                diamondsLabel: "💎 钻石:",
+                coinWord: "金币",
+                diamondWord: "钻石",
+                bonusTitle: "🎁 关卡奖励",
+                collectionTitle: "🏆 七大宝藏",
+                settingsTitle: "⚙️ 设置",
+                selectLang: "🌐 选择语言 / LANGUAGE:",
+                supportBtn: "💬 WhatsApp 客服",
+                backBtn: "⬅️ 返回",
+                undoBtn: "↩️ 撤销 (10 🪙)",
+                shuffleBtn: "🔀 打乱 (15 🪙)",
+                winToast: "🎉 恭喜通关！进入下一关！",
+                fullToast: "❌ 位置已满！",
+                copySuccess: "✅ 源码已复制！",
+                adminOpen: "🔑 已开启管理员模式！"
+            },
+            ko: {
+                title: "카자흐 스타일 맞추기 게임",
+                shop: "🛒 상점",
+                bonuses: "🎁 보너스",
+                collection: "🏆 7가지 보물",
+                levelBtn: "레벨",
+                shopTitle: "🛒 상점 (KASPI)",
+                coinsLabel: "🪙 코인:",
+                diamondsLabel: "💎 다이아몬드:",
+                coinWord: "코인",
+                diamondWord: "다이아몬드",
+                bonusTitle: "🎁 레벨 보너스",
+                collectionTitle: "🏆 7가지 카자흐 보물",
+                settingsTitle: "⚙️ 설정",
+                selectLang: "🌐 언어 선택 / LANGUAGE:",
+                supportBtn: "💬 WhatsApp 지원",
+                backBtn: "⬅️ 뒤로",
+                undoBtn: "↩️ 되돌리기 (10 🪙)",
+                shuffleBtn: "🔀 섞기 (15 🪙)",
+                winToast: "🎉 축하합니다! 레벨 클리어!",
+                fullToast: "❌ 가득 찼습니다!",
+                copySuccess: "✅ 코드가 복사되었습니다!",
+                adminOpen: "🔑 관리자 모드 활성화!"
+            },
+            ja: {
+                title: "カザフスタイル・マッチゲーム",
+                shop: "🛒 ショップ",
+                bonuses: "🎁 ボーナス",
+                collection: "🏆 7つの宝物",
+                levelBtn: "レベル",
+                shopTitle: "🛒 ショップ (KASPI)",
+                coinsLabel: "🪙 コイン:",
+                diamondsLabel: "💎 ダイヤ:",
+                coinWord: "コイン",
+                diamondWord: "ダイヤ",
+                bonusTitle: "🎁 レベルボーナス",
+                collectionTitle: "🏆 7つの宝物",
+                settingsTitle: "⚙️ 設定",
+                selectLang: "🌐 言語選択 / LANGUAGE:",
+                supportBtn: "💬 WhatsApp サポート",
+                backBtn: "⬅️ 戻る",
+                undoBtn: "↩️ 元に戻す (10 🪙)",
+                shuffleBtn: "🔀 シャッフル (15 🪙)",
+                winToast: "🎉 おめでとうございます！クリア！",
+                fullToast: "❌ 枠がいっぱいです！",
+                copySuccess: "✅ コードをコピーしました！",
+                adminOpen: "🔑 管理者モード解除！"
+            },
+            ar: {
+                title: "لعبة المطابقة بأسلوب كازاخي",
+                shop: "🛒 المتجر",
+                bonuses: "🎁 المكافآت",
+                collection: "🏆 الكنوز السبعة",
+                levelBtn: "المستوى",
+                shopTitle: "🛒 المتجر (KASPI)",
+                coinsLabel: "🪙 العملات:",
+                diamondsLabel: "💎 الألماس:",
+                coinWord: "عملة",
+                diamondWord: "ألماسة",
+                bonusTitle: "🎁 مكافآت المستويات",
+                collectionTitle: "🏆 الكن
