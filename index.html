@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v4.4</title>
-    <!-- Monetag Tag Integration -->
-    <script src="https://alwingulla.com/88/tag.min.js" data-zone="e5e4318e5ca58d6b7eb38b03155d67fb" async data-cfasync="false"></script>
-    <meta name="monetag" content="e5e4318e5ca58d6b7eb38b03155d67fb">
+    <title>Qazaq Mahjong v4.5</title>
     <style>
         * {
             box-sizing: border-box;
@@ -622,7 +619,7 @@
     <div id="ad-popup" class="ad-overlay hidden">
         <div class="ad-box">
             <div class="ad-header-bar">
-                <span>Monetag Демеуші Жарнама</span>
+                <span>Демеуші Жарнама</span>
                 <button class="ad-close-x" onclick="closeAdPopup()">✕</button>
             </div>
             <div style="padding: 15px; background: #f8fafc;">
@@ -677,7 +674,7 @@
                 <div class="mode-card-arrow">›</div>
             </div>
 
-            <!-- Mode 2: Player Duel Battle (Түзетілген Батырма) -->
+            <!-- Mode 2: Player Duel Battle -->
             <div class="mode-card battle" onclick="startBattleGame()">
                 <div class="mode-card-left">
                     <div class="mode-card-icon">⚔️</div>
@@ -856,8 +853,9 @@
     <script>
         const whatsappNum = "77000000000";
 
-        // Monetag тікелей жарнама сілтемесі
-        const monetagDirectLink = "https://alwingulla.com/88/tag.min.js";
+        // НАҚТЫ ЖАРНАМА СІЛТЕМЕСІ (Monetag Direct Link немесе Adsterra Smartlink)
+        // Бұл жерге Direct Link (https://...) сілтемесін қоясыз:
+        const adSmartLink = "https://google.com"; // Monetag Direct Link сілтемеңізді осы жерге қойыңыз
 
         let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
         let currentLevel = parseInt(localStorage.getItem('qazaq_mahjong_level')) || 1;
@@ -918,14 +916,16 @@
             }
         }
 
-        // Ақ экран қатесін болдырмайтын Monetag жарнама бағыттау логикасы
+        // ЖАРНАМА АШУ ЛОГИКАСЫ (Ақ код шықпас үшін браузерде жаңа бетпен ашады)
         function openMonetagAdLink() {
             document.getElementById('ad-popup').classList.add('hidden');
             coins += 50;
             saveUserData();
             updateUI();
             showToast("🎁 Жарнама ашылды! +50 монета берілді!");
-            window.location.href = monetagDirectLink;
+
+            // Жаңа терезеде нақты жарнама сайтын ашу
+            window.open(adSmartLink, '_blank');
         }
 
         function closeAdPopup() {
@@ -958,7 +958,7 @@
             if(event && event.target) event.target.classList.add('active');
         }
 
-        // Жеті Қазына бонусы тек 10 кезеңнен жоғары ашылады
+        // Жеті Қазына бонусы 10 кезеңнен жоғары
         const jetiQazynaList = [
             { req: 10, title: "Жүйрік ат", icon: "🐎", reward: 300, claimed: false },
             { req: 12, title: "Құмай тазы", icon: "🐕", reward: 500, claimed: false },
@@ -1109,7 +1109,6 @@
             startGameCommon();
         }
 
-        // Дұрысталған Дуэль шайқасын бастау батырмасы
         function startBattleGame() {
             playSound(600, 0.1);
             isBattleMode = true;
