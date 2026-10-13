@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v5.4</title>
+    <title>Qazaq Mahjong v5.5</title>
     <style>
         * {
             box-sizing: border-box;
@@ -41,7 +41,6 @@
             z-index: 1;
         }
 
-        /* Қатып қалуды болдырмау үшін жасыру стилі дұрысталды */
         .hidden {
             display: none !important;
         }
@@ -521,37 +520,46 @@
             font-size: 14px;
         }
 
+        /* Board Area - Толық экранды қамтитын үлкен тақтайшалар */
         .board-area {
             flex-grow: 1;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            width: 100%;
         }
 
         .layered-board {
             position: relative;
             width: 100%;
-            height: 320px;
+            height: 100%;
+            max-height: 520px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        /* Үлкейтілген, Толық Экранды Тақтайшалар (3D Маджонг Стилі) */
         .tile-stacked {
             position: absolute;
-            width: 50px;
-            height: 58px;
-            background: #ffffff;
-            border-radius: 10px;
-            border: 2px solid #94a3b8;
+            width: 62px;
+            height: 74px;
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 32px;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.8);
-            transition: transform 0.1s ease;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.9), inset -2px -4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .tile-stacked:active {
+            transform: scale(0.95);
         }
 
         .boosters-row {
@@ -922,7 +930,6 @@
     <script>
         const whatsappNum = "77477099901";
 
-        // Промокодтар базасы
         let activePromoCodes = JSON.parse(localStorage.getItem('qazaq_mahjong_promos')) || {
             "QAZAQ300": 300,
             "QAZAQ600": 600,
@@ -931,13 +938,11 @@
             "QAZAQ10000": 10000
         };
 
-        // Барлық құрылғылар арасындағы ортақ онлайн чат
         let globalChatMessages = JSON.parse(localStorage.getItem('qazaq_mahjong_global_chat')) || [
             { name: "Арман", text: "Дуэль шайқасы өте қарқынды өтуде!" },
             { name: "Айгерім", text: "Баршаға сәлем! Монетаны қалай алуға болады?" }
         ];
 
-        // Терезелер мен құрылғылар арасында синхронизация
         window.addEventListener('storage', function(e) {
             if (e.key === 'qazaq_mahjong_global_chat') {
                 globalChatMessages = JSON.parse(e.newValue);
@@ -1081,7 +1086,7 @@
             if(event && event.target) event.target.classList.add('active');
         }
 
-        const kazakhIcons = ["🇰🇿", "🏛️", "🛖", "🪕", "☀️", "🦅", "🐎", "🗺️"];
+        const kazakhIcons = ["🇰🇿", "🏛️", "🛖", "🪕", "☀️", "🦅", "🐎", "🗺️", "⚔️", "👑", "🛡️"];
 
         let boardTiles = [];
         let slots = [];
@@ -1294,34 +1299,46 @@
             updateUI();
         }
 
+        // ҮЛКЕН ТОЛЫҚ ЭКРАНДЫ ТАҚТАЙШАЛАР ЖӘНЕ 5-ДЕҢГЕЙДЕН КЕЙІН КҮРДЕЛЕНУ ЛОГИКАСЫ
         function initBoard() {
             slots = [];
             renderSlots();
             boardTiles = [];
 
-            let totalPairs = isBattleMode ? 4 : (currentLevel <= 5 ? 2 + currentLevel : 7 + (currentLevel - 5) * 2);
+            // 5-кезеңге дейін жеңіл орналасу, 5-тен кейін үлкен пирамидалық толық экран
+            let columnsCount = currentLevel < 5 ? 4 : 5;
+            let rowsCount = currentLevel < 5 ? 3 : 5;
+            let maxLayers = currentLevel < 5 ? 2 : Math.min(5, Math.floor(currentLevel / 3) + 2);
 
+            let iconPairsNeeded = Math.floor((columnsCount * rowsCount * maxLayers) / 2);
             let iconArray = [];
-            for (let i = 0; i < totalPairs; i++) {
+            for (let i = 0; i < iconPairsNeeded; i++) {
                 const icon = kazakhIcons[i % kazakhIcons.length];
                 iconArray.push(icon, icon);
             }
             iconArray.sort(() => Math.random() - 0.5);
 
-            iconArray.forEach((icon, idx) => {
-                const isFlat = !isBattleMode && currentLevel <= 5;
-                const layer = isFlat ? 0 : Math.floor(idx / 5);
-                const col = idx % 3;
-                const row = Math.floor((idx % 5) / 3);
-                
-                boardTiles.push({
-                    id: idx,
-                    icon: icon,
-                    layer: layer,
-                    x: (col - 1) * 56,
-                    y: (row - 0.5) * 62 - (layer * 8)
-                });
-            });
+            let tileIdx = 0;
+            for (let layer = 0; layer < maxLayers; layer++) {
+                let cols = columnsCount - layer;
+                let rows = rowsCount - layer;
+                if (cols < 2 || rows < 2) break;
+
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        if (tileIdx < iconArray.length) {
+                            boardTiles.push({
+                                id: tileIdx,
+                                icon: iconArray[tileIdx],
+                                layer: layer,
+                                x: (c - (cols - 1) / 2) * 64,
+                                y: (r - (rows - 1) / 2) * 76 - (layer * 8)
+                            });
+                            tileIdx++;
+                        }
+                    }
+                }
+            }
 
             renderTiles();
         }
@@ -1332,9 +1349,9 @@
             boardTiles.forEach(tile => {
                 const el = document.createElement('div');
                 el.className = 'tile-stacked';
-                el.style.left = `calc(50% + ${tile.x}px)`;
-                el.style.top = `calc(50% + ${tile.y}px)`;
-                el.style.zIndex = tile.layer * 10;
+                el.style.left = `calc(50% + ${tile.x}px - 31px)`;
+                el.style.top = `calc(50% + ${tile.y}px - 37px)`;
+                el.style.zIndex = tile.layer * 10 + 5;
                 el.innerText = tile.icon;
                 el.onclick = () => tapTile(tile);
                 board.appendChild(el);
