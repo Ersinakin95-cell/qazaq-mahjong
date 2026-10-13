@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v5.7</title>
+    <title>Qazaq Mahjong v5.8</title>
     <style>
         * {
             box-sizing: border-box;
@@ -544,15 +544,15 @@
         /* Үлкейтілген Тақтайшалар */
         .tile-stacked {
             position: absolute;
-            width: 62px;
-            height: 74px;
+            width: 58px;
+            height: 70px;
             background: linear-gradient(145deg, #ffffff, #f1f5f9);
             border-radius: 12px;
             border: 2px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 30px;
             cursor: pointer;
             box-shadow: 0 6px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.9), inset -2px -4px 6px rgba(0,0,0,0.1);
             transition: transform 0.1s ease, box-shadow 0.1s ease;
@@ -1295,48 +1295,76 @@
             if (battleTimerInterval) clearInterval(battleTimerInterval);
             if (oppBattleInterval) clearInterval(oppBattleInterval);
             document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('home-screen').classList.add('hidden');
             document.getElementById('home-screen').classList.remove('hidden');
             updateUI();
         }
 
-        // ӘР ИКОНКА ДӘЛ 2 ДАНАДАН (ЖҰПТАРМЕН) ТАРАТЫЛАДЫ
+        // 1-5 ДЕҢГЕЙ АРАСЫНДА ТӨРТ БҰРЫШТЫ ТОР, 5-ТЕН КЕЙІН ҮСТІ-ҮСТІНЕ ҚАБАТТАСҚАН ПИРАМИДА
         function initBoard() {
             slots = [];
             renderSlots();
             boardTiles = [];
 
-            let numTypes = currentLevel < 5 ? 4 + currentLevel : 10;
+            let isStacked = currentLevel > 5;
+            let numTypes = isStacked ? Math.min(10, 4 + Math.floor(currentLevel / 2)) : 6;
             let iconArray = [];
 
-            // Әр иконка МІНДЕТТІ ТҮРДЕ 2 ДАНАДАН (ЖҰП) қосылады
+            // Әр иконка қатаң 2-ден (жұп) құрылады
             for (let i = 0; i < numTypes; i++) {
                 const icon = kazakhIcons[i % kazakhIcons.length];
-                iconArray.push(icon, icon); 
+                iconArray.push(icon, icon);
+            }
+            // Деңгей өскен сайын тақтайшалар саны көбейеді
+            if (isStacked) {
+                for (let i = 0; i < (currentLevel - 5) * 2; i++) {
+                    const icon = kazakhIcons[i % kazakhIcons.length];
+                    iconArray.push(icon, icon);
+                }
             }
 
-            // Тақтайшаларды араластыру
             iconArray.sort(() => Math.random() - 0.5);
 
-            let maxLayers = currentLevel < 5 ? 2 : Math.min(4, Math.floor(currentLevel / 3) + 2);
-            let colsCount = 4;
-            let rowsCount = Math.ceil(iconArray.length / colsCount);
-
             let tileIdx = 0;
-            for (let layer = 0; layer < maxLayers; layer++) {
-                let cols = colsCount - Math.floor(layer / 2);
-                let rows = Math.ceil((iconArray.length - tileIdx) / cols);
-
+            if (!isStacked) {
+                // 1-5 деңгейлер: Төрт бұрышты тор (скриншоттағыдай тегіс)
+                let cols = 4;
+                let rows = Math.ceil(iconArray.length / cols);
                 for (let r = 0; r < rows; r++) {
                     for (let c = 0; c < cols; c++) {
                         if (tileIdx < iconArray.length) {
                             boardTiles.push({
                                 id: tileIdx,
                                 icon: iconArray[tileIdx],
-                                layer: layer,
-                                x: (c - (cols - 1) / 2) * 64,
-                                y: (r - (rows - 1) / 2) * 76 - (layer * 8)
+                                layer: 0,
+                                x: (c - (cols - 1) / 2) * 66,
+                                y: (r - (rows - 1) / 2) * 78
                             });
                             tileIdx++;
+                        }
+                    }
+                }
+            } else {
+                // 5-деңгейден кейін: Үсті-үстіне қабаттасқан пирамида (күрделі)
+                let maxLayers = Math.min(4, Math.floor((currentLevel - 5) / 2) + 2);
+                let colsCount = 4;
+                
+                for (let layer = 0; layer < maxLayers; layer++) {
+                    let layerCols = colsCount - Math.floor(layer / 2);
+                    let layerRows = Math.ceil((iconArray.length - tileIdx) / layerCols);
+                    
+                    for (let r = 0; r < layerRows; r++) {
+                        for (let c = 0; c < layerCols; c++) {
+                            if (tileIdx < iconArray.length) {
+                                boardTiles.push({
+                                    id: tileIdx,
+                                    icon: iconArray[tileIdx],
+                                    layer: layer,
+                                    x: (c - (layerCols - 1) / 2) * 60 + (layer * 6),
+                                    y: (r - (layerRows - 1) / 2) * 70 - (layer * 12)
+                                });
+                                tileIdx++;
+                            }
                         }
                     }
                 }
@@ -1351,8 +1379,8 @@
             boardTiles.forEach(tile => {
                 const el = document.createElement('div');
                 el.className = 'tile-stacked';
-                el.style.left = `calc(50% + ${tile.x}px - 31px)`;
-                el.style.top = `calc(50% + ${tile.y}px - 37px)`;
+                el.style.left = `calc(50% + ${tile.x}px - 29px)`;
+                el.style.top = `calc(50% + ${tile.y}px - 35px)`;
                 el.style.zIndex = tile.layer * 10 + 5;
                 el.innerText = tile.icon;
                 el.onclick = () => tapTile(tile);
@@ -1402,7 +1430,6 @@
             }
         }
 
-        // 2 БІРДЕЙ ИКОНКА СӘЙКЕС КЕЛСЕ БІРДЕН ӨШІРУ ЛОГИКАСЫ
         function checkMatches() {
             const counts = {};
             slots.forEach(icon => counts[icon] = (counts[icon] || 0) + 1);
