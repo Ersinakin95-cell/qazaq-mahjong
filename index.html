@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v5.9</title>
+    <title>Qazaq Mahjong v6.1</title>
     <style>
         * {
             box-sizing: border-box;
@@ -1299,37 +1299,36 @@
             updateUI();
         }
 
-        // ЖАҢАРТЫЛҒАН ПИРАМИДАЛЫҚ ҚАБАТТАСУ ЛОГИКАСЫ (3D ПИРАМИДА)
+        // ҚАТАҢ ЖҰПТАЛҒАН (100% КЕПІЛДІК) ПИРАМИДАЛЫҚ ГЕНЕРАЦИЯ
         function initBoard() {
             slots = [];
             renderSlots();
             boardTiles = [];
 
             let isStacked = currentLevel > 5;
-            let iconArray = [];
-
-            // Иконкалар саны (әр иконка 2 данадан жұп болады)
-            let pairsCount = isStacked ? Math.min(18, 6 + (currentLevel - 5) * 2) : 6;
-
+            let pairsCount = isStacked ? Math.min(24, 6 + (currentLevel - 5) * 3) : 8; // Деңгей өскен сайын жұптар саны артады
+            
+            let pairsArray = [];
             for (let i = 0; i < pairsCount; i++) {
                 const icon = kazakhIcons[i % kazakhIcons.length];
-                iconArray.push(icon, icon);
+                pairsArray.push(icon);
+                pairsArray.push(icon); // Міндетті түрде дәл 2 дана (жұп)
             }
 
-            iconArray.sort(() => Math.random() - 0.5);
+            // Барлық тақтайшаларды араластыру
+            pairsArray.sort(() => Math.random() - 0.5);
 
             let tileIdx = 0;
 
             if (!isStacked) {
-                // 1-5 деңгейлер: Тіктөртбұрышты тегіс тор (4x3 немесе 4x4)
                 let cols = 4;
-                let rows = Math.ceil(iconArray.length / cols);
+                let rows = Math.ceil(pairsArray.length / cols);
                 for (let r = 0; r < rows; r++) {
                     for (let c = 0; c < cols; c++) {
-                        if (tileIdx < iconArray.length) {
+                        if (tileIdx < pairsArray.length) {
                             boardTiles.push({
                                 id: tileIdx,
-                                icon: iconArray[tileIdx],
+                                icon: pairsArray[tileIdx],
                                 layer: 0,
                                 x: (c - (cols - 1) / 2) * 62,
                                 y: (r - (rows - 1) / 2) * 76
@@ -1339,12 +1338,7 @@
                     }
                 }
             } else {
-                // 5-деңгейден КЕЙІН: НАҒЫЗ ПИРАМИДА (Бір-бірінің ҮСТІНЕ жинақталады)
-                // Қабаттар құрылымы:
-                // 1-қабат (төменгі): 4х4
-                // 2-қабат (ортаңғы): 3х3 (үстіне ортаға)
-                // 3-қабат (жоғарғы): 2х2 (ең төбесі)
-                
+                // Пирамида қабаттары (барлық тақтайшалар дәл сияқты орналасады)
                 const layersConfig = [
                     { cols: 4, rows: 4 },
                     { cols: 3, rows: 3 },
@@ -1352,23 +1346,41 @@
                     { cols: 1, rows: 1 }
                 ];
 
+                // Егер тақтайшалар саны көп болса, қабаттарды толықтырамыз
+                let totalSlotsNeeded = pairsArray.length;
+                let assignedCount = 0;
+
                 for (let l = 0; l < layersConfig.length; l++) {
                     let cfg = layersConfig[l];
+                    let layerCapacity = cfg.cols * cfg.rows;
+                    
                     for (let r = 0; r < cfg.rows; r++) {
                         for (let c = 0; c < cfg.cols; c++) {
-                            if (tileIdx < iconArray.length) {
+                            if (tileIdx < pairsArray.length) {
                                 boardTiles.push({
                                     id: tileIdx,
-                                    icon: iconArray[tileIdx],
+                                    icon: pairsArray[tileIdx],
                                     layer: l,
-                                    // Әр қабат жоғарылаған сайын ортаға жиналады + 3D ығысу
-                                    x: (c - (cfg.cols - 1) / 2) * 60 - (l * 4),
-                                    y: (r - (cfg.rows - 1) / 2) * 72 - (l * 6)
+                                    x: (c - (cfg.cols - 1) / 2) * 58 - (l * 4),
+                                    y: (r - (cfg.rows - 1) / 2) * 70 - (l * 6)
                                 });
                                 tileIdx++;
                             }
                         }
                     }
+                }
+
+                // Егер әлі де тақтайшалар қалса, оларды соңғы қабаттарға үлестіреміз
+                while(tileIdx < pairsArray.length) {
+                    let l = Math.floor(Math.random() * 3);
+                    boardTiles.push({
+                        id: tileIdx,
+                        icon: pairsArray[tileIdx],
+                        layer: l,
+                        x: (Math.random() - 0.5) * 120,
+                        y: (Math.random() - 0.5) * 120
+                    });
+                    tileIdx++;
                 }
             }
 
@@ -1384,10 +1396,8 @@
                 el.style.left = `calc(50% + ${tile.x}px - 29px)`;
                 el.style.top = `calc(50% + ${tile.y}px - 36px)`;
                 
-                // Үстіңгі қабат астыңғы қабаттың бетін жауып тұрады
                 el.style.zIndex = tile.layer * 10 + 5;
                 
-                // Жоғарғы қабаттарға тереңірек көлеңке беріледі
                 if (tile.layer > 0) {
                     el.style.boxShadow = `${-4 * tile.layer}px ${6 * tile.layer}px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.9)`;
                 }
