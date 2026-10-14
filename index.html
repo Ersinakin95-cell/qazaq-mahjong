@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v6.5</title>
+    <title>Qazaq Mahjong v7.1 (Profile & Realtime Chat)</title>
+    
+    <!-- Firebase Realtime Database SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -275,6 +280,62 @@
 
         .policy-content-box h4 { color: #fbbf24; margin: 8px 0 4px 0; font-size: 12px; }
 
+        /* Profile Modal Cards */
+        .profile-stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #fbbf24;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .profile-stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 8px;
+            font-size: 11px;
+        }
+
+        .stat-val {
+            font-size: 16px;
+            font-weight: 900;
+            color: #fbbf24;
+        }
+
+        .medals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .medal-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .medal-item.locked {
+            opacity: 0.35;
+            filter: grayscale(1);
+        }
+
+        .medal-icon { font-size: 24px; margin-bottom: 2px; }
+        .medal-name { font-size: 9px; color: #cbd5e1; font-weight: bold; }
+
         /* Game Screen */
         #game-screen { background: #0b6045; color: #fff; justify-content: space-between; }
         .game-top-bar { display: flex; justify-content: space-between; align-items: center; }
@@ -324,7 +385,7 @@
             max-height: 540px; display: flex; justify-content: center; align-items: center;
         }
 
-        /* 🀄 КЛАССИКАЛЫҚ 3D МАДЖОНГ СҮЙЕКТЕРІ (СУРЕТТЕГІДЕЙ ҚАЛЫҢ) */
+        /* 🀄 3D МАДЖОНГ СҮЙЕКТЕРІ */
         .tile-stacked {
             position: absolute;
             width: 58px;
@@ -340,8 +401,6 @@
             justify-content: center;
             font-size: 30px;
             cursor: pointer;
-            
-            /* СУРЕТТЕГІДЕЙ 3D ҚАЛЫҢ СҮЙЕК ҚЫРЫ ВАН КӨЛЕҢКЕСІ */
             box-shadow: 
                 -3px 5px 0px #b0c4de,
                 -6px 9px 0px #64748b,
@@ -350,7 +409,6 @@
             transition: transform 0.1s ease, filter 0.2s;
         }
 
-        /* Бұғатталған (астындағы) тақтайша стилі */
         .tile-stacked.locked {
             opacity: 0.8;
             filter: brightness(0.72) contrast(0.95);
@@ -396,13 +454,25 @@
         }
 
         .chat-box {
-            height: 180px; background: rgba(0,0,0,0.2);
+            height: 180px; background: rgba(0,0,0,0.25);
             border-radius: 10px; padding: 8px; overflow-y: auto;
             margin-bottom: 8px; display: flex; flex-direction: column;
-            gap: 5px; font-size: 11px;
+            gap: 6px; font-size: 11px; border: 1px solid rgba(251, 191, 36, 0.2);
         }
 
-        .chat-msg { background: rgba(255,255,255,0.1); padding: 5px 8px; border-radius: 6px; }
+        .chat-msg {
+            background: rgba(255,255,255,0.08);
+            padding: 6px 10px;
+            border-radius: 8px;
+            word-break: break-word;
+        }
+
+        .chat-msg .time {
+            font-size: 8px;
+            color: #94a3b8;
+            margin-left: 6px;
+        }
+
         .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
         .lang-card { background: rgba(255,255,255,0.1); border: 1px solid #fbbf24; color: white; padding: 6px; border-radius: 8px; font-size: 10px; font-weight: bold; cursor: pointer; text-align: center; }
         .lang-card.active { background: #22c55e; }
@@ -410,6 +480,40 @@
     </style>
 </head>
 <body>
+
+    <!-- User Profile Modal -->
+    <div id="profile-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">👤 ЖЕКЕ ПРОФИЛЬ</div>
+                <button class="close-btn" onclick="closeModal('profile-modal')">✕</button>
+            </div>
+            
+            <div class="profile-stat-box">
+                <div style="font-size: 40px; margin-bottom: 4px;">🧔🏽‍♂️</div>
+                <div style="font-size: 16px; font-weight: 900; color: #fbbf24;" id="profile-name-txt">Абылай хан</div>
+                <div style="font-size: 11px; color: #4ade80; margin-top: 2px;">Онлайн ойыншы</div>
+
+                <div class="profile-stat-grid">
+                    <div class="stat-card">
+                        <div>Жорық деңгейі</div>
+                        <div class="stat-val" id="profile-lvl-txt">1-деңгей</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Монета балансы</div>
+                        <div class="stat-val" id="profile-coins-txt">100 🪙</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="font-size: 12px; font-weight: 900; color: #fbbf24; margin-bottom: 6px;">
+                🏆 Жеті Қазына Сыйлықтары мен Медальдар:
+            </div>
+            <div class="medals-grid" id="profile-medals-grid"></div>
+
+            <button class="buy-btn" style="width:100%; margin-top:14px; padding:10px;" onclick="closeModal('profile-modal')">Жабу</button>
+        </div>
+    </div>
 
     <!-- Privacy Policy Modal -->
     <div id="privacy-modal" class="modal hidden">
@@ -424,9 +528,9 @@
                 
                 <h4>2. Деректерді сақтау</h4>
                 <p>Ойыншының таңдаған нигі, монеталары мен деңгейлері жергілікті құрылғыда (LocalStorage) сақталады.</p>
-                
-                <h4>3. Жарнамалар (Google AdMob)</h4>
-                <p>Ойында Google AdMob жарнама желісі пайдаланылуы мүмкін.</p>
+
+                <h4>3. Онлайн Чат</h4>
+                <p>Ойыншылар арасындағы жазысқан хабарламалар Firebase Realtime Database бұлтты базасында сақталады.</p>
                 
                 <h4>4. Байланыс</h4>
                 <p>Сұрақтарыңыз болса, WhatsApp қолдау қызметі (+77477099901) арқылы хабарласа аласыз.</p>
@@ -465,7 +569,7 @@
     <!-- Home Screen -->
     <div id="home-screen" class="screen">
         <div class="top-bar-custom">
-            <div class="profile-section" onclick="openModal('settings-modal')">
+            <div class="profile-section" onclick="openUserProfileModal()">
                 <div class="avatar-box" id="user-avatar-display">
                     🧔🏽‍♂️
                     <span class="avatar-badge-lvl" id="lvl-badge-text">1-ші</span>
@@ -606,9 +710,11 @@
                 <button onclick="toggleAudio('sound')" id="sound-toggle-btn" style="background:#22c55e; border:none; padding:6px 10px; border-radius:8px; color:white; font-weight:bold; cursor:pointer; font-size:11px;">🔊 Дыбыс: Қосулы</button>
             </div>
 
-            <div style="margin-bottom: 12px;">
+            <!-- User Name Input + Save Button -->
+            <div style="margin-bottom: 14px; background: rgba(0,0,0,0.25); padding: 10px; border-radius: 14px; border: 1px solid rgba(251,191,36,0.3);">
                 <label style="font-size:11px; color:#fbbf24; font-weight:bold;">Ойыншы аты:</label>
-                <input type="text" id="username-input" class="shop-item-card" style="width:100%; color:#fff; background:rgba(0,0,0,0.3); margin-top:4px;" value="Абылай хан" oninput="checkAdminCode(this.value)">
+                <input type="text" id="username-input" class="shop-item-card" style="width:100%; color:#fff; background:rgba(0,0,0,0.3); margin-top:4px; margin-bottom:6px;" value="Абылай хан" oninput="checkAdminCode(this.value)">
+                <button class="buy-btn" style="width:100%; background:#22c55e; padding:8px;" onclick="saveUsernameExplicitly()">💾 Сақтау (Сохранить)</button>
             </div>
 
             <!-- Admin Panel (Ersin 1995) -->
@@ -668,11 +774,11 @@
         </div>
     </div>
 
-    <!-- Chat Modal -->
+    <!-- Realtime Global Chat Modal -->
     <div id="chat-modal" class="modal hidden">
         <div class="modal-card">
             <div class="modal-header">
-                <div class="modal-title">💬 Ойыншылар Чаты</div>
+                <div class="modal-title">💬 Ойыншылар Чаты (Realtime)</div>
                 <button class="close-btn" onclick="closeModal('chat-modal')">✕</button>
             </div>
             <div class="chat-box" id="chat-box"></div>
@@ -719,26 +825,25 @@
     </div>
 
     <script>
+        // -------------------------------------------------------------
+        // 🔥 FIREBASE REALTIME DATABASE CONFIGURATION
+        // -------------------------------------------------------------
+        const firebaseConfig = {
+            databaseURL: "https://qazaq-mahjong-default-rtdb.firebaseio.com"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const chatRef = db.ref("global_messages");
+
+        // -------------------------------------------------------------
+        // 📱 LOCAL USER DATA & VARIABLES
+        // -------------------------------------------------------------
         const whatsappNum = "77477099901";
 
         let activePromoCodes = JSON.parse(localStorage.getItem('qazaq_mahjong_promos')) || {
-            "QAZAQ300": 300,
-            "QAZAQ600": 600,
-            "QAZAQ1500": 1500,
-            "QAZAQ3500": 3500,
-            "QAZAQ10000": 10000
+            "QAZAQ300": 300, "QAZAQ600": 600, "QAZAQ1500": 1500, "QAZAQ3500": 3500, "QAZAQ10000": 10000
         };
-
-        let globalChatMessages = JSON.parse(localStorage.getItem('qazaq_mahjong_global_chat')) || [
-            { name: "Абылай хан", text: "Сәлем баршаға!" }
-        ];
-
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'qazaq_mahjong_global_chat') {
-                globalChatMessages = JSON.parse(e.newValue);
-                renderChat();
-            }
-        });
 
         let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
         let currentLevel = parseInt(localStorage.getItem('qazaq_mahjong_level')) || 1;
@@ -770,7 +875,37 @@
             localStorage.setItem('qazaq_mahjong_ads_count', watchedAdsCount);
             localStorage.setItem('qazaq_mahjong_qazyna_saved', JSON.stringify(jetiQazynaList.map(q => ({ claimed: q.claimed }))));
             localStorage.setItem('qazaq_mahjong_promos', JSON.stringify(activePromoCodes));
-            localStorage.setItem('qazaq_mahjong_global_chat', JSON.stringify(globalChatMessages));
+        }
+
+        function saveUsernameExplicitly() {
+            const val = document.getElementById('username-input').value.trim();
+            if (val) {
+                username = val;
+                saveUserData();
+                updateUI();
+                playSound('tap');
+                showToast("💾 Ойыншы аты сәтті сақталды!");
+            }
+        }
+
+        function openUserProfileModal() {
+            document.getElementById('profile-name-txt').innerText = username;
+            document.getElementById('profile-lvl-txt').innerText = `${currentLevel}-деңгей`;
+            document.getElementById('profile-coins-txt').innerText = `${coins} 🪙`;
+
+            const medalsGrid = document.getElementById('profile-medals-grid');
+            medalsGrid.innerHTML = '';
+
+            jetiQazynaList.forEach(item => {
+                medalsGrid.innerHTML += `
+                    <div class="medal-item ${item.claimed ? '' : 'locked'}">
+                        <div class="medal-icon">${item.icon}</div>
+                        <div class="medal-name">${item.title}</div>
+                    </div>
+                `;
+            });
+
+            openModal('profile-modal');
         }
 
         let isBattleMode = false;
@@ -849,6 +984,46 @@
             }
         }
 
+        // -------------------------------------------------------------
+        // 🔥 REALTIME CHAT FUNCTIONS (FIREBASE)
+        // -------------------------------------------------------------
+        chatRef.limitToLast(30).on('value', (snapshot) => {
+            const chatBox = document.getElementById('chat-box');
+            if(!chatBox) return;
+            chatBox.innerHTML = '';
+            
+            const data = snapshot.val();
+            if (data) {
+                Object.values(data).forEach(msg => {
+                    const timeStr = msg.time ? new Date(msg.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+                    chatBox.innerHTML += `
+                        <div class="chat-msg">
+                            <strong style="color:#fbbf24">${msg.name}:</strong> ${msg.text}
+                            <span class="time">${timeStr}</span>
+                        </div>
+                    `;
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        });
+
+        function sendMsg() {
+            const inp = document.getElementById('chat-msg-input');
+            const text = inp.value.trim();
+            if (text) {
+                chatRef.push({
+                    name: username,
+                    text: text,
+                    time: firebase.database.ServerValue.TIMESTAMP
+                });
+                inp.value = '';
+                playSound('tap');
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 🛠️ GENERAL GAME LOGIC
+        // -------------------------------------------------------------
         function claimCashReward(targetCount, amount) {
             if (watchedAdsCount >= targetCount) {
                 const txt = encodeURIComponent(`Сәлеметсіз бе! Мен Qazaq Mahjong ойынында ${targetCount} жарнама көріп, ${amount} ТГ бонусын аштым. Ник: ${username}`);
@@ -920,6 +1095,7 @@
             document.getElementById('coin-display').innerText = coins;
             document.getElementById('diamond-display').innerText = diamonds;
             document.getElementById('user-name-display').innerText = username;
+            document.getElementById('username-input').value = username;
             document.getElementById('home-level-label').innerText = `${currentLevel}-ші Деңгей`;
             document.getElementById('lvl-badge-text').innerText = `${currentLevel}-ші`;
             document.getElementById('ad-count-txt').innerText = watchedAdsCount;
@@ -1105,7 +1281,6 @@
             updateUI();
         }
 
-        /* ТУРА СУРЕТТЕГІДЕЙ ТЫҒЫЗ 3D ПИРАМИДА ОРНАЛАСУЫ */
         function initBoard() {
             slots = [];
             renderSlots();
@@ -1142,7 +1317,6 @@
                     }
                 }
             } else {
-                // СУРЕТТЕГІДЕЙ 3D ПИРАМИДАЛЫҚ СӘЛ ЫҒЫСУМЕН ДӘЛ ОРНАЛАСУ (OFFSET)
                 const layersConfig = [
                     { cols: 5, rows: 5 },
                     { cols: 4, rows: 4 },
@@ -1159,7 +1333,6 @@
                                     id: tileIdx,
                                     icon: pairsArray[tileIdx],
                                     layer: l,
-                                    // Әр қабат сайын сәл солға-жоғары ығысу (3D эффект үшін)
                                     x: (c - (cfg.cols - 1) / 2) * 56 - (l * 6),
                                     y: (r - (cfg.rows - 1) / 2) * 68 - (l * 8)
                                 });
@@ -1315,29 +1488,7 @@
             }
         }
 
-        function renderChat() {
-            const box = document.getElementById('chat-box');
-            if(!box) return;
-            box.innerHTML = '';
-            globalChatMessages.forEach(c => {
-                box.innerHTML += `<div class="chat-msg"><strong style="color:#fbbf24">${c.name}:</strong> ${c.text}</div>`;
-            });
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function sendMsg() {
-            const inp = document.getElementById('chat-msg-input');
-            if (inp.value.trim()) {
-                const newMsgObj = { name: username, text: inp.value.trim() };
-                globalChatMessages.push(newMsgObj);
-                saveUserData();
-                renderChat();
-                inp.value = '';
-            }
-        }
-
         renderQazyna();
-        renderChat();
         updateUI();
     </script>
 </body>
