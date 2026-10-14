@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v6.3</title>
+    <title>Qazaq Mahjong v6.4</title>
     <style>
         * {
             box-sizing: border-box;
@@ -120,28 +120,6 @@
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             color: #0f2c23;
-        }
-
-        /* Live Player Activity Banner Notification */
-        .live-player-popup {
-            position: absolute;
-            top: 62px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.92);
-            border: 1px solid #fbbf24;
-            color: #f8fafc;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 100;
-            pointer-events: none;
-            transition: all 0.3s ease;
         }
 
         /* Ad Cash Task Banner */
@@ -288,7 +266,6 @@
 
         .buy-btn.disabled { background: #64748b; cursor: not-allowed; }
 
-        /* Privacy Policy Modal Content */
         .policy-content-box {
             font-size: 11px; color: #cbd5e1; line-height: 1.5;
             background: rgba(0,0,0,0.25); padding: 10px; border-radius: 12px;
@@ -347,20 +324,39 @@
             max-height: 520px; display: flex; justify-content: center; align-items: center;
         }
 
-        /* 3D ПИРАМИДАЛЫҚ ТАҚТАЙШАЛАР */
+        /* 🀄 ШЫНАЙЫ 3D КӨЛЕМДІ ҚАЛЫҢ МАДЖОНГ ТАСТАРЫ */
         .tile-stacked {
             position: absolute; width: 58px; height: 72px;
-            background: linear-gradient(145deg, #ffffff, #f1f5f9);
-            border-radius: 12px; border: 2px solid #94a3b8;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 60%, #cbd5e1 100%);
+            border-radius: 10px;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #f8fafc;
+            border-right: 3px solid #94a3b8;
+            border-bottom: 3px solid #64748b;
             display: flex; align-items: center; justify-content: center;
             font-size: 28px; cursor: pointer;
-            box-shadow: -3px 5px 10px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.9);
-            transition: transform 0.1s ease, background 0.2s, border-color 0.2s;
+            box-shadow: 
+                -4px 6px 0px #064e3b, /* Астыңғы жасыл сүйек қабаты */
+                -7px 10px 14px rgba(0,0,0,0.65), 
+                inset 0 2px 4px rgba(255,255,255,1);
+            transition: transform 0.1s ease, filter 0.2s;
         }
 
+        .tile-stacked::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: -5px;
+            width: 100%; height: 100%;
+            background: #15803d;
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        /* Бұғатталған (астындағы) тақтайша стилі */
         .tile-stacked.locked {
-            opacity: 0.65; filter: brightness(0.8);
-            background: linear-gradient(145deg, #cbd5e1, #94a3b8);
+            opacity: 0.7;
+            filter: brightness(0.75) contrast(0.9);
+            background: linear-gradient(135deg, #cbd5e1, #94a3b8);
         }
 
         @keyframes shakeRed {
@@ -369,12 +365,12 @@
             40% { transform: translate(6px, 0); }
             60% { transform: translate(-6px, 0); }
             80% { transform: translate(6px, 0); }
-            100% { transform: translate(0, 0) scale(1); border-color: #94a3b8; }
+            100% { transform: translate(0, 0) scale(1); }
         }
 
         .tile-stacked.shaking {
             animation: shakeRed 0.4s ease-in-out;
-            border: 2px solid #ef4444 !important;
+            border: 3px solid #ef4444 !important;
         }
 
         .boosters-row { display: flex; justify-content: center; gap: 14px; margin-bottom: 6px; }
@@ -417,11 +413,6 @@
 </head>
 <body>
 
-    <!-- Live Player Activity Notification Banner -->
-    <div id="live-player-banner" class="live-player-popup hidden">
-        <span id="live-banner-text">👤 Асылжан ойынға кірді</span>
-    </div>
-
     <!-- Privacy Policy Modal -->
     <div id="privacy-modal" class="modal hidden">
         <div class="modal-card">
@@ -431,18 +422,18 @@
             </div>
             <div class="policy-content-box">
                 <h4>1. Жалпы ережелер</h4>
-                <p>Qazaq Mahjong ойыны сіздің жеке деректеріңіздің құпиялылығын құрметтейді. Бұл саясат қандай ақпарат жиналатынын және қалай пайдаланылатынын түсіндіреді.</p>
+                <p>Qazaq Mahjong ойыны сіздің жеке деректеріңіздің құпиялылығын құрметтейді.</p>
                 
-                <h4>2. Деректерді жинау және пайдалану</h4>
-                <p>Ойын барысында ойыншының таңдаған нигі, жинаған монеталары мен деңгейлері жергілікті құрылғыда (LocalStorage) сақталады. Біз сіздің жеке аты-жөніңізді немесе байланыс деректеріңізді үшінші тарапқа сатпаймыз.</p>
+                <h4>2. Деректерді сақтау</h4>
+                <p>Ойыншының таңдаған нигі, монеталары мен деңгейлері жергілікті құрылғыда (LocalStorage) сақталады.</p>
                 
                 <h4>3. Жарнамалар (Google AdMob)</h4>
-                <p>Ойында Google AdMob жарнама желісі пайдаланылуы мүмкін. Google жарнаманы дербестендіру үшін анонимді идентификаторларды (Advertising ID) қолдануы мүмкін.</p>
+                <p>Ойында Google AdMob жарнама желісі пайдаланылуы мүмкін.</p>
                 
                 <h4>4. Байланыс</h4>
                 <p>Сұрақтарыңыз болса, WhatsApp қолдау қызметі (+77477099901) арқылы хабарласа аласыз.</p>
             </div>
-            <button class="buy-btn" style="width:100%; padding:10px;" onclick="closeModal('privacy-modal')">Түсінікті (Жабу)</button>
+            <button class="buy-btn" style="width:100%; padding:10px;" onclick="closeModal('privacy-modal')">Жабу</button>
         </div>
     </div>
 
@@ -741,9 +732,7 @@
         };
 
         let globalChatMessages = JSON.parse(localStorage.getItem('qazaq_mahjong_global_chat')) || [
-            { name: "Арман", text: "Дуэль шайқасы өте қарқынды өтуде!" },
-            { name: "Айгерім", text: "Баршаға сәлем! Монетаны қалай алуға болады?" },
-            { name: "Нұрбек", text: "10-деңгей шынымен керемет пирамида екен!" }
+            { name: "Абылай хан", text: "Сәлем баршаға!" }
         ];
 
         window.addEventListener('storage', function(e) {
@@ -860,47 +849,6 @@
                 document.getElementById('sound-toggle-btn').style.background = soundEnabled ? '#22c55e' : '#ef4444';
                 document.getElementById('sound-toggle-btn').innerText = `🔊 Дыбыс: ${soundEnabled ? 'Қосулы' : 'Өшірулі'}`;
             }
-        }
-
-        /* LIVE PLAYER ACTIVITY & CHAT SIMULATION */
-        const randomNames = ["Асылжан", "Данияр", "Мәдина", "Ернұр", "Сұлтан", "Динара", "Бекзат", "Әсел"];
-        const randomChatTexts = [
-            "Салам достар! Жеті Қазынаны ашқандар бар ма?",
-            "Шайқас режимі өте тартысты екен!",
-            "10-деңгейді сәтті аяқтадым 🔥",
-            "Монета жинау оңай екен 👍",
-            "Қазақша маджонг өте сапалы жасалған!"
-        ];
-
-        setInterval(() => {
-            if (Math.random() > 0.4) {
-                const name = randomNames[Math.floor(Math.random() * randomNames.length)];
-                const actions = [
-                    `👤 ${name} ойынға кірді`,
-                    `🎉 ${name} ${Math.floor(Math.random() * 10) + 1}-деңгейге өтті!`,
-                    `⚔️ ${name} дуэль шайқасына қосылды`
-                ];
-                const act = actions[Math.floor(Math.random() * actions.length)];
-                showLiveBanner(act);
-            }
-        }, 7000);
-
-        setInterval(() => {
-            if (Math.random() > 0.5) {
-                const name = randomNames[Math.floor(Math.random() * randomNames.length)];
-                const msg = randomChatTexts[Math.floor(Math.random() * randomChatTexts.length)];
-                globalChatMessages.push({ name: name, text: msg });
-                if (globalChatMessages.length > 20) globalChatMessages.shift();
-                saveUserData();
-                renderChat();
-            }
-        }, 10000);
-
-        function showLiveBanner(text) {
-            const b = document.getElementById('live-player-banner');
-            document.getElementById('live-banner-text').innerText = text;
-            b.classList.remove('hidden');
-            setTimeout(() => b.classList.add('hidden'), 3000);
         }
 
         function claimCashReward(targetCount, amount) {
@@ -1159,7 +1107,6 @@
             updateUI();
         }
 
-        // 100% КЕПІЛДІ ЖҰПТАРМЕН ТАРАТУ ЛОГИКАСЫ
         function initBoard() {
             slots = [];
             renderSlots();
@@ -1259,10 +1206,6 @@
                 el.style.left = `calc(50% + ${tile.x}px - 29px)`;
                 el.style.top = `calc(50% + ${tile.y}px - 36px)`;
                 el.style.zIndex = tile.layer * 10 + 5;
-                
-                if (tile.layer > 0) {
-                    el.style.boxShadow = `${-4 * tile.layer}px ${6 * tile.layer}px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.9)`;
-                }
 
                 el.innerText = tile.icon;
                 el.onclick = () => tapTile(tile);
