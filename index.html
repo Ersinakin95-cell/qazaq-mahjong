@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v6.2</title>
+    <title>Qazaq Mahjong v6.3</title>
     <style>
         * {
             box-sizing: border-box;
@@ -114,16 +114,34 @@
         .add-btn {
             background: #fbbf24;
             border: none;
-            width: 16px;
-            height: 16px;
+            width: 16px; height: 16px;
             border-radius: 50%;
-            font-weight: 900;
-            font-size: 10px;
+            font-weight: 900; font-size: 10px;
             cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #0f2c23;
+        }
+
+        /* Live Player Activity Banner Notification */
+        .live-player-popup {
+            position: absolute;
+            top: 62px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid #fbbf24;
+            color: #f8fafc;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #0f2c23;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 100;
+            pointer-events: none;
+            transition: all 0.3s ease;
         }
 
         /* Ad Cash Task Banner */
@@ -155,67 +173,42 @@
             border-radius: 10px;
             padding: 6px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
         }
 
         .ad-task-info { font-size: 10px; color: #cbd5e1; font-weight: bold; }
         .ad-task-prize { font-size: 11px; color: #4ade80; font-weight: 900; margin: 2px 0; }
 
         .ad-claim-btn {
-            background: #22c55e;
-            color: white;
-            border: none;
-            font-size: 9px;
-            font-weight: bold;
-            padding: 4px 6px;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
+            background: #22c55e; color: white; border: none;
+            font-size: 9px; font-weight: bold; padding: 4px 6px;
+            border-radius: 6px; cursor: pointer; width: 100%;
         }
 
         .ad-claim-btn.disabled { background: #475569; cursor: not-allowed; }
 
         /* Main Center Area */
         .main-content-wrapper {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex-grow: 1;
-            margin-bottom: 8px;
-            z-index: 10;
+            display: flex; flex-direction: column; justify-content: center;
+            flex-grow: 1; margin-bottom: 8px; z-index: 10;
         }
 
         .center-brand-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 18px 18px;
-            border-radius: 16px;
-            padding: 12px 10px;
-            margin-bottom: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 18px 18px; border-radius: 16px; padding: 12px 10px; margin-bottom: 10px;
         }
 
         .logo-box {
-            width: 60px; height: 60px;
-            background: #1e3a34;
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
+            width: 60px; height: 60px; background: #1e3a34;
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
             font-size: 30px; border: 2px solid #fbbf24;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-            margin-bottom: 6px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15); margin-bottom: 6px;
         }
 
         .brand-title {
-            font-family: Georgia, serif;
-            font-size: 20px; font-weight: 900;
-            color: #d97706; letter-spacing: 1px;
-            line-height: 1.1; margin-bottom: 4px;
+            font-family: Georgia, serif; font-size: 20px; font-weight: 900;
+            color: #d97706; letter-spacing: 1px; line-height: 1.1; margin-bottom: 4px;
             text-transform: uppercase;
         }
 
@@ -227,21 +220,18 @@
             border-radius: 16px; padding: 12px 14px;
             display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
-            cursor: pointer; margin-bottom: 8px;
-            border: 2px solid #fef3c7;
+            cursor: pointer; margin-bottom: 8px; border: 2px solid #fef3c7;
         }
 
         .mode-card.battle {
             background: linear-gradient(135deg, #ef4444, #991b1b);
-            border-color: #fca5a5;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            border-color: #fca5a5; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .mode-card-left { display: flex; align-items: center; gap: 10px; }
 
         .mode-card-icon {
-            width: 40px; height: 40px;
-            background: #0f2c23; border-radius: 10px;
+            width: 40px; height: 40px; background: #0f2c23; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             font-size: 20px; border: 2px solid #fbbf24;
         }
@@ -262,10 +252,8 @@
         /* Modals */
         .modal {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(6px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 500;
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px);
+            display: flex; justify-content: center; align-items: center; z-index: 500;
         }
 
         .modal-card {
@@ -273,8 +261,7 @@
             width: 90%; max-width: 380px; padding: 18px;
             border-radius: 22px; border: 3px solid #fbbf24;
             box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-            max-height: 85vh; overflow-y: auto; color: #fff;
-            position: relative;
+            max-height: 85vh; overflow-y: auto; color: #fff; position: relative;
         }
 
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -288,8 +275,7 @@
         }
 
         .shop-item-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(251, 191, 36, 0.4);
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(251, 191, 36, 0.4);
             border-radius: 12px; padding: 10px; margin-bottom: 8px;
             display: flex; justify-content: space-between; align-items: center;
         }
@@ -302,29 +288,37 @@
 
         .buy-btn.disabled { background: #64748b; cursor: not-allowed; }
 
+        /* Privacy Policy Modal Content */
+        .policy-content-box {
+            font-size: 11px; color: #cbd5e1; line-height: 1.5;
+            background: rgba(0,0,0,0.25); padding: 10px; border-radius: 12px;
+            max-height: 300px; overflow-y: auto; border: 1px solid rgba(251,191,36,0.3);
+            margin-bottom: 12px;
+        }
+
+        .policy-content-box h4 { color: #fbbf24; margin: 8px 0 4px 0; font-size: 12px; }
+
         /* Game Screen */
         #game-screen { background: #064e3b; color: #fff; justify-content: space-between; }
         .game-top-bar { display: flex; justify-content: space-between; align-items: center; }
 
         .action-icon-btn {
-            background: #14532d; border: 2px solid #fbbf24;
-            color: #fbbf24; width: 36px; height: 36px; border-radius: 50%;
+            background: #14532d; border: 2px solid #fbbf24; color: #fbbf24;
+            width: 36px; height: 36px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; font-weight: bold;
         }
 
         .collection-holder {
-            height: 65px; background: #022c22;
-            border: 3px solid #fbbf24; border-radius: 14px;
-            display: flex; justify-content: center; align-items: center;
-            gap: 6px; margin: 6px 0; padding: 0 6px;
+            height: 65px; background: #022c22; border: 3px solid #fbbf24;
+            border-radius: 14px; display: flex; justify-content: center;
+            align-items: center; gap: 6px; margin: 6px 0; padding: 0 6px;
         }
 
         .slot-box {
             width: 44px; height: 50px; background: #14532d;
-            border: 2px solid rgba(251, 191, 36, 0.6);
-            border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; font-size: 24px;
+            border: 2px solid rgba(251, 191, 36, 0.6); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; font-size: 24px;
         }
 
         .battle-split-container {
@@ -344,9 +338,8 @@
 
         /* Board Area */
         .board-area {
-            flex-grow: 1; position: relative;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden; width: 100%;
+            flex-grow: 1; position: relative; display: flex;
+            align-items: center; justify-content: center; overflow: hidden; width: 100%;
         }
 
         .layered-board {
@@ -356,8 +349,7 @@
 
         /* 3D ПИРАМИДАЛЫҚ ТАҚТАЙШАЛАР */
         .tile-stacked {
-            position: absolute;
-            width: 58px; height: 72px;
+            position: absolute; width: 58px; height: 72px;
             background: linear-gradient(145deg, #ffffff, #f1f5f9);
             border-radius: 12px; border: 2px solid #94a3b8;
             display: flex; align-items: center; justify-content: center;
@@ -366,14 +358,11 @@
             transition: transform 0.1s ease, background 0.2s, border-color 0.2s;
         }
 
-        /* Бұғатталған (астындағы) тақтайша стилі */
         .tile-stacked.locked {
-            opacity: 0.65;
-            filter: brightness(0.8);
+            opacity: 0.65; filter: brightness(0.8);
             background: linear-gradient(145deg, #cbd5e1, #94a3b8);
         }
 
-        /* Діріл анимациясы (астындағыны алғысы келгенде) */
         @keyframes shakeRed {
             0% { transform: translate(0, 0) scale(1); border-color: #ef4444; background: #fca5a5; }
             20% { transform: translate(-6px, 0); }
@@ -427,6 +416,35 @@
     </style>
 </head>
 <body>
+
+    <!-- Live Player Activity Notification Banner -->
+    <div id="live-player-banner" class="live-player-popup hidden">
+        <span id="live-banner-text">👤 Асылжан ойынға кірді</span>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">🔒 ҚҰПИЯЛЫҚ САЯСАТЫ</div>
+                <button class="close-btn" onclick="closeModal('privacy-modal')">✕</button>
+            </div>
+            <div class="policy-content-box">
+                <h4>1. Жалпы ережелер</h4>
+                <p>Qazaq Mahjong ойыны сіздің жеке деректеріңіздің құпиялылығын құрметтейді. Бұл саясат қандай ақпарат жиналатынын және қалай пайдаланылатынын түсіндіреді.</p>
+                
+                <h4>2. Деректерді жинау және пайдалану</h4>
+                <p>Ойын барысында ойыншының таңдаған нигі, жинаған монеталары мен деңгейлері жергілікті құрылғыда (LocalStorage) сақталады. Біз сіздің жеке аты-жөніңізді немесе байланыс деректеріңізді үшінші тарапқа сатпаймыз.</p>
+                
+                <h4>3. Жарнамалар (Google AdMob)</h4>
+                <p>Ойында Google AdMob жарнама желісі пайдаланылуы мүмкін. Google жарнаманы дербестендіру үшін анонимді идентификаторларды (Advertising ID) қолдануы мүмкін.</p>
+                
+                <h4>4. Байланыс</h4>
+                <p>Сұрақтарыңыз болса, WhatsApp қолдау қызметі (+77477099901) арқылы хабарласа аласыз.</p>
+            </div>
+            <button class="buy-btn" style="width:100%; padding:10px;" onclick="closeModal('privacy-modal')">Түсінікті (Жабу)</button>
+        </div>
+    </div>
 
     <!-- Promo Code Modal -->
     <div id="promo-modal" class="modal hidden">
@@ -620,6 +638,7 @@
             </div>
 
             <button class="buy-btn" style="width:100%; margin-bottom:8px; background:#3b82f6;" onclick="openModal('promo-modal')">🎟️ Промокод енгізу</button>
+            <button class="buy-btn" style="width:100%; margin-bottom:8px; background:#64748b;" onclick="openModal('privacy-modal')">🔒 Құпиялық саясаты (Privacy Policy)</button>
 
             <div style="font-size:11px; color:#fbbf24; font-weight:bold; margin-bottom:4px;">Тілді таңдау / Language:</div>
             <div class="lang-grid">
@@ -723,7 +742,8 @@
 
         let globalChatMessages = JSON.parse(localStorage.getItem('qazaq_mahjong_global_chat')) || [
             { name: "Арман", text: "Дуэль шайқасы өте қарқынды өтуде!" },
-            { name: "Айгерім", text: "Баршаға сәлем! Монетаны қалай алуға болады?" }
+            { name: "Айгерім", text: "Баршаға сәлем! Монетаны қалай алуға болады?" },
+            { name: "Нұрбек", text: "10-деңгей шынымен керемет пирамида екен!" }
         ];
 
         window.addEventListener('storage', function(e) {
@@ -794,7 +814,6 @@
                     osc.connect(gain); gain.connect(audioCtx.destination);
                     osc.start(); osc.stop(audioCtx.currentTime + 0.08);
                 } 
-                // ӘЙНЕК СЫҢҒЫРЛАП СЫНУ / ШАҒЫЛУ ДЫБЫСЫ (GLASS CRUSH SOUND EFFECT)
                 else if (type === 'crush') {
                     const bufferSize = audioCtx.sampleRate * 0.15;
                     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -841,6 +860,47 @@
                 document.getElementById('sound-toggle-btn').style.background = soundEnabled ? '#22c55e' : '#ef4444';
                 document.getElementById('sound-toggle-btn').innerText = `🔊 Дыбыс: ${soundEnabled ? 'Қосулы' : 'Өшірулі'}`;
             }
+        }
+
+        /* LIVE PLAYER ACTIVITY & CHAT SIMULATION */
+        const randomNames = ["Асылжан", "Данияр", "Мәдина", "Ернұр", "Сұлтан", "Динара", "Бекзат", "Әсел"];
+        const randomChatTexts = [
+            "Салам достар! Жеті Қазынаны ашқандар бар ма?",
+            "Шайқас режимі өте тартысты екен!",
+            "10-деңгейді сәтті аяқтадым 🔥",
+            "Монета жинау оңай екен 👍",
+            "Қазақша маджонг өте сапалы жасалған!"
+        ];
+
+        setInterval(() => {
+            if (Math.random() > 0.4) {
+                const name = randomNames[Math.floor(Math.random() * randomNames.length)];
+                const actions = [
+                    `👤 ${name} ойынға кірді`,
+                    `🎉 ${name} ${Math.floor(Math.random() * 10) + 1}-деңгейге өтті!`,
+                    `⚔️ ${name} дуэль шайқасына қосылды`
+                ];
+                const act = actions[Math.floor(Math.random() * actions.length)];
+                showLiveBanner(act);
+            }
+        }, 7000);
+
+        setInterval(() => {
+            if (Math.random() > 0.5) {
+                const name = randomNames[Math.floor(Math.random() * randomNames.length)];
+                const msg = randomChatTexts[Math.floor(Math.random() * randomChatTexts.length)];
+                globalChatMessages.push({ name: name, text: msg });
+                if (globalChatMessages.length > 20) globalChatMessages.shift();
+                saveUserData();
+                renderChat();
+            }
+        }, 10000);
+
+        function showLiveBanner(text) {
+            const b = document.getElementById('live-player-banner');
+            document.getElementById('live-banner-text').innerText = text;
+            b.classList.remove('hidden');
+            setTimeout(() => b.classList.add('hidden'), 3000);
         }
 
         function claimCashReward(targetCount, amount) {
@@ -1177,12 +1237,10 @@
             renderTiles();
         }
 
-        // ТАҚТАЙШАНЫҢ БҮРКЕЛЕНГЕНІН (АСТЫНДА ЕКЕНІН) ТЕСКЕРУ
         function isTileBlocked(tile) {
             return boardTiles.some(other => {
                 if (other.id === tile.id) return false;
-                if (other.layer <= tile.layer) return false; // Жоғарғы қабатта болса
-                // Координаталық сәйкестік (үстін жауып тұр ма?)
+                if (other.layer <= tile.layer) return false;
                 const diffX = Math.abs(other.x - tile.x);
                 const diffY = Math.abs(other.y - tile.y);
                 return diffX < 45 && diffY < 50;
@@ -1213,7 +1271,6 @@
         }
 
         function tapTile(tile) {
-            // ЕГЕР ТАҚТАЙША АСТЫНДА ҚАЛСА — ҚЫЗЫЛ БОЛЫП ДІРІЛДЕЙДІ ӘРІ АЛЫНБАЙДЫ
             if (isTileBlocked(tile)) {
                 playSound('error');
                 const el = document.getElementById(`tile-el-${tile.id}`);
@@ -1264,13 +1321,12 @@
             }
         }
 
-        // ЖҰПТАР ҚОСЫЛҒАНДА ШАҒЫЛЫП СЫНҒАН ДЫБЫС ШЫҒАДЫ
         function checkMatches() {
             const counts = {};
             slots.forEach(icon => counts[icon] = (counts[icon] || 0) + 1);
             for (let icon in counts) {
                 if (counts[icon] >= 2) {
-                    playSound('crush'); // Екі жұп тас жиналғанда әйнектей шағылған дыбыс шығады
+                    playSound('crush');
                     slots = slots.filter(s => s !== icon);
                 }
             }
