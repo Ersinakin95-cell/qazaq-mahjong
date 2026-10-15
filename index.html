@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v7.2 (Full Edition)</title>
+    <title>Qazaq Mahjong v7.3 (Fixed Chat)</title>
     
     <!-- Firebase Realtime Database SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -447,23 +447,25 @@
         }
 
         .chat-box {
-            height: 180px; background: rgba(0,0,0,0.25);
-            border-radius: 10px; padding: 8px; overflow-y: auto;
+            height: 220px; background: rgba(0,0,0,0.35);
+            border-radius: 12px; padding: 10px; overflow-y: auto;
             margin-bottom: 8px; display: flex; flex-direction: column;
-            gap: 6px; font-size: 11px; border: 1px solid rgba(251, 191, 36, 0.2);
+            gap: 8px; font-size: 12px; border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
         .chat-msg {
-            background: rgba(255,255,255,0.08);
-            padding: 6px 10px;
-            border-radius: 8px;
+            background: rgba(255,255,255,0.12);
+            padding: 8px 12px;
+            border-radius: 10px;
             word-break: break-word;
+            line-height: 1.3;
         }
 
         .chat-msg .time {
-            font-size: 8px;
+            font-size: 9px;
             color: #94a3b8;
-            margin-left: 6px;
+            margin-left: 8px;
+            float: right;
         }
 
         .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
@@ -775,8 +777,8 @@
             </div>
             <div class="chat-box" id="chat-box"></div>
             <div style="display:flex; gap:6px; margin-top:8px;">
-                <input type="text" id="chat-msg-input" class="shop-item-card" style="flex:1; color:#fff; background:rgba(0,0,0,0.3); padding:6px;" placeholder="Хабарлама жазыңыз...">
-                <button class="buy-btn" onclick="sendMsg()">Жіберу</button>
+                <input type="text" id="chat-msg-input" class="shop-item-card" style="flex:1; color:#fff; background:rgba(0,0,0,0.3); padding:8px; border-radius:10px;" placeholder="Хабарлама жазыңыз..." onkeypress="if(event.key==='Enter') sendMsg()">
+                <button class="buy-btn" style="padding:8px 14px; background:#22c55e;" onclick="sendMsg()">Жіберу</button>
             </div>
         </div>
     </div>
@@ -818,7 +820,7 @@
 
     <script>
         // -------------------------------------------------------------
-        // 🔥 FIREBASE REALTIME DATABASE CONFIGURATION
+        // 🔥 FIREBASE REALTIME DATABASE CONFIGURATION[cite: 5]
         // -------------------------------------------------------------
         const firebaseConfig = {
             databaseURL: "https://qazaq-mahjong-default-rtdb.firebaseio.com"
@@ -829,7 +831,7 @@
         const chatRef = db.ref("global_messages");
 
         // -------------------------------------------------------------
-        // 🎨 10 ДИНАМИКАЛЫҚ ТАҚТАЙША ТҮСТЕРІ (ӘР ДЕҢГЕЙДЕ ӨЗГЕРЕДІ)
+        // 🎨 10 ДИНАМИКАЛЫҚ ТАҚТАЙША ТҮСТЕРІ (ӘР ДЕҢГЕЙДЕ ӨЗГЕРЕДІ)[cite: 5]
         // -------------------------------------------------------------
         const tileColorThemes = [
             { bg: 'linear-gradient(160deg, #ffffff 0%, #f1f5f9 70%, #cbd5e1 100%)', s1: '#b0c4de', s2: '#64748b' },
@@ -845,7 +847,7 @@
         ];
 
         // -------------------------------------------------------------
-        // 📱 LOCAL USER DATA & VARIABLES
+        // 📱 LOCAL USER DATA & VARIABLES[cite: 5]
         // -------------------------------------------------------------
         const whatsappNum = "77477099901";
 
@@ -993,26 +995,35 @@
         }
 
         // -------------------------------------------------------------
-        // 🔥 REALTIME CHAT FUNCTIONS (FIREBASE)
+        // 🔥 REALTIME CHAT FUNCTIONS (FIREBASE FIX)[cite: 5]
         // -------------------------------------------------------------
-        chatRef.limitToLast(30).on('value', (snapshot) => {
+        chatRef.limitToLast(50).on('value', (snapshot) => {
             const chatBox = document.getElementById('chat-box');
-            if(!chatBox) return;
+            if (!chatBox) return;
             chatBox.innerHTML = '';
             
             const data = snapshot.val();
             if (data) {
                 Object.values(data).forEach(msg => {
-                    const timeStr = msg.time ? new Date(msg.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+                    let timeStr = '';
+                    if (msg.time) {
+                        const dateObj = new Date(msg.time);
+                        timeStr = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    }
                     chatBox.innerHTML += `
                         <div class="chat-msg">
-                            <strong style="color:#fbbf24">${msg.name}:</strong> ${msg.text}
+                            <strong style="color:#fbbf24">${msg.name || 'Ойыншы'}:</strong> ${msg.text}
                             <span class="time">${timeStr}</span>
                         </div>
                     `;
                 });
-                chatBox.scrollTop = chatBox.scrollHeight;
+            } else {
+                chatBox.innerHTML = '<div style="text-align:center; color:#94a3b8; margin-top:20px; font-size:11px;">💬 Әлі хабарлама жоқ. Бірінші болып жазыңыз!</div>';
             }
+            
+            setTimeout(() => {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 100);
         });
 
         function sendMsg() {
@@ -1022,7 +1033,7 @@
                 chatRef.push({
                     name: username,
                     text: text,
-                    time: firebase.database.ServerValue.TIMESTAMP
+                    time: Date.now()
                 });
                 inp.value = '';
                 playSound('tap');
@@ -1030,7 +1041,7 @@
         }
 
         // -------------------------------------------------------------
-        // 🛠️ GENERAL GAME LOGIC
+        // 🛠️ GENERAL GAME LOGIC[cite: 5]
         // -------------------------------------------------------------
         function claimCashReward(targetCount, amount) {
             if (watchedAdsCount >= targetCount) {
@@ -1367,7 +1378,7 @@
         }
 
         // -------------------------------------------------------------
-        // 🔒 ТАҚТАЙШАНЫҢ БҰҒАТТАЛУ ЕРЕЖЕСІ (15-ДЕҢГЕЙДЕН КЕЙІН ҚИЫНДАЙДЫ)
+        // 🔒 ТАҚТАЙШАНЫҢ БҰҒАТТАЛУ ЕРЕЖЕСІ (15-ДЕҢГЕЙДЕН КЕЙІН ҚИЫНДАЙДЫ)[cite: 5]
         // -------------------------------------------------------------
         function isTileBlocked(tile) {
             const isCoveredFromTop = boardTiles.some(other => {
@@ -1512,8 +1523,7 @@
             const container = document.getElementById('opponent-slots-container');
             container.innerHTML = '';
             for (let i = 0; i < 4; i++) {
-                const box = document.createElement('div');
-                box.className = 'opp-slot';
+                const box = document.className = 'opp-slot';
                 box.innerText = opponentSlots[i] || '';
                 container.appendChild(box);
             }
