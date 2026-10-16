@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qazaq Mahjong v7.5 (Full Edition)</title>
+    <title>Qazaq Mahjong v7.6 (Stable Edition)</title>
     
     <!-- Firebase Realtime Database SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -831,7 +831,7 @@
         const chatRef = db.ref("global_messages");
 
         // -------------------------------------------------------------
-        // 🎨 10 ДИНАМИКАЛЫҚ ТАҚТАЙША ТҮСТЕРІ (ӘР ДЕҢГЕЙДЕ ӨЗГЕРЕДІ)
+        // 🎨 10 ДИНАМИКАЛЫҚ ТАҚТАЙША ТҮСТЕРІ
         // -------------------------------------------------------------
         const tileColorThemes = [
             { bg: 'linear-gradient(160deg, #ffffff 0%, #f1f5f9 70%, #cbd5e1 100%)', s1: '#b0c4de', s2: '#64748b' },
@@ -1033,16 +1033,14 @@
             const inp = document.getElementById('chat-msg-input');
             const text = inp.value.trim();
             if (text) {
-                chatRef.push({
+                const sendData = {
                     name: username,
                     text: text,
                     time: Date.now()
-                }).then(() => {
-                    inp.value = '';
-                    playSound('tap');
-                }).catch((e) => {
-                    showToast("❌ Хабарлама жіберілмеді!");
-                });
+                };
+                inp.value = '';
+                playSound('tap');
+                chatRef.push(sendData);
             }
         }
 
@@ -1209,3 +1207,353 @@
         }
 
         function unlockQazynaWithCoins(i) {
+            const item = jetiQazynaList[i];
+            if (item.claimed) { showWishModal(item); return; }
+            if (coins >= item.cost) {
+                coins -= item.cost;
+                item.claimed = true;
+                playSound('tap');
+                saveUserData();
+                updateUI();
+                showWishModal(item);
+            } else {
+                showToast(`⚠️ Қазынаны ашуға ${item.cost - coins} монета жетпейді!`);
+            }
+        }
+
+        function showWishModal(item) {
+            document.getElementById('wish-icon').innerText = item.icon;
+            document.getElementById('wish-title').innerText = item.title;
+            document.getElementById('wish-text').innerText = item.wish;
+            openModal('wish-popup');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.remove('hidden');
+            setTimeout(() => t.classList.add('hidden'), 2000);
+        }
+
+        function startClassicGame() {
+            playSound('tap');
+            isBattleMode = false;
+            if (battleTimerInterval) clearInterval(battleTimerInterval);
+            if (oppBattleInterval) clearInterval(oppBattleInterval);
+            document.getElementById('battle-timer').classList.add('hidden');
+            document.getElementById('opponent-battle-box').classList.add('hidden');
+            startGameCommon();
+        }
+
+        function startBattleGame(type) {
+            closeModal('battle-select-modal');
+            playSound('tap');
+            isBattleMode = true;
+            battleType = type;
+            timeLeft = 35;
+            opponentSlots = [];
+            renderOpponentSlots();
+
+            if (battleTimerInterval) clearInterval(battleTimerInterval);
+            if (oppBattleInterval) clearInterval(oppBattleInterval);
+
+            document.getElementById('battle-timer').classList.remove('hidden');
+            document.getElementById('opponent-battle-box').classList.remove('hidden');
+            document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}с`;
+            
+            document.getElementById('opp-name-text').innerText = type === 'bot' ? "⚔️ Қарсылас: Бот (Сот)" : "⚔️ Қарсылас: Бақтияр (Шынайы)";
+
+            battleTimerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}с`;
+                if (timeLeft <= 0) {
+                    clearInterval(battleTimerInterval);
+                    if (oppBattleInterval) clearInterval(oppBattleInterval);
+                    showToast("⏰ Уақыт бітті! Жеңілдіңіз!");
+                    exitGame();
+                }
+            }, 1000);
+
+            const speed = type === 'bot' ? 3000 : 2000;
+            oppBattleInterval = setInterval(() => {
+                if (Math.random() > 0.4 && opponentSlots.length < 3) {
+                    opponentSlots.push(kazakhIcons[Math.floor(Math.random() * kazakhIcons.length)]);
+                    renderOpponentSlots();
+                } else if (opponentSlots.length >= 2 && Math.random() > 0.5) {
+                    opponentSlots.pop();
+                    opponentSlots.pop();
+                    renderOpponentSlots();
+                }
+            }, speed);
+
+            startGameCommon();
+        }
+
+        function startGameCommon() {
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('game-level-text').innerText = isBattleMode ? "⚔️ Шайқас" : `${currentLevel}-Деңгей`;
+            initBoard();
+        }
+
+        function exitGame() {
+            if (battleTimerInterval) clearInterval(battleTimerInterval);
+            if (oppBattleInterval) clearInterval(oppBattleInterval);
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+            updateUI();
+        }
+
+        function initBoard() {
+            slots = [];
+            renderSlots();
+            boardTiles = [];
+
+            let isStacked = currentLevel > 5;
+            let pairsCount = isStacked ? Math.min(24, 6 + (currentLevel - 5) * 3) : 8; 
+            
+            let pairsArray = [];
+            for (let i = 0; i < pairsCount; i++) {
+                const icon = kazakhIcons[i % kazakhIcons.length];
+                pairsArray.push(icon, icon);
+            }
+
+            pairsArray.sort(() => Math.random() - 0.5);
+
+            let tileIdx = 0;
+
+            if (!isStacked) {
+                let cols = 4;
+                let rows = Math.ceil(pairsArray.length / cols);
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        if (tileIdx < pairsArray.length) {
+                            boardTiles.push({
+                                id: tileIdx,
+                                icon: pairsArray[tileIdx],
+                                layer: 0,
+                                x: (c - (cols - 1) / 2) * 60,
+                                y: (r - (rows - 1) / 2) * 76
+                            });
+                            tileIdx++;
+                        }
+                    }
+                }
+            } else {
+                const layersConfig = [
+                    { cols: 5, rows: 5 },
+                    { cols: 4, rows: 4 },
+                    { cols: 3, rows: 3 },
+                    { cols: 2, rows: 2 }
+                ];
+
+                for (let l = 0; l < layersConfig.length; l++) {
+                    let cfg = layersConfig[l];
+                    for (let r = 0; r < cfg.rows; r++) {
+                        for (let c = 0; c < cfg.cols; c++) {
+                            if (tileIdx < pairsArray.length) {
+                                boardTiles.push({
+                                    id: tileIdx,
+                                    icon: pairsArray[tileIdx],
+                                    layer: l,
+                                    x: (c - (cfg.cols - 1) / 2) * 56 - (l * 6),
+                                    y: (r - (cfg.rows - 1) / 2) * 68 - (l * 8)
+                                });
+                                tileIdx++;
+                            }
+                        }
+                    }
+                }
+
+                while(tileIdx < pairsArray.length) {
+                    let l = Math.floor(Math.random() * 3);
+                    boardTiles.push({
+                        id: tileIdx,
+                        icon: pairsArray[tileIdx],
+                        layer: l,
+                        x: (Math.random() - 0.5) * 100,
+                        y: (Math.random() - 0.5) * 100
+                    });
+                    tileIdx++;
+                }
+            }
+
+            renderTiles();
+        }
+
+        // -------------------------------------------------------------
+        // 🔒 ТАҚТАЙШАНЫҢ БҰҒАТТАЛУ ЕРЕЖЕСІ (15-ДЕҢГЕЙДЕН КЕЙІН ҚИЫНДАЙДЫ)
+        // -------------------------------------------------------------
+        function isTileBlocked(tile) {
+            const isCoveredFromTop = boardTiles.some(other => {
+                if (other.id === tile.id) return false;
+                if (other.layer <= tile.layer) return false;
+                const diffX = Math.abs(other.x - tile.x);
+                const diffY = Math.abs(other.y - tile.y);
+                return diffX < 44 && diffY < 50;
+            });
+
+            if (isCoveredFromTop) return true;
+
+            if (currentLevel > 15) {
+                let hasLeftNeighbor = false;
+                let hasRightNeighbor = false;
+
+                boardTiles.forEach(other => {
+                    if (other.id === tile.id || other.layer !== tile.layer) return;
+                    const diffY = Math.abs(other.y - tile.y);
+                    const diffX = other.x - tile.x;
+
+                    if (diffY < 35) {
+                        if (diffX < -30 && diffX > -65) hasLeftNeighbor = true;
+                        if (diffX > 30 && diffX < 65) hasRightNeighbor = true;
+                    }
+                });
+
+                if (hasLeftNeighbor && hasRightNeighbor) return true;
+            }
+
+            return false;
+        }
+
+        function renderTiles() {
+            const board = document.getElementById('layered-board');
+            board.innerHTML = '';
+
+            const theme = tileColorThemes[(currentLevel - 1) % tileColorThemes.length];
+
+            boardTiles.forEach(tile => {
+                const el = document.createElement('div');
+                const blocked = isTileBlocked(tile);
+                
+                el.className = `tile-stacked ${blocked ? 'locked' : ''}`;
+                el.id = `tile-el-${tile.id}`;
+                el.style.left = `calc(50% + ${tile.x}px - 29px)`;
+                el.style.top = `calc(50% + ${tile.y}px - 37px)`;
+                el.style.zIndex = tile.layer * 10 + 5;
+
+                el.style.background = theme.bg;
+                el.style.boxShadow = `
+                    -3px 5px 0px ${theme.s1},
+                    -6px 9px 0px ${theme.s2},
+                    -8px 12px 14px rgba(0, 0, 0, 0.45),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.9)
+                `;
+
+                el.innerText = tile.icon;
+                el.onclick = () => tapTile(tile);
+                board.appendChild(el);
+            });
+        }
+
+        function tapTile(tile) {
+            if (isTileBlocked(tile)) {
+                playSound('error');
+                const el = document.getElementById(`tile-el-${tile.id}`);
+                if (el) {
+                    el.classList.add('shaking');
+                    setTimeout(() => el.classList.remove('shaking'), 400);
+                }
+                if (currentLevel > 15) {
+                    showToast("🔒 Екі жағы да жабық! Ашық тасты таңдаңыз!");
+                } else {
+                    showToast("🔒 Бірінші үстіңгі тасты алыңыз!");
+                }
+                return;
+            }
+
+            if (slots.length >= 4) {
+                playSound('error');
+                showToast("⚠️ Ұяшық толды!");
+                openModal('shop-modal');
+                return;
+            }
+
+            playSound('tap');
+            historyStack.push([...boardTiles]);
+            boardTiles = boardTiles.filter(t => t.id !== tile.id);
+            slots.push(tile.icon);
+
+            checkMatches();
+            renderSlots();
+            renderTiles();
+
+            if (boardTiles.length === 0 && slots.length === 0) {
+                if (battleTimerInterval) clearInterval(battleTimerInterval);
+                if (oppBattleInterval) clearInterval(oppBattleInterval);
+
+                if (isBattleMode) {
+                    const reward = battleType === 'bot' ? 5 : 15;
+                    coins += reward;
+                    updateUI();
+                    showToast(`🎉 Жеңіс! +${reward} 🪙 таптыңыз!`);
+                    setTimeout(exitGame, 1500);
+                } else {
+                    showToast("🎉 Келесі кезеңге өттіңіз!");
+                    currentLevel++;
+                    updateUI();
+
+                    setTimeout(() => {
+                        document.getElementById('game-level-text').innerText = `${currentLevel}-Деңгей`;
+                        initBoard();
+                    }, 1200);
+                }
+            }
+        }
+
+        function checkMatches() {
+            const counts = {};
+            slots.forEach(icon => counts[icon] = (counts[icon] || 0) + 1);
+            for (let icon in counts) {
+                if (counts[icon] >= 2) {
+                    playSound('crush');
+                    slots = slots.filter(s => s !== icon);
+                }
+            }
+        }
+
+        function renderSlots() {
+            const container = document.getElementById('collection-holder');
+            container.innerHTML = '';
+            for (let i = 0; i < 4; i++) {
+                const box = document.createElement('div');
+                box.className = 'slot-box';
+                box.innerText = slots[i] || '';
+                container.appendChild(box);
+            }
+        }
+
+        function renderOpponentSlots() {
+            const container = document.getElementById('opponent-slots-container');
+            if(!container) return;
+            container.innerHTML = '';
+            for (let i = 0; i < 4; i++) {
+                const box = document.createElement('div');
+                box.className = 'opp-slot';
+                box.innerText = opponentSlots[i] || '';
+                container.appendChild(box);
+            }
+        }
+
+        function useBooster(type) {
+            if (type === 'undo' && coins >= 28 && historyStack.length > 0) {
+                coins -= 28;
+                boardTiles = historyStack.pop();
+                slots.pop();
+                renderSlots();
+                renderTiles();
+                updateUI();
+            } else if (type === 'shuffle' && coins >= 15) {
+                coins -= 15;
+                const icons = boardTiles.map(t => t.icon).sort(() => Math.random() - 0.5);
+                boardTiles.forEach((t, i) => t.icon = icons[i]);
+                renderTiles();
+                updateUI();
+            }
+        }
+
+        renderQazyna();
+        updateUI();
+    </script>
+</body>
+</html>
