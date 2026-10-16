@@ -1563,330 +1563,164 @@
 
         renderQazyna();
         updateUI();
-    </script>
-</body>
-</html>
 // -------------------------------------------------------------
-        // 👑 ЕРСІН (ERSIN) - НЕГІЗІН ҚАЛАУШЫНЫ ЕРЕКШЕЛЕУ ЖӘНЕ РАМКА ЛОГИКАСЫ
-        // -------------------------------------------------------------
+    // 👑 АДМИН МӘРТЕБЕСІ ЖӘНЕ АЛТЫН РАМКА ЛОГИКАСЫ
+    // -------------------------------------------------------------
+    function isAdmin(name) {
+        if (!name) return false;
+        const clean = name.trim().toLowerCase();
+        return clean.includes('ерсін') || clean.includes('ersin');
+    }
+
+    // Динамикалық алтын рамка стилі мен бейджигін қосу
+    const adminStyleEnhancement = document.createElement('style');
+    adminStyleEnhancement.innerHTML = `
+        .admin-vip-profile {
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.7) !important;
+        }
+        .admin-chat-glow {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.4), rgba(180, 83, 9, 0.6)) !important;
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.7) !important;
+        }
+        .admin-badge-gold {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff; font-size: 9px; font-weight: 900;
+            padding: 2px 6px; border-radius: 6px; border: 1px solid #fef3c7;
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+            display: inline-flex; align-items: center; gap: 2px; margin-left: 4px;
+        }
+    `;
+    document.head.appendChild(adminStyleEnhancement);
+
+    // Интерфейстегі админ екенін автоматты түрде жаңарту
+    const originalUpdateUI = window.updateUI || function(){};
+    window.updateUI = function() {
+        if (typeof originalUpdateUI === 'function') originalUpdateUI();
+        const nameDisp = document.getElementById('user-name-display');
+        const avatarBox = document.getElementById('user-avatar-display');
         
-        // Админ екенін тексеру функциясы (Ерсін немесе Ersin сөздеріне 100% жұмыс істейді)
-        function isAdmin(name) {
-            if (!name) return false;
-            const cleanName = name.trim().toLowerCase();
-            return cleanName.includes('ерсін') || cleanName.includes('ersin');
-        }
-
-        // Қолданушының онлайн статус пен админ мәртебесін Firebase-ке тіркеу
-        function updateOnlinePresenceWithAdmin() {
-            if (typeof onlineRef !== 'undefined' && typeof myUserKey !== 'undefined') {
-                onlineRef.child(myUserKey).set({
-                    name: username,
-                    level: currentLevel,
-                    isAdmin: isAdmin(username),
-                    lastSeen: Date.now()
-                });
-                onlineRef.child(myUserKey).onDisconnect().remove();
-            }
-        }
-
-        // Чатта және Онлайн тізімде алтын түстес рамка мен белгіні қосу стилі (Динамикалық CSS)
-        const adminStyleEnhancement = document.createElement('style');
-        adminStyleEnhancement.innerHTML = `
-            /* 👑 Алтын түстес жарық рамка және ерекше стиль */
-            .admin-vip-profile {
-                border: 2px solid #fbbf24 !important;
-                box-shadow: 0 0 15px rgba(251, 191, 36, 0.6) !important;
-                background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(245, 158, 11, 0.5)) !important;
-            }
-            .admin-chat-glow {
-                background: linear-gradient(135deg, rgba(217, 119, 6, 0.4), rgba(180, 83, 9, 0.6)) !important;
-                border: 2px solid #fbbf24 !important;
-                box-shadow: 0 0 12px rgba(251, 191, 36, 0.7) !important;
-            }
-            .admin-badge-gold {
-                background: linear-gradient(135deg, #f59e0b, #d97706);
-                color: #ffffff;
-                font-size: 9px;
-                font-weight: 900;
-                padding: 2px 6px;
-                border-radius: 6px;
-                border: 1px solid #fef3c7;
-                box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
-                display: inline-flex;
-                align-items: center;
-                gap: 2px;
-                margin-left: 4px;
-            }
-        `;
-        document.head.appendChild(adminStyleEnhancement);
-
-        // Қолданушы атын өзгертіп сақтағанда админ екенін дереу жаңарту
-        const originalSaveUser = window.saveUsernameExplicitly || function(){};
-        window.saveUsernameExplicitly = function() {
-            const val = document.getElementById('username-input').value.trim();
-            if (val) {
-                username = val;
-                if (typeof saveUserData === 'function') saveUserData();
-                if (typeof updateUI === 'function') updateUI();
-                if (typeof closeModal === 'function') closeModal('settings-modal');
-                updateOnlinePresenceWithAdmin();
-                if (typeof showToast === 'function') showToast("💾 Ат пен Админ мәртебесі сақталды!");
-            }
-        };
-
-        // Бастапқы іске қосылу кезінде орындау
         if (typeof username !== 'undefined' && isAdmin(username)) {
-            console.log("👑 Қош келдіңіз, Негізін қалаушы Ерсін!");
+            if(nameDisp) nameDisp.innerHTML = `${username} <span class="admin-badge-gold">👑 НЕГІЗІН ҚАЛАУШЫ</span>`;
+            if(avatarBox) avatarBox.classList.add('admin-vip-profile');
+        }
+    };
+
+    // -------------------------------------------------------------
+    // 🃏 ДУРАК 6-ЛЫҚ (ЖЕЛПУІШ ТӘРІЗДІ КАРТАЛАР ЖӘНЕ ДЕҢГЕЙЛЕР)
+    // -------------------------------------------------------------
+    function openDurakLobby() {
+        const homeScreen = document.getElementById('home-screen');
+        const durakMenu = document.getElementById('durak-menu-screen');
+        if(homeScreen) homeScreen.classList.add('hidden');
+        if(durakMenu) durakMenu.classList.remove('hidden');
+        
+        if(typeof coins !== 'undefined') {
+            const coinBal = document.getElementById('durak-coin-balance');
+            if(coinBal) coinBal.innerText = coins;
+        }
+        if(typeof username !== 'undefined') {
+            const profName = document.getElementById('durak-profile-name');
+            if(profName) profName.innerText = username;
+        }
+    }
+
+    function exitDurakMenu() {
+        const durakMenu = document.getElementById('durak-menu-screen');
+        const homeScreen = document.getElementById('home-screen');
+        if(durakMenu) durakMenu.classList.add('hidden');
+        if(homeScreen) homeScreen.classList.remove('hidden');
+        if(typeof updateUI === 'function') updateUI();
+    }
+
+    function startDurakBattle(cost, lvlName) {
+        if (typeof coins !== 'undefined' && coins < cost) {
+            if(typeof showToast === 'function') showToast("⚠️ Монета жеткіліксіз!");
+            return;
+        }
+        if(typeof coins !== 'undefined') {
+            coins -= cost;
+            if(typeof saveUserData === 'function') saveUserData();
         }
         
-        // Онлайн тізім мен чатты жаңарту кезінде алтын рамканы автоматты қосу функциясы
-        setInterval(() => {
-            // Басты беттегі аватар мен атыңызға алтын рамка қосу
-            const avatarBox = document.getElementById('user-avatar-display');
-            if (avatarBox && isAdmin(username)) {
-                avatarBox.classList.add('admin-vip-profile');
-            }
-        }, 1000);
-        <!-- 🃏 ДУРАК ОЙЫНЫНЫҢ ЖАҢАРТЫЛҒАН ДИЗАЙНЫ МЕН СТИЛІ -->
-    <style>
-        #durak-screen {
-            background: #114e3d !important;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 12px;
-            position: relative;
+        const durakMenu = document.getElementById('durak-menu-screen');
+        const durakScreen = document.getElementById('durak-screen');
+        if(durakMenu) durakMenu.classList.add('hidden');
+        if(durakScreen) durakScreen.classList.remove('hidden');
+        
+        generateRealisticDurakCards();
+        if(typeof showToast === 'function') showToast(`🚀 ${lvlName} басталды!`);
+    }
+
+    function generateRealisticDurakCards() {
+        const suits = ['♠️', '♥️', '♣️', '♦️'];
+        const vals = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        window.myCards = [];
+        
+        for (let i = 0; i < 6; i++) {
+            const s = suits[Math.floor(Math.random() * suits.length)];
+            const v = vals[Math.floor(Math.random() * vals.length)];
+            window.myCards.push({ suit: s, val: v, isRed: s === '♥️' || s === '♦️' });
         }
+        renderRealisticHand();
+    }
 
-        /* Деңгей таңдау меню карталары */
-        .durak-lvl-card {
-            background: linear-gradient(135deg, #22c55e, #15803d);
-            border-radius: 16px;
-            padding: 12px 16px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 2px solid #86efac;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .durak-lvl-card.medium { background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-color: #93c5fd; }
-        .durak-lvl-card.hard { background: linear-gradient(135deg, #f59e0b, #b45309); border-color: #fde68a; }
-
-        /* Ойын үстелі мен карталар орналасуы */
-        .durak-game-table {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            padding: 10px 0;
-        }
-
-        .durak-opponents-row {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: rgba(0,0,0,0.2);
-            padding: 8px;
-            border-radius: 14px;
-        }
-
-        .durak-opponent-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            color: #fef08a;
-        }
-
-        /* 🎴 Желпуіш тәрізді әдемі карталар стилі */
-        .durak-hand-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 110px;
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .durak-real-card {
-            width: 54px;
-            height: 78px;
-            background: #ffffff;
-            color: #0f172a;
-            border-radius: 8px;
-            border: 2px solid #cbd5e1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 4px;
-            font-weight: 900;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: -3px 5px 10px rgba(0,0,0,0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: absolute;
-            bottom: 0;
-        }
-
-        .durak-real-card:hover {
-            transform: translateY(-12px) scale(1.05);
-            z-index: 50;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
-        }
-
-        .durak-real-card.red { color: #dc2626; }
-
-        .durak-center-battle-field {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.15);
-            border: 2px dashed rgba(251, 191, 36, 0.3);
-            border-radius: 20px;
-            margin: 10px 0;
-            min-height: 130px;
-        }
-
-        .durak-action-btn-group {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 6px;
-        }
-    </style>
-
-    <!-- Дурак меню экранының HTML құрылымы -->
-    <div id="durak-menu-screen" class="screen hidden" style="background: #0d3b2e; color: #fff;">
-        <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 0;">
-            <button class="buy-btn" onclick="exitDurakMenu()">⬅️ Меню</button>
-            <h3 style="color:#fbbf24; font-size:16px;">🃏 Дурак 6-лық</h3>
-            <span style="font-size:12px; color:#38bdf8;">🪙 <span id="durak-coin-balance">100</span></span>
-        </div>
-
-        <!-- Профиль шапкасы -->
-        <div style="background:rgba(255,255,255,0.08); border-radius:16px; padding:12px; display:flex; align-items:center; gap:12px; border:2px solid #fbbf24; margin-bottom:14px;">
-            <div style="font-size:32px; background:#1e3a34; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fbbf24;">👑</div>
-            <div>
-                <div style="font-weight:900; font-size:14px; color:#fbbf24;" id="durak-profile-name">Ерсін</div>
-                <div style="font-size:11px; color:#cbd5e1;">Ойын саны: <b style="color:#fff;">70</b> | Жеңіс: <b style="color:#4ade80;">71.43%</b></div>
-            </div>
-        </div>
-
-        <!-- Деңгейлер тізімі (Скринноттағыдай) -->
-        <div class="durak-lvl-card" onclick="startDurakBattle(20, 'Бастапқы деңгей')">
-            <div>
-                <div style="font-size:15px; font-weight:900; color:#fff;">Начальный ур.</div>
-                <div style="font-size:11px; color:#fef3c7;">Кіру: 🪙 20 монета</div>
-            </div>
-            <div style="font-size:28px;">🛡️</div>
-        </div>
-
-        <div class="durak-lvl-card medium" onclick="startDurakBattle(100, 'Орташа деңгей')">
-            <div>
-                <div style="font-size:15px; font-weight:900; color:#fff;">Средний ур.</div>
-                <div style="font-size:11px; color:#dbeafe;">Кіру: 🪙 100 монета</div>
-            </div>
-            <div style="font-size:28px;">⚔️</div>
-        </div>
-
-        <div class="durak-lvl-card hard" onclick="startDurakBattle(500, 'Жоғары деңгей')">
-            <div>
-                <div style="font-size:15px; font-weight:900; color:#fff;">Продвинутый ур.</div>
-                <div style="font-size:11px; color:#fef3c7;">Кіру: 🪙 500 монета</div>
-            </div>
-            <div style="font-size:28px;">👑</div>
-        </div>
-    </div>
-    
-    <script>
-        // Дурак ойынын қосу логикасы
-        function openDurakLobby() {
-            document.getElementById('home-screen').classList.add('hidden');
-            document.getElementById('durak-menu-screen').classList.remove('hidden');
-            document.getElementById('durak-coin-balance').innerText = coins;
-            document.getElementById('durak-profile-name').innerText = username;
-        }
-
-        function exitDurakMenu() {
-            document.getElementById('durak-menu-screen').classList.add('hidden');
-            document.getElementById('home-screen').classList.remove('hidden');
-            updateUI();
-        }
-
-        function startDurakBattle(entryCost, lvlName) {
-            if (coins < entryCost) {
-                showToast("⚠️ Монета жеткіліксіз!");
-                return;
-            }
-            coins -= entryCost;
-            saveUserData();
+    function renderRealisticHand() {
+        const container = document.getElementById('my-durak-hand');
+        if(!container) return;
+        container.innerHTML = '';
+        container.className = 'durak-hand-container';
+        
+        const total = window.myCards.length;
+        window.myCards.forEach((c, idx) => {
+            const el = document.createElement('div');
+            el.className = `durak-real-card ${c.isRed ? 'red' : ''}`;
             
-            document.getElementById('durak-menu-screen').classList.add('hidden');
-            document.getElementById('durak-screen').classList.remove('hidden');
+            const offsetLeft = (idx - (total / 2)) * 32 + 20;
+            const rotation = (idx - (total / 2)) * 6;
+            el.style.left = `calc(50% + ${offsetLeft}px)`;
+            el.style.transform = `rotate(${rotation}deg)`;
             
-            // Карталарды генерациялау (Скриншот стиліндегі мәндер)
-            generateRealisticDurakCards();
-            showToast(`🚀 ${lvlName} басталды!`);
-        }
-
-        function generateRealisticDurakCards() {
-            const suits = ['♠️', '♥️', '♣️', '♦️'];
-            const vals = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-            myCards = [];
-            
-            for (let i = 0; i < 6; i++) {
-                const s = suits[Math.floor(Math.random() * suits.length)];
-                const v = vals[Math.floor(Math.random() * vals.length)];
-                myCards.push({ suit: s, val: v, isRed: s === '♥️' || s === '♦️' });
-            }
-            renderRealisticHand();
-        }
-
-        function renderRealisticHand() {
-            const container = document.getElementById('my-durak-hand');
-            container.innerHTML = '';
-            container.className = 'durak-hand-container';
-            
-            const total = myCards.length;
-            myCards.forEach((c, idx) => {
-                const el = document.createElement('div');
-                el.className = `durak-real-card ${c.isRed ? 'red' : ''}`;
-                
-                // Желпуіш тәрізді орналастыру (rotation & offset)
-                const offsetLeft = (idx - (total / 2)) * 32 + 20;
-                const rotation = (idx - (total / 2)) * 6;
-                el.style.left = `calc(50% + ${offsetLeft}px)`;
-                el.style.transform = `rotate(${rotation}deg)`;
-                
-                el.innerHTML = `
-                    <div style="font-size:13px; line-height:1;">${c.val}<br>${c.suit}</div>
-                    <div style="font-size:22px; text-align:center; align-self:center;">${c.val === 'Q' ? '👸' : (c.val === 'K' ? '🤴' : (c.val === 'A' ? '👑' : c.suit))}</div>
-                    <div style="font-size:13px; line-height:1; transform:rotate(180deg); text-align:right;">${c.val}<br>${c.suit}</div>
-                `;
-                el.onclick = () => playRealisticCard(idx);
-                container.appendChild(el);
-            });
-        }
-
-        function playRealisticCard(idx) {
-            const area = document.getElementById('durak-play-area');
-            const card = myCards[idx];
-            area.innerHTML = `
-                <div class="durak-real-card ${card.isRed ? 'red' : ''}" style="position:relative; transform:none;">
-                    <div style="font-size:13px; line-height:1;">${card.val}<br>${card.suit}</div>
-                    <div style="font-size:22px; text-align:center; align-self:center;">${card.suit}</div>
-                    <div style="font-size:13px; line-height:1; transform:rotate(180deg); text-align:right;">${card.val}<br>${card.suit}</div>
-                </div>
+            el.innerHTML = `
+                <div style="font-size:12px; line-height:1;">${c.val}<br>${c.suit}</div>
+                <div style="font-size:20px; text-align:center; align-self:center;">${c.val === 'Q' ? '👸' : (c.val === 'K' ? '🤴' : (c.val === 'A' ? '👑' : c.suit))}</div>
+                <div style="font-size:12px; line-height:1; transform:rotate(180deg); text-align:right;">${c.val}<br>${c.suit}</div>
             `;
-            myCards.splice(idx, 1);
-            renderRealisticHand();
-            showToast("🃏 Карта тасталды!");
-        }
-    </script>
+            el.onclick = () => playRealisticCard(idx);
+            container.appendChild(el);
+        });
+    }
+
+    function playRealisticCard(idx) {
+        const area = document.getElementById('durak-play-area');
+        if(!area) return;
+        const card = window.myCards[idx];
+        area.innerHTML = `
+            <div class="durak-real-card ${card.isRed ? 'red' : ''}" style="position:relative; transform:none;">
+                <div style="font-size:12px; line-height:1;">${card.val}<br>${card.suit}</div>
+                <div style="font-size:20px; text-align:center; align-self:center;">${card.suit}</div>
+                <div style="font-size:12px; line-height:1; transform:rotate(180deg); text-align:right;">${card.val}<br>${card.suit}</div>
+            </div>
+        `;
+        window.myCards.splice(idx, 1);
+        renderRealisticHand();
+        if(typeof showToast === 'function') showToast("🃏 Карта тасталды!");
+    }
+
+    function bitoDurak() {
+        const area = document.getElementById('durak-play-area');
+        if(area) area.innerHTML = '<span style="font-size:11px; color:#cbd5e1;">Тазаланды (Бито)</span>';
+        if(typeof showToast === 'function') showToast("✅ Бито!");
+    }
+
+    function exitDurak() {
+        const durakScreen = document.getElementById('durak-screen');
+        const homeScreen = document.getElementById('home-screen');
+        if(durakScreen) durakScreen.classList.add('hidden');
+        if(homeScreen) homeScreen.classList.remove('hidden');
+        if(typeof updateUI === 'function') updateUI();
+    }
+        </script>
+     </body>
+ </html>    
