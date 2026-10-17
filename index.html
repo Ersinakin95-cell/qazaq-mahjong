@@ -1699,6 +1699,136 @@
         }
     });
 })();
+        // -------------------------------------------------------------
+// 👑 ЕРСІН & 👥 ОНЛАЙН ТІЗІМІН ТҮЗЕТУ СКРИПТІ
+// -------------------------------------------------------------
+
+(function initErsinFixAndOnline() {
+    function isErsinAdmin(name) {
+        if (!name) return false;
+        const clean = String(name).trim().toLowerCase();
+        return clean.includes('ерсін') || clean.includes('ersin');
+    }
+
+    // 1. Алтын стильдер мен рамкалар
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .admin-vip-profile {
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.85) !important;
+        }
+        .admin-badge-gold-v7 {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff !important;
+            font-size: 9px; font-weight: 900;
+            padding: 2px 5px; border-radius: 6px;
+            border: 1px solid #fef3c7;
+            box-shadow: 0 0 6px rgba(251, 191, 36, 0.8);
+            display: inline-flex; align-items: center; margin-left: 4px;
+        }
+        .admin-chat-card-gold {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.35), rgba(180, 83, 9, 0.5)) !important;
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5) !important;
+        }
+        .online-user-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.08); padding: 8px 12px;
+            border-radius: 10px; margin-bottom: 6px; font-size: 12px;
+            border-left: 3px solid #4ade80; color: #fff;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // 2. Firebase арқылы Онлайн/Офлайн тізімді жаңарту
+    if (typeof db !== 'undefined') {
+        const myKey = localStorage.getItem('qazaq_mahjong_user_key') || ('user_' + Math.floor(Math.random()*1000000));
+        localStorage.setItem('qazaq_mahjong_user_key', myKey);
+
+        function heartbeat() {
+            const curName = (typeof username !== 'undefined') ? username : (localStorage.getItem('qazaq_mahjong_username') || "Ерсін");
+            const curLvl = (typeof currentLevel !== 'undefined') ? currentLevel : (localStorage.getItem('qazaq_mahjong_level') || 1);
+
+            db.ref("online_players/" + myKey).set({
+                name: curName,
+                level: curLvl,
+                isAdmin: isErsinAdmin(curName),
+                lastSeen: Date.now()
+            });
+            db.ref("online_players/" + myKey).onDisconnect().remove();
+        }
+
+        heartbeat();
+        setInterval(heartbeat, 10000);
+
+        // Басқа ойыншылардың тізімін оқып шығару
+        db.ref("online_players").on('value', function(snapshot) {
+            let container = document.getElementById('online-users-list');
+            
+            // Егер ID табылмаса, оны өзіміз іздеп табамыз немесе жасаймыз
+            if (!container) {
+                const modalCards = document.querySelectorAll('.modal-card');
+                modalCards.forEach(card => {
+                    if (card.innerHTML.includes('Онлайн')) {
+                        let listDiv = card.querySelector('#online-users-list');
+                        if (!listDiv) {
+                            listDiv = document.createElement('div');
+                            listDiv.id = 'online-users-list';
+                            card.appendChild(listDiv);
+                        }
+                        container = listDiv;
+                    }
+                });
+            }
+
+            if (!container) return;
+
+            const data = snapshot.val();
+            let html = '';
+            const now = Date.now();
+
+            if (data) {
+                Object.values(data).forEach(u => {
+                    const isOnline = (now - (u.lastSeen || 0)) < 25000;
+                    const statusColor = isOnline ? '#4ade80' : '#94a3b8';
+                    const statusText = isOnline ? 'Онлайн' : 'Офлайн';
+                    const adminCheck = isErsinAdmin(u.name);
+
+                    html += `
+                        <div class="online-user-item" style="border-left-color: ${statusColor};">
+                            <div>
+                                <b>${u.name || 'Ойыншы'}</b>
+                                ${adminCheck ? '<span class="admin-badge-gold-v7">👑 НЕГІЗІН ҚАЛАУШЫ</span>' : ''}
+                                <div style="font-size:9px; color:${statusColor}; margin-top:2px;">● ${statusText}</div>
+                            </div>
+                            <div style="color:#fbbf24; font-weight:bold;">${u.level || 1}-деңгей</div>
+                        </div>
+                    `;
+                });
+            } else {
+                html = '<div style="font-size:11px; text-align:center; color:#cbd5e1; padding:10px;">Әзірге басқа ойыншылар жоқ</div>';
+            }
+
+            container.innerHTML = html;
+        });
+    }
+
+    // 3. Профиль мен Чаттағы админ стилін автоматты бақылау
+    setInterval(function() {
+        var currentName = (typeof username !== 'undefined') ? username : localStorage.getItem('qazaq_mahjong_username');
+        if (isErsinAdmin(currentName)) {
+            var avatar = document.getElementById('user-avatar-display') || document.querySelector('.avatar-box');
+            if (avatar && !avatar.classList.contains('admin-vip-profile')) {
+                avatar.classList.add('admin-vip-profile');
+            }
+
+            var nameElem = document.getElementById('user-name-display');
+            if (nameElem && !nameElem.querySelector('.admin-badge-gold-v7')) {
+                nameElem.innerHTML = currentName + ' <span class="admin-badge-gold-v7">👑 НЕГІЗІН ҚАЛАУШЫ</span>';
+            }
+        }
+    }, 800);
+})();
 </script> 
 </body>
 </html>
