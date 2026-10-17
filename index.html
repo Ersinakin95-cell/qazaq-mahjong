@@ -1644,6 +1644,61 @@
         });
     }, 800);
 })();
+        // -------------------------------------------------------------
+// 👥 ОНЛАЙН ЖӘНЕ ОФЛАЙН ОЙЫНШЫЛАРДЫ ДЕҢГЕЙІМЕН КӨРСЕТУ
+// -------------------------------------------------------------
+
+(function initOnlinePlayersListSystem() {
+    if (typeof db === 'undefined') return;
+
+    // Firebase арқылы барлық ойыншыларды бақылау
+    db.ref("online_players").on('value', function(snapshot) {
+        // Тізім шығатын элементті табу (HTML-дегі #online-users-list немесе .online-list)
+        let listContainer = document.getElementById('online-users-list');
+        if (!listContainer) {
+            // Егер модальды терезе ішінен іздесеміз немесе өзіміз контейнер жасаймыз
+            listContainer = document.querySelector('#online-players-modal .modal-card') || document.getElementById('online-users-list');
+        }
+        if (!listContainer) return;
+
+        const data = snapshot.val();
+        let html = '<div style="font-size:12px; font-weight:bold; color:#fbbf24; margin-bottom:8px;">👥 Барлық ойыншылар тізімі:</div>';
+        
+        const now = Date.now();
+        let activeCount = 0;
+
+        if (data) {
+            Object.values(data).forEach(function(u) {
+                const isOnline = (now - (u.lastSeen || 0)) < 30000; // Соңғы 30 секундта кіргендер онлайн саналады
+                const statusColor = isOnline ? '#4ade80' : '#94a3b8';
+                const statusText = isOnline ? 'Онлайн' : 'Офлайн';
+                const isAdminUser = (String(u.name || '').toLowerCase().includes('ерсін') || String(u.name || '').toLowerCase().includes('ersin'));
+
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; margin-bottom:6px; border-left:3px solid ${statusColor};">
+                        <div>
+                            <span style="font-weight:bold; color:#fff;">${u.name || 'Ойыншы'}</span>
+                            ${isAdminUser ? '<span style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#fff; font-size:8px; font-weight:900; padding:2px 5px; border-radius:4px; margin-left:4px;">👑 НЕГІЗІН ҚАЛАУШЫ</span>' : ''}
+                            <div style="font-size:9px; color:${statusColor}; margin-top:2px;">● ${statusText}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <span style="color:#fbbf24; font-weight:bold; font-size:11px;">${u.level || 1}-деңгей</span>
+                        </div>
+                    </div>
+                `;
+                if (isOnline) activeCount++;
+            });
+        } else {
+            html += '<div style="font-size:11px; text-align:center; color:#cbd5e1; padding:10px;">Әзірге ойыншылар тіркелмеген</div>';
+        }
+
+        // Егер арнайы тізім контейнері бар болса, соған жазамыз
+        const targetList = document.getElementById('online-users-list');
+        if (targetList) {
+            targetList.innerHTML = html;
+        }
+    });
+})();
 </script> 
 </body>
 </html>
