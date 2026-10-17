@@ -1563,6 +1563,82 @@
 
         renderQazyna();
         updateUI();
-    </script>
-</body>
+   </body> // -------------------------------------------------------------
+// 👑 ЕРСІН (ERSIN) - НЕГІЗІН ҚАЛАУШЫ АЛТЫН РАМКА ЖӘНЕ БЕЙДЖИКТЕРІ
+// -------------------------------------------------------------
+
+(function initErsinAdminEnhancement() {
+    // 1. Админ екенін тексеру (Ерсін / Ersin)
+    function isErsinAdmin(name) {
+        if (!name) return false;
+        const clean = String(name).trim().toLowerCase();
+        return clean.includes('ерсін') || clean.includes('ersin');
+    }
+
+    // 2. Алтын рамка мен стилизация үшін CSS қосу
+    const ersinStyle = document.createElement('style');
+    ersinStyle.innerHTML = `
+        /* 👑 VIP Алтын рамка */
+        .admin-vip-profile {
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.85), inset 0 0 8px rgba(251, 191, 36, 0.5) !important;
+            animation: ersinGlowPulse 2s infinite alternate;
+        }
+
+        @keyframes ersinGlowPulse {
+            0% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(251, 191, 36, 1), 0 0 10px rgba(245, 158, 11, 0.8); }
+        }
+
+        /* 👑 Алтын бейдж */
+        .admin-badge-gold-v7 {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff !important;
+            font-size: 9px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid #fef3c7;
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            margin-left: 4px;
+        }
+    `;
+    document.head.appendChild(ersinStyle);
+
+    // 3. Аватар мен бейджді автоматты жаңарту циклы
+    setInterval(function() {
+        var currentName = (typeof username !== 'undefined') ? username : localStorage.getItem('qazaq_mahjong_username');
+        if (isErsinAdmin(currentName)) {
+            // Аватарға алтын рамка беру
+            var avatar = document.getElementById('user-avatar-display') || document.querySelector('.avatar-box');
+            if (avatar && !avatar.classList.contains('admin-vip-profile')) {
+                avatar.classList.add('admin-vip-profile');
+            }
+
+            // Имя жанына алтын бейдж қосу
+            var nameElem = document.getElementById('user-name-display');
+            if (nameElem && !nameElem.querySelector('.admin-badge-gold-v7')) {
+                nameElem.innerHTML = currentName + ' <span class="admin-badge-gold-v7">👑 НЕГІЗІН ҚАЛАУШЫ</span>';
+            }
+        }
+    }, 1000);
+
+    // 4. Онлайн референс сақталса Firebase-ке де админ статусын жазу
+    if (typeof updateOnlinePresence === 'function') {
+        var oldUpdateOnline = updateOnlinePresence;
+        window.updateOnlinePresence = function() {
+            oldUpdateOnline();
+            if (typeof onlineRef !== 'undefined' && typeof myUserKey !== 'undefined') {
+                var currentName = (typeof username !== 'undefined') ? username : "Ерсін";
+                if (isErsinAdmin(currentName)) {
+                    onlineRef.child(myUserKey).update({ isAdmin: true, badge: "👑 НЕГІЗІН ҚАЛАУШЫ" });
+                }
+            }
+        };
+    }
+})();
+</script>
 </html>
