@@ -1577,6 +1577,16 @@
     // 1. Чат пен Профильге арналған алтын стильдер
     const ersinStyle = document.createElement('style');
     ersinStyle.innerHTML = `
+    /* ✨ Ник пен аты бар аймаққа арналған алтын рамка / фон */
+        .user-name, #user-name-display {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.3));
+            padding: 3px 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(251, 191, 36, 0.6);
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+        }
         .admin-vip-profile {
             border: 2px solid #fbbf24 !important;
             box-shadow: 0 0 15px rgba(251, 191, 36, 0.85) !important;
