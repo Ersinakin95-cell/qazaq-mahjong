@@ -1610,7 +1610,7 @@
     // -------------------------------------------------------------
     // 🃏 ДУРАК 6-ЛЫҚ (ЖЕЛПУІШ ТӘРІЗДІ КАРТАЛАР ЖӘНЕ ДЕҢГЕЙЛЕР)
     // -------------------------------------------------------------
-    function openDurakLobby() {
+    <div class="mode-card durak" onclick="openDurakLobby()">
         const homeScreen = document.getElementById('home-screen');
         const durakMenu = document.getElementById('durak-menu-screen');
         if(homeScreen) homeScreen.classList.add('hidden');
@@ -1626,7 +1626,7 @@
         }
     }
 
-    function exitDurakMenu() {
+     exitDurakMenu() {
         const durakMenu = document.getElementById('durak-menu-screen');
         const homeScreen = document.getElementById('home-screen');
         if(durakMenu) durakMenu.classList.add('hidden');
@@ -1634,7 +1634,7 @@
         if(typeof updateUI === 'function') updateUI();
     }
 
-    function startDurakBattle(cost, lvlName) {
+    startDurakBattle(cost, lvlName) {
         if (typeof coins !== 'undefined' && coins < cost) {
             if(typeof showToast === 'function') showToast("⚠️ Монета жеткіліксіз!");
             return;
@@ -1653,7 +1653,7 @@
         if(typeof showToast === 'function') showToast(`🚀 ${lvlName} басталды!`);
     }
 
-    function generateRealisticDurakCards() {
+    generateRealisticDurakCards() {
         const suits = ['♠️', '♥️', '♣️', '♦️'];
         const vals = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
         window.myCards = [];
@@ -1666,7 +1666,7 @@
         renderRealisticHand();
     }
 
-    function renderRealisticHand() {
+     renderRealisticHand() {
         const container = document.getElementById('my-durak-hand');
         if(!container) return;
         container.innerHTML = '';
@@ -1692,7 +1692,7 @@
         });
     }
 
-    function playRealisticCard(idx) {
+    playRealisticCard(idx) {
         const area = document.getElementById('durak-play-area');
         if(!area) return;
         const card = window.myCards[idx];
@@ -1708,13 +1708,13 @@
         if(typeof showToast === 'function') showToast("🃏 Карта тасталды!");
     }
 
-    function bitoDurak() {
+     bitoDurak() {
         const area = document.getElementById('durak-play-area');
         if(area) area.innerHTML = '<span style="font-size:11px; color:#cbd5e1;">Тазаланды (Бито)</span>';
         if(typeof showToast === 'function') showToast("✅ Бито!");
     }
 
-    function exitDurak() {
+     exitDurak() {
         const durakScreen = document.getElementById('durak-screen');
         const homeScreen = document.getElementById('home-screen');
         if(durakScreen) durakScreen.classList.add('hidden');
