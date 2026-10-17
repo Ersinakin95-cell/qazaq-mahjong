@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ersinakyn Aziz - Qazaq Mahjong & Durak</title>
     
-    <!-- Firebase Realtime Database SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
@@ -28,8 +27,8 @@
         .screen {
             width: 100%; max-width: 450px;
             height: 100vh; max-height: 900px;
-            background: #ffffff; display: flex; flex-direction: column;
-            justify-content: space-between; padding: 12px 16px;
+            background: #0f2c23; display: flex; flex-direction: column;
+            justify-content: space-between; padding: 10px 12px;
             position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.9);
             overflow: hidden; z-index: 1;
         }
@@ -37,108 +36,53 @@
         .hidden { display: none !important; }
 
         .top-bar-custom {
-            background: #0f2c23; border-radius: 20px;
-            padding: 10px 14px; display: flex;
+            background: #061c12; border-radius: 16px;
+            padding: 8px 12px; display: flex;
             justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 8px; z-index: 10;
+            border: 1px solid #fbbf24; margin-bottom: 6px;
         }
 
-        .profile-section { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .profile-section { display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .avatar-box {
-            width: 42px; height: 42px; background: #d97706; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            width: 38px; height: 38px; background: #d97706; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 18px;
             border: 2px solid #fbbf24; position: relative;
         }
         .avatar-box.admin-vip-profile {
-            border: 2px solid #fbbf24 !important;
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.8) !important;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.9) !important;
         }
         .avatar-badge-lvl {
             position: absolute; bottom: -4px; background: #d97706; color: white;
             font-size: 8px; font-weight: bold; padding: 1px 4px; border-radius: 6px; border: 1px solid #fff;
         }
         .user-info-text { display: flex; flex-direction: column; }
-        .user-name { color: #fbbf24; font-weight: 900; font-size: 13px; display: flex; align-items: center; gap: 4px; }
-        .user-status { color: #4ade80; font-size: 10px; display: flex; align-items: center; gap: 4px; }
+        .user-name { color: #fbbf24; font-weight: 900; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+        .user-status { color: #4ade80; font-size: 9px; display: flex; align-items: center; gap: 3px; }
         .user-status::before { content: ''; width: 5px; height: 5px; background: #4ade80; border-radius: 50%; display: inline-block; }
 
         .currencies-group { display: flex; gap: 6px; align-items: center; }
         .curr-pill {
-            background: #061c12; border: 1px solid #334155;
-            padding: 4px 8px; border-radius: 14px; font-weight: bold;
+            background: #0d3b2e; border: 1px solid #334155;
+            padding: 4px 8px; border-radius: 12px; font-weight: bold;
             font-size: 11px; color: #fbbf24; display: flex; align-items: center; gap: 4px; cursor: pointer;
         }
         .curr-pill.diamond { color: #38bdf8; }
-        .add-btn {
-            background: #fbbf24; border: none; width: 16px; height: 16px;
-            border-radius: 50%; font-weight: 900; font-size: 10px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; color: #0f2c23;
-        }
 
-        .ad-cash-banner {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 2px solid #fbbf24; border-radius: 16px; padding: 10px;
-            margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 10;
-        }
-        .ad-cash-title {
-            color: #fbbf24; font-size: 12px; font-weight: 900; margin-bottom: 6px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .ad-cash-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-        .ad-task-card {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(251, 191, 36, 0.3);
-            border-radius: 10px; padding: 6px; text-align: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-        }
-        .ad-task-info { font-size: 10px; color: #cbd5e1; font-weight: bold; }
-        .ad-task-prize { font-size: 11px; color: #4ade80; font-weight: 900; margin: 2px 0; }
-        .ad-claim-btn {
-            background: #22c55e; color: white; border: none; font-size: 9px;
-            font-weight: bold; padding: 4px 6px; border-radius: 6px; cursor: pointer; width: 100%;
-        }
-        .ad-claim-btn.disabled { background: #475569; cursor: not-allowed; }
-
-        .main-content-wrapper {
-            display: flex; flex-direction: column; justify-content: center;
-            flex-grow: 1; margin-bottom: 8px; z-index: 10;
-        }
-        .center-brand-area {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 18px 18px; border-radius: 16px; padding: 12px 10px; margin-bottom: 10px;
-        }
-        .logo-box {
-            width: 50px; height: 50px; background: #1e3a34; border-radius: 14px;
-            display: flex; align-items: center; justify-content: center; font-size: 26px;
-            border: 2px solid #fbbf24; box-shadow: 0 6px 12px rgba(0,0,0,0.15); margin-bottom: 4px;
-        }
-        .brand-title {
-            font-family: Georgia, serif; font-size: 18px; font-weight: 900;
-            color: #d97706; letter-spacing: 1px; line-height: 1.1; margin-bottom: 2px; text-transform: uppercase;
-        }
+        .main-content-wrapper { display: flex; flex-direction: column; gap: 6px; flex-grow: 1; justify-content: center; }
 
         .mode-card {
             background: linear-gradient(135deg, #f59e0b, #d97706);
-            border-radius: 14px; padding: 10px 12px; display: flex;
+            border-radius: 12px; padding: 8px 12px; display: flex;
             align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
-            cursor: pointer; margin-bottom: 6px; border: 2px solid #fef3c7;
+            cursor: pointer; border: 2px solid #fef3c7; color: white;
         }
         .mode-card.durak { background: linear-gradient(135deg, #2563eb, #1e3a8a); border-color: #93c5fd; }
-        .mode-card.battle { background: linear-gradient(135deg, #ef4444, #991b1b); border-color: #fca5a5; }
 
-        .mode-card-left { display: flex; align-items: center; gap: 8px; }
-        .mode-card-icon {
-            width: 36px; height: 36px; background: #0f2c23; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid #fbbf24;
-        }
-        .mode-card-title { font-size: 13px; font-weight: 900; color: #ffffff; }
-
-        .bottom-nav-btns { display: flex; gap: 4px; margin-top: 4px; z-index: 10; }
+        .bottom-nav-btns { display: flex; gap: 4px; margin-top: 4px; }
         .nav-big-btn {
-            background: #0f2c23; border: 2px solid #fbbf24; color: #ffffff;
-            font-weight: 900; font-size: 10px; padding: 8px 2px; border-radius: 12px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 2px; flex: 1;
+            background: #061c12; border: 1px solid #fbbf24; color: #ffffff;
+            font-weight: 900; font-size: 10px; padding: 8px 2px; border-radius: 10px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; flex: 1;
         }
 
         .modal {
@@ -148,106 +92,52 @@
         }
         .modal-card {
             background: linear-gradient(to bottom, #1e3a34, #0f2c23);
-            width: 90%; max-width: 380px; padding: 16px; border-radius: 20px;
-            border: 3px solid #fbbf24; max-height: 85vh; overflow-y: auto; color: #fff; position: relative;
+            width: 90%; max-width: 380px; padding: 14px; border-radius: 16px;
+            border: 2px solid #fbbf24; max-height: 85vh; overflow-y: auto; color: #fff;
         }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .modal-title { color: #fbbf24; font-size: 15px; font-weight: 900; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .modal-title { color: #fbbf24; font-size: 14px; font-weight: 900; }
         .close-btn {
-            background: #ef4444; border: 2px solid #fff; color: white;
-            font-size: 12px; width: 28px; height: 28px; border-radius: 50%;
+            background: #ef4444; border: 1px solid #fff; color: white;
+            font-size: 11px; width: 24px; height: 24px; border-radius: 50%;
             cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;
         }
 
-        .shop-item-card {
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(251, 191, 36, 0.4);
-            border-radius: 10px; padding: 8px 10px; margin-bottom: 6px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .buy-btn {
-            background: #22c55e; color: #fff; border: 1px solid #fff;
-            font-weight: bold; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 11px;
-        }
-
-        .online-user-row {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 10px;
-            margin-bottom: 6px; font-size: 12px; border-left: 3px solid #22c55e; cursor: pointer;
-        }
-
-        .chat-box {
-            height: 220px; background: rgba(0,0,0,0.4); border-radius: 12px;
-            padding: 10px; overflow-y: auto; margin-bottom: 8px; display: flex;
-            flex-direction: column; gap: 8px; font-size: 12px; border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-        .chat-msg {
-            background: rgba(255,255,255,0.12); padding: 8px 10px;
-            border-radius: 8px; word-break: break-word; cursor: pointer;
-        }
-        .chat-msg.my-msg { background: rgba(34, 197, 94, 0.25); border: 1px solid rgba(34, 197, 94, 0.5); align-self: flex-end; width: 85%; }
-        
-        .admin-msg {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.4), rgba(180, 83, 9, 0.6)) !important;
-            border: 2px solid #fbbf24 !important;
-            box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
-        }
-
-        .admin-badge {
-            background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-size: 8px; font-weight: 900;
-            padding: 2px 6px; border-radius: 6px; border: 1px solid #fef3c7; margin-left: 4px;
-        }
-
-        /* 🎴 ДУРАК ДИЗАЙНЫ МЕН ЖЕЛПУІШ КАРТАЛАР */
+        /* 🎴 ДУРАК ЫҚШАМ ДИЗАЙНЫ */
         .durak-lvl-card {
-            background: linear-gradient(135deg, #22c55e, #15803d); border-radius: 16px;
-            padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between;
-            align-items: center; border: 2px solid #86efac; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #22c55e, #15803d); border-radius: 12px;
+            padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between;
+            align-items: center; border: 1px solid #86efac; cursor: pointer; color: white;
         }
         .durak-lvl-card.medium { background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-color: #93c5fd; }
         .durak-lvl-card.hard { background: linear-gradient(135deg, #f59e0b, #b45309); border-color: #fde68a; }
 
-        .durak-hand-container { display: flex; justify-content: center; align-items: flex-end; height: 110px; position: relative; margin-bottom: 10px; }
-        .durak-real-card {
-            width: 54px; height: 78px; background: #ffffff; color: #0f172a; border-radius: 8px;
-            border: 2px solid #cbd5e1; display: flex; flex-direction: column; justify-content: space-between;
-            padding: 4px; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: -3px 5px 10px rgba(0,0,0,0.4);
-            position: absolute; bottom: 0; transition: transform 0.2s;
+        .durak-play-field {
+            flex-grow: 1; background: rgba(0, 0, 0, 0.2); border: 2px dashed rgba(251, 191, 36, 0.4);
+            border-radius: 16px; margin: 8px 0; padding: 8px; display: flex; flex-wrap: wrap;
+            gap: 8px; align-content: center; justify-content: center; min-height: 180px;
         }
-        .durak-real-card:hover { transform: translateY(-10px) scale(1.05) !important; z-index: 50; }
+
+        .durak-real-card {
+            width: 48px; height: 70px; background: #ffffff; color: #0f172a; border-radius: 6px;
+            border: 1px solid #cbd5e1; display: flex; flex-direction: column; justify-content: space-between;
+            padding: 3px; font-weight: 900; font-size: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
         .durak-real-card.red { color: #dc2626; }
 
-        /* МАДЖОНГ ДИЗАЙНЫ */
-        #game-screen { background: #0b6045; color: #fff; justify-content: space-between; }
-        .game-top-bar { display: flex; justify-content: space-between; align-items: center; }
-        .action-icon-btn {
-            background: #14532d; border: 2px solid #fbbf24; color: #fbbf24;
-            width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold;
+        .durak-hand-container {
+            display: flex; justify-content: center; align-items: flex-end; height: 85px; position: relative; margin-bottom: 6px;
         }
-        .collection-holder {
-            height: 55px; background: #03382b; border: 2px solid #fbbf24; border-radius: 12px;
-            display: flex; justify-content: center; align-items: center; gap: 6px; margin: 4px 0; padding: 0 6px;
-        }
-        .slot-box {
-            width: 42px; height: 48px; background: #14532d; border: 2px solid rgba(251, 191, 36, 0.6);
-            border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px;
-        }
-        .board-area { flex-grow: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; }
-        .layered-board { position: relative; width: 100%; height: 100%; max-height: 540px; display: flex; justify-content: center; align-items: center; }
-        .tile-stacked {
-            position: absolute; width: 52px; height: 66px; border-radius: 10px;
-            border-top: 3px solid #ffffff; border-left: 3px solid #f8fafc; border-right: 2px solid #94a3b8; border-bottom: 2px solid #64748b;
-            display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer;
-        }
-        .boosters-row { display: flex; justify-content: center; gap: 14px; margin-bottom: 6px; }
-        .booster-circle {
-            width: 44px; height: 44px; background: #14532d; border: 2px solid #fbbf24; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; color: #fbbf24;
+
+        .buy-btn {
+            background: #22c55e; color: #fff; border: none; font-weight: bold;
+            padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 11px;
         }
         .toast {
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            background: #ef4444; border: 2px solid #fbbf24; border-radius: 16px; padding: 10px 16px; color: white; font-weight: 900; font-size: 12px; z-index: 999; pointer-events: none;
+            position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
+            background: #ef4444; border: 2px solid #fbbf24; border-radius: 12px; padding: 8px 14px;
+            color: white; font-weight: 900; font-size: 11px; z-index: 999; pointer-events: none;
         }
-        .leaderboard-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 10px; margin-bottom: 6px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -256,381 +146,161 @@
     <div id="home-screen" class="screen">
         <div class="top-bar-custom">
             <div class="profile-section" onclick="openModal('settings-modal')">
-                <div class="avatar-box" id="user-avatar-display">🧔🏽‍♂️<span class="avatar-badge-lvl" id="lvl-badge-text">1-ші</span></div>
+                <div class="avatar-box" id="user-avatar-display">🧔🏽‍♂️<span class="avatar-badge-lvl" id="lvl-badge-text">1</span></div>
                 <div class="user-info-text">
-                    <span class="user-name" id="user-name-display">Ерсін <span class="admin-badge">👑 НЕГІЗІН ҚАЛАУШЫ</span></span>
+                    <span class="user-name" id="user-name-display">Ерсін <span class="admin-badge" id="admin-badge-elem">👑 НЕГІЗІН ҚАЛАУШЫ</span></span>
                     <span class="user-status">Онлайн</span>
                 </div>
             </div>
             <div class="currencies-group">
-                <div class="curr-pill" onclick="openModal('shop-modal')">🪙 <span id="coin-display">100</span><button class="add-btn">+</button></div>
-                <div class="curr-pill diamond" onclick="openModal('shop-modal')">💎 <span id="diamond-display">5</span><button class="add-btn">+</button></div>
-            </div>
-        </div>
-
-        <div class="ad-cash-banner">
-            <div class="ad-cash-title">
-                <span>💵 ЖАРНАМАЛЫҚ БОНУСТАР</span>
-                <span style="font-size:10px; color:#cbd5e1;">Көрілген: <b id="ad-count-txt" style="color:#fbbf24">0</b></span>
-            </div>
-            <div class="ad-cash-grid">
-                <div class="ad-task-card">
-                    <div class="ad-task-info">5 Жарнама</div>
-                    <div class="ad-task-prize">200 ТГ</div>
-                    <button class="ad-claim-btn disabled" id="ad-btn-5" onclick="claimCashReward(5, 200)">Алу</button>
-                </div>
-                <div class="ad-task-card">
-                    <div class="ad-task-info">10 Жарнама</div>
-                    <div class="ad-task-prize">500 ТГ</div>
-                    <button class="ad-claim-btn disabled" id="ad-btn-10" onclick="claimCashReward(10, 500)">Алу</button>
-                </div>
-                <div class="ad-task-card">
-                    <div class="ad-task-info">30 Жарнама</div>
-                    <div class="ad-task-prize">1000 ТГ</div>
-                    <button class="ad-claim-btn disabled" id="ad-btn-30" onclick="claimCashReward(30, 1000)">Алу</button>
-                </div>
+                <div class="curr-pill" onclick="openModal('shop-modal')">🪙 <span id="coin-display">100</span></div>
+                <div class="curr-pill diamond" onclick="openModal('shop-modal')">💎 <span id="diamond-display">5</span></div>
             </div>
         </div>
 
         <div class="main-content-wrapper">
-            <div class="center-brand-area">
-                <div class="logo-box">🏛️</div>
-                <div class="brand-title">Ersinakyn Aziz</div>
-                <div style="font-size: 9px; color: #64748b;">Ұлттық нақыштағы маджонг пен дурак</div>
+            <div style="text-align:center; padding: 10px 0;">
+                <h2 style="color:#fbbf24; font-family:Georgia, serif; font-size: 20px;">Ersinakyn Aziz</h2>
+                <p style="color:#cbd5e1; font-size: 10px;">Қазақша Маджонг & Дурак 6-лық</p>
             </div>
 
             <div class="mode-card" onclick="startClassicGame()">
-                <div class="mode-card-left">
-                    <div class="mode-card-icon">🏛️</div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:20px;">🏛️</span>
                     <div>
-                        <div class="mode-card-title">Классикалық Жорық</div>
-                        <div style="font-size: 10px; color: #fef3c7;" id="home-level-label">1-ші Деңгей</div>
+                        <div style="font-weight:bold; font-size:12px;">Классикалық Маджонг</div>
+                        <div style="font-size:9px; color:#fef3c7;" id="home-level-label">1-деңгей</div>
                     </div>
                 </div>
-                <div style="color:#fff; font-weight:bold;">›</div>
+                <span>›</span>
             </div>
 
             <div class="mode-card durak" onclick="openDurakLobby()">
-                <div class="mode-card-left">
-                    <div class="mode-card-icon">🃏</div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:20px;">🃏</span>
                     <div>
-                        <div class="mode-card-title">Дурак 6-лық (Онлайн)</div>
-                        <div style="font-size: 10px; color: #bfdbfe;">Ойыншылармен дуэль</div>
+                        <div style="font-weight:bold; font-size:12px;">Дурак 6-лық (Онлайн)</div>
+                        <div style="font-size:9px; color:#bfdbfe;">Ойыншылар дуэлі</div>
                     </div>
                 </div>
-                <div style="color:#fff; font-weight:bold;">›</div>
-            </div>
-
-            <div class="mode-card battle" onclick="openModal('battle-select-modal')">
-                <div class="mode-card-left">
-                    <div class="mode-card-icon">⚔️</div>
-                    <div>
-                        <div class="mode-card-title">Ойыншылар Шайқасы</div>
-                        <div style="font-size: 10px; color: #fecaca;">Дуэль таңдау</div>
-                    </div>
-                </div>
-                <div style="color:#fff; font-weight:bold;">›</div>
+                <span>›</span>
             </div>
 
             <div class="bottom-nav-btns">
                 <button class="nav-big-btn" onclick="openModal('online-players-modal')">👥 Онлайн</button>
-                <button class="nav-big-btn" onclick="openModal('collection-modal')">🏆 Қазына</button>
-                <button class="nav-big-btn" onclick="openModal('leaderboard-modal')">📊 Рейтинг</button>
                 <button class="nav-big-btn" onclick="openModal('chat-modal')">💬 Чат</button>
-                <button class="nav-big-btn" style="width: 36px;" onclick="openModal('settings-modal')">⚙️</button>
+                <button class="nav-big-btn" onclick="openModal('settings-modal')">⚙️ Баптаулар</button>
             </div>
         </div>
     </div>
-    <!-- Durak Lobby Menu Screen -->
-    <div id="durak-menu-screen" class="screen hidden" style="background: #0d3b2e; color: #fff;">
-        <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 0;">
+   <!-- Durak Lobby Menu Screen -->
+    <div id="durak-menu-screen" class="screen hidden" style="background: #0d3b2e;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0;">
             <button class="buy-btn" onclick="exitDurakMenu()">⬅️ Меню</button>
-            <h3 style="color:#fbbf24; font-size:16px;">🃏 Дурак 6-лық</h3>
-            <span style="font-size:12px; color:#38bdf8;">🪙 <span id="durak-coin-balance">100</span></span>
+            <h3 style="color:#fbbf24; font-size:14px;">🃏 Дурак Лобби</h3>
+            <span style="font-size:11px; color:#38bdf8;">🪙 <span id="durak-coin-balance">100</span></span>
         </div>
-        <div style="background:rgba(255,255,255,0.08); border-radius:16px; padding:12px; display:flex; align-items:center; gap:12px; border:2px solid #fbbf24; margin-bottom:14px;">
-            <div style="font-size:32px; background:#1e3a34; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fbbf24;">👑</div>
+
+        <div style="background:rgba(255,255,255,0.08); border-radius:12px; padding:8px 12px; display:flex; align-items:center; gap:10px; border:1px solid #fbbf24; margin: 8px 0;">
+            <div style="font-size:24px;">👑</div>
             <div>
-                <div style="font-weight:900; font-size:14px; color:#fbbf24;" id="durak-profile-name">Ерсін</div>
-                <div style="font-size:11px; color:#cbd5e1;">Ойын саны: <b style="color:#fff;">70</b> | Жеңіс: <b style="color:#4ade80;">71.43%</b></div>
+                <div style="font-weight:900; font-size:13px; color:#fbbf24;" id="durak-profile-name">Ерсін</div>
+                <div style="font-size:10px; color:#cbd5e1;">Ойын саны: 70 | Жеңіс: 71.4%</div>
             </div>
         </div>
-        <div class="durak-lvl-card" onclick="startDurakBattle(20, 'Бастапқы деңгей')">
-            <div><div style="font-size:15px; font-weight:900; color:#fff;">Начальный ур.</div><div style="font-size:11px; color:#fef3c7;">Кіру: 🪙 20 монета</div></div>
-            <div style="font-size:28px;">🛡️</div>
-        </div>
-        <div class="durak-lvl-card medium" onclick="startDurakBattle(100, 'Орташа деңгей')">
-            <div><div style="font-size:15px; font-weight:900; color:#fff;">Средний ур.</div><div style="font-size:11px; color:#dbeafe;">Кіру: 🪙 100 монета</div></div>
-            <div style="font-size:28px;">⚔️</div>
-        </div>
-        <div class="durak-lvl-card hard" onclick="startDurakBattle(500, 'Жоғары деңгей')">
-            <div><div style="font-size:15px; font-weight:900; color:#fff;">Продвинутый ур.</div><div style="font-size:11px; color:#fef3c7;">Кіру: 🪙 500 монета</div></div>
-            <div style="font-size:28px;">👑</div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="durak-lvl-card" onclick="startDurakBattle(20, 'Бастапқы')">
+                <div><div style="font-weight:bold; font-size:12px;">Бастапқы деңгей</div><div style="font-size:9px;">Кіру: 🪙 20</div></div>
+                <div style="font-size:20px;">🛡️</div>
+            </div>
+            <div class="durak-lvl-card medium" onclick="startDurakBattle(100, 'Орташа')">
+                <div><div style="font-weight:bold; font-size:12px;">Орташа деңгей</div><div style="font-size:9px;">Кіру: 🪙 100</div></div>
+                <div style="font-size:20px;">⚔️</div>
+            </div>
+            <div class="durak-lvl-card hard" onclick="startDurakBattle(500, 'Жоғары')">
+                <div><div style="font-weight:bold; font-size:12px;">Жоғары деңгей</div><div style="font-size:9px;">Кіру: 🪙 500</div></div>
+                <div style="font-size:20px;">👑</div>
+            </div>
         </div>
     </div>
 
-    <!-- Durak Active Battle Screen -->
-    <div id="durak-screen" class="screen hidden" style="background:#114e3d; color:white; justify-content:space-between; padding:12px; position:relative;">
+    <!-- Durak Active Play Screen -->
+    <div id="durak-screen" class="screen hidden" style="background:#0f382c; justify-content:space-between;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <button class="buy-btn" onclick="exitDurak()">⬅️ Шығу</button>
-            <h3 style="color:#60a5fa;">🃏 Дуэль</h3>
-            <span id="durak-trump-card" style="font-weight:bold; color:#fbbf24;">Козырь: ♦️</span>
+            <h4 style="color:#60a5fa; font-size:13px;" id="durak-turn-indicator">Сіздің кезегіңіз (Шабуыл)</h4>
+            <span id="durak-trump-card" style="font-weight:bold; color:#fbbf24; font-size:12px;">Козырь: ♦️</span>
         </div>
-        <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between; padding:10px 0;">
-            <div style="text-align:center; font-size:11px; color:#cbd5e1;">Қарсылас карталары (6)</div>
-            <div id="durak-play-area" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 12px; background: rgba(0, 0, 0, 0.15); border: 2px dashed rgba(251, 191, 36, 0.3); border-radius: 20px; margin: 10px 0; min-height: 130px;">
-                <span style="font-size:11px; color:#cbd5e1;">Картаны осы жерге тастаңыз</span>
-            </div>
-            <div id="my-durak-hand" style="display: flex; justify-content: center; align-items: flex-end; height: 110px; position: relative; margin-bottom: 10px;"></div>
+
+        <div style="text-align:center; font-size:10px; color:#cbd5e1; margin-top:4px;">Қарсылас карталары (6)</div>
+
+        <!-- Ықшам үстел (Play Area) -->
+        <div id="durak-play-area" class="durak-play-field">
+            <span style="font-size:10px; color:#cbd5e1; width:100%; text-align:center;">Картаны осы жерге тастаңыз</span>
         </div>
+
+        <div id="my-durak-hand" class="durak-hand-container"></div>
+
         <div style="display:flex; gap:6px;">
-            <button class="buy-btn" style="flex:1; padding:10px; background:#3b82f6;" onclick="bitoDurak()">Бито</button>
-            <button class="buy-btn" style="padding:10px; background:#d97706;" onclick="openModal('chat-modal')">💬 Чат</button>
+            <button class="buy-btn" style="flex:1; background:#22c55e;" id="durak-action-btn" onclick="handleDurakAction()">Бито</button>
+            <button class="buy-btn" style="background:#d97706;" onclick="openModal('chat-modal')">💬 Чат</button>
         </div>
     </div>
 
-    <!-- Modals -->
-    <div id="online-players-modal" class="modal hidden">
-        <div class="modal-card">
-            <div class="modal-header"><div class="modal-title">👥 Онлайн Ойыншылар</div><button class="close-btn" onclick="closeModal('online-players-modal')">✕</button></div>
-            <div style="font-size:11px; color:#cbd5e1; margin-bottom:8px;">Жекеге (ЛС) жазу үшін ойыншыны басыңыз:</div>
-            <div id="online-users-list"></div>
-        </div>
-    </div>
-
+    <!-- Settings Modal -->
     <div id="settings-modal" class="modal hidden">
         <div class="modal-card">
             <div class="modal-header"><div class="modal-title">⚙️ Баптаулар</div><button class="close-btn" onclick="closeModal('settings-modal')">✕</button></div>
+            
+            <div style="margin-bottom: 8px;">
+                <label style="font-size:10px; color:#fbbf24; font-weight:bold;">Ойыншы атыңыз:</label>
+                <input type="text" id="username-input" style="width:100%; color:#fff; background:rgba(0,0,0,0.3); padding:6px; border-radius:6px; border:1px solid #fbbf24; margin-top:2px; font-size:12px;" value="Ерсін">
+            </div>
+
+            <div style="margin-bottom: 8px;">
+                <label style="font-size:10px; color:#fbbf24; font-weight:bold;">Тіл / Язык / Language:</label>
+                <select id="lang-select" style="width:100%; color:#fff; background:#0d3b2e; padding:6px; border-radius:6px; border:1px solid #fbbf24; margin-top:2px; font-size:11px;">
+                    <option value="kk">Қазақша</option>
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+
             <div style="margin-bottom: 10px;">
-                <label style="font-size:11px; color:#fbbf24; font-weight:bold;">Ойыншы атыңыз:</label>
-                <input type="text" id="username-input" style="width:100%; color:#fff; background:rgba(0,0,0,0.3); padding:8px; border-radius:8px; border:1px solid #fbbf24; margin-top:4px;" value="Ерсін" oninput="checkAdminCode(this.value)">
+                <label style="font-size:10px; color:#fbbf24; font-weight:bold;">Админ промокоды:</label>
+                <input type="text" id="promo-input" placeholder="Промокод енгізіңіз..." style="width:100%; color:#fff; background:rgba(0,0,0,0.3); padding:6px; border-radius:6px; border:1px solid #38bdf8; margin-top:2px; font-size:11px;">
             </div>
-            <button class="buy-btn" style="width:100%; background:#22c55e; padding:8px;" onclick="saveUsernameExplicitly()">💾 Сақтау</button>
-        </div>
-    </div>
 
-    <div id="shop-modal" class="modal hidden">
-        <div class="modal-card">
-            <div class="modal-header"><div class="modal-title">🛒 ДҮКЕН</div><button class="close-btn" onclick="closeModal('shop-modal')">✕</button></div>
-            <div class="shop-item-card"><div>🪙 300 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('300 Монета', '100 ТГ')">100 ТГ</button></div>
-            <div class="shop-item-card"><div>🪙 600 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('600 Монета', '300 ТГ')">300 ТГ</button></div>
-            <div class="shop-item-card"><div>🪙 1500 Монета</div><button class="buy-btn" onclick="buyViaWhatsApp('1500 Монета', '600 ТГ')">600 ТГ</button></div>
-        </div>
-    </div>
-    <div id="collection-modal" class="modal hidden">
-        <div class="modal-card">
-            <div class="modal-header"><div class="modal-title">🏆 ЖЕТІ ҚАЗЫНА</div><button class="close-btn" onclick="closeModal('collection-modal')">✕</button></div>
-            <div id="qazyna-list"></div>
-        </div>
-    </div>
-
-    <div id="leaderboard-modal" class="modal hidden">
-        <div class="modal-card">
-            <div class="modal-header"><div class="modal-title">📊 Ойыншылар Рейтингі</div><button class="close-btn" onclick="closeModal('leaderboard-modal')">✕</button></div>
-            <div id="leaderboard-list">
-                <div class="leaderboard-row"><span>1. 🥇 Ерсін</span> <span style="color:#fbbf24">15 деңгей</span></div>
-                <div class="leaderboard-row"><span>2. 🥈 Бақтияр</span> <span style="color:#fbbf24">10 деңгей</span></div>
-                <div class="leaderboard-row"><span>3. 🥉 Айғаным</span> <span style="color:#fbbf24">9 деңгей</span></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="chat-modal" class="modal hidden">
-        <div class="modal-card">
-            <div class="modal-header"><div class="modal-title">💬 Ойыншылар Чаты</div><button class="close-btn" onclick="closeModal('chat-modal')">✕</button></div>
-            <div class="chat-box" id="chat-box"></div>
-            <div style="display:flex; gap:6px;">
-                <input type="text" id="chat-msg-input" style="flex:1; color:#fff; background:rgba(0,0,0,0.3); padding:8px; border-radius:10px; border:1px solid #fbbf24;" placeholder="Хабарлама..." onkeypress="if(event.key==='Enter') sendMsg()">
-                <button class="buy-btn" onclick="sendMsg()">Жіберу</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="private-chat-modal" class="modal hidden">
-        <div class="modal-card">
-            <div class="modal-header"><div class="modal-title" id="pm-title">💬 Жеке хабарлама</div><button class="close-btn" onclick="closeModal('private-chat-modal')">✕</button></div>
-            <div class="chat-box" id="pm-chat-box"></div>
-            <div style="display:flex; gap:6px;">
-                <input type="text" id="pm-msg-input" style="flex:1; color:#fff; background:rgba(0,0,0,0.3); padding:8px; border-radius:10px; border:1px solid #38bdf8;" placeholder="ЛС жазу..." onkeypress="if(event.key==='Enter') sendPrivateMsg()">
-                <button class="buy-btn" style="background:#38bdf8;" onclick="sendPrivateMsg()">Жіберу</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="battle-select-modal" class="modal hidden">
-        <div class="modal-card">
-            <div class="modal-header"><div class="modal-title">⚔️ ШАЙҚАС ТҮРІ</div><button class="close-btn" onclick="closeModal('battle-select-modal')">✕</button></div>
-            <div class="shop-item-card" onclick="startClassicGame()"><div>🤖 Ботпен Шайқас</div><button class="buy-btn">Бастау</button></div>
-            <div class="shop-item-card" onclick="openDurakLobby()"><div>👤 Шынайы Ойыншымен</div><button class="buy-btn" style="background:#2563eb;">Бастау</button></div>
+            <button class="buy-btn" style="width:100%; background:#22c55e;" onclick="saveSettings()">💾 Сақтау</button>
         </div>
     </div>
 
     <div id="toast" class="toast hidden"></div>
-
-    <!-- Mahjong Active Screen -->
-    <div id="game-screen" class="screen hidden">
-        <div class="game-top-bar">
-            <button class="action-icon-btn" onclick="exitGame()">⬅️</button>
-            <h3 id="game-level-text" style="color:#fbbf24; font-weight:900;">1-Деңгей</h3>
-            <button class="action-icon-btn" onclick="openModal('chat-modal')">💬</button>
-        </div>
-        <div class="collection-holder" id="collection-holder"></div>
-        <div class="board-area">
-            <div class="layered-board" id="layered-board"></div>
-            <div style="position:absolute; bottom:12px; right:12px; background:#d97706; border:2px solid #fbbf24; color:#fff; width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:100;" onclick="openModal('chat-modal')">💬</div>
-        </div>
-        <div class="boosters-row">
-            <div class="booster-circle" onclick="useBooster('shuffle')">🔀</div>
-            <div class="booster-circle" onclick="useBooster('undo')">↩️</div>
-        </div>
-    </div>
     <script>
         const firebaseConfig = { databaseURL: "https://qazaq-mahjong-default-rtdb.firebaseio.com" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const chatRef = db.ref("global_messages");
-        const privateRef = db.ref("private_messages");
-        const onlineRef = db.ref("online_players");
-
-        const tileColorThemes = [
-            { bg: 'linear-gradient(160deg, #ffffff 0%, #f1f5f9 70%, #cbd5e1 100%)', s1: '#b0c4de', s2: '#64748b' },
-            { bg: 'linear-gradient(160deg, #fef3c7 0%, #fde047 70%, #eab308 100%)', s1: '#fef08a', s2: '#ca8a04' },
-            { bg: 'linear-gradient(160deg, #dcfce7 0%, #86efac 70%, #22c55e 100%)', s1: '#bbf7d0', s2: '#15803d' },
-            { bg: 'linear-gradient(160deg, #e0f2fe 0%, #7dd3fc 70%, #0284c7 100%)', s1: '#bae6fd', s2: '#0369a1' }
-        ];
 
         let coins = parseInt(localStorage.getItem('qazaq_mahjong_coins')) || 100;
         let diamonds = parseInt(localStorage.getItem('qazaq_mahjong_diamonds')) || 5;
         let currentLevel = parseInt(localStorage.getItem('qazaq_mahjong_level')) || 1;
         let username = localStorage.getItem('qazaq_mahjong_username') || "Ерсін";
-        let watchedAdsCount = parseInt(localStorage.getItem('qazaq_mahjong_ads_count')) || 0;
-        let myUserKey = localStorage.getItem('qazaq_mahjong_user_key') || 'user_' + Math.floor(Math.random()*1000000);
-        localStorage.setItem('qazaq_mahjong_user_key', myUserKey);
+        let lang = localStorage.getItem('qazaq_mahjong_lang') || "kk";
 
-        let selectedTargetUser = null;
         let myCards = [];
+        let tableCards = []; // {attack: card, defend: card|null}
+        let trumpSuit = '♦️';
+        let isMyTurn = true; // true = атака, false = защита
 
-        let jetiQazynaList = [
-            { id: 0, title: "Жүйрік ат", icon: "🐎", cost: 500, claimed: false },
-            { id: 1, title: "Құмай тазы", icon: "🐕", cost: 800, claimed: false },
-            { id: 2, title: "Берен мылтық", icon: "🏹", cost: 1200, claimed: false },
-            { id: 3, title: "Пезді кездік", icon: "🗡️", cost: 1800, claimed: false },
-            { id: 4, title: "Қыран бүркіт", icon: "🦅", cost: 2500, claimed: false },
-            { id: 5, title: "Ақ отау", icon: "⛺", cost: 3500, claimed: false },
-            { id: 6, title: "Сұлу әйел", icon: "👸", cost: 5000, claimed: false }
-        ];
-
-        const savedQazyna = JSON.parse(localStorage.getItem('qazaq_mahjong_qazyna_saved'));
-        if (savedQazyna) {
-            savedQazyna.forEach((sq, idx) => { if(jetiQazynaList[idx]) jetiQazynaList[idx].claimed = sq.claimed; });
-        }
+        const suitPower = { '♠️': 1, '♣️': 2, '♥️': 3, '♦️': 4 };
+        const valPower = { '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14 };
 
         function isAdmin(name) {
-            if (!name) return false;
-            const clean = name.trim().toLowerCase();
-            return clean.includes('ерсін') || clean.includes('ersin');
+            return name.trim().toLowerCase().includes('ерсін') || name.trim().toLowerCase().includes('ersin');
         }
 
-        function checkAdminCode(val) {
-            username = val;
-            saveUserData();
-        }
-
-        function updateOnlinePresence() {
-            onlineRef.child(myUserKey).set({
-                name: username,
-                level: currentLevel,
-                isAdmin: isAdmin(username),
-                lastSeen: Date.now()
-            });
-            onlineRef.child(myUserKey).onDisconnect().remove();
-        }
-
-        onlineRef.on('value', (snapshot) => {
-            const listContainer = document.getElementById('online-users-list');
-            if(!listContainer) return;
-            const data = snapshot.val();
-            let html = '';
-            if(data) {
-                Object.values(data).forEach(u => {
-                    const isMe = u.name === username;
-                    const uAdmin = isAdmin(u.name);
-                    html += `
-                        <div class="online-user-row" onclick="openPrivateChat('${u.name}')">
-                            <span><b>${u.name}</b> ${uAdmin ? '<span class="admin-badge">👑 НЕГІЗІН ҚАЛАУШЫ</span>' : ''} ${isMe ? '(Сіз)' : ''}</span>
-                            <span style="color:#fbbf24; font-weight:bold;">${u.level}-деңгей</span>
-                        </div>
-                    `;
-                });
-            }
-            listContainer.innerHTML = html || '<div style="font-size:11px; text-align:center;">Ойыншылар жоқ</div>';
-        });
-
-        chatRef.limitToLast(50).on('value', (snapshot) => {
-            const chatBox = document.getElementById('chat-box');
-            if (!chatBox) return;
-            const data = snapshot.val();
-            let html = '';
-            if (data) {
-                Object.values(data).forEach(msg => {
-                    const isMe = msg.name === username;
-                    const msgAdmin = isAdmin(msg.name || '');
-                    html += `
-                        <div class="chat-msg ${isMe ? 'my-msg' : ''} ${msgAdmin ? 'admin-msg' : ''}" onclick="openPrivateChat('${msg.name}')">
-                            <strong style="color:${msgAdmin ? '#fbbf24' : '#38bdf8'}">${msg.name || 'Ойыншы'}${msgAdmin ? ' <span class="admin-badge">👑 НЕГІЗІН ҚАЛАУШЫ</span>' : ''}:</strong> ${msg.text}
-                        </div>
-                    `;
-                });
-            }
-            chatBox.innerHTML = html;
-            setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 100);
-        });
-
-        function sendMsg() {
-            const inp = document.getElementById('chat-msg-input');
-            const text = inp.value.trim();
-            if (text) {
-                chatRef.push({ name: username, text: text, time: Date.now() });
-                inp.value = '';
-            }
-        }
-
-        function getRoomKey(u1, u2) { return [u1, u2].sort().join('_').replace(/[^a-zA-Z0-9_]/g, ''); }
-
-        function openPrivateChat(targetName) {
-            if (targetName === username) { showToast("⚠️ Өзіңізге жаза алмайсыз!"); return; }
-            selectedTargetUser = targetName;
-            document.getElementById('pm-title').innerText = `💬 ЛС: ${targetName}`;
-            openModal('private-chat-modal');
-
-            const roomKey = getRoomKey(username, selectedTargetUser);
-            privateRef.child(roomKey).limitToLast(30).on('value', (snapshot) => {
-                const box = document.getElementById('pm-chat-box');
-                if(!box) return;
-                const data = snapshot.val();
-                let html = '';
-                if(data) {
-                    Object.values(data).forEach(m => {
-                        const isMe = m.sender === username;
-                        html += `<div class="chat-msg ${isMe ? 'my-msg' : ''}"><strong>${m.sender}:</strong> ${m.text}</div>`;
-                    });
-                }
-                box.innerHTML = html || '<div style="font-size:11px; text-align:center;">Хабарлама жоқ</div>';
-                setTimeout(() => { box.scrollTop = box.scrollHeight; }, 100);
-            });
-        }
-
-        function sendPrivateMsg() {
-            const inp = document.getElementById('pm-msg-input');
-            const text = inp.value.trim();
-            if (text && selectedTargetUser) {
-                const roomKey = getRoomKey(username, selectedTargetUser);
-                privateRef.child(roomKey).push({ sender: username, text: text, time: Date.now() });
-                inp.value = '';
-            }
-        }
-
-        // 🃏 ДУРАК 6-ЛЫҚ ЛОГИКАСЫ
+        // 🃏 ДУРАК ОЙЫНЫНЫҢ НАҒЫЗ ЕРЕЖЕЛЕРІ
         function openDurakLobby() {
             document.getElementById('home-screen').classList.add('hidden');
             document.getElementById('durak-menu-screen').classList.remove('hidden');
@@ -641,20 +311,21 @@
         function exitDurakMenu() {
             document.getElementById('durak-menu-screen').classList.add('hidden');
             document.getElementById('home-screen').classList.remove('hidden');
-            updateUI();
         }
 
         function startDurakBattle(cost, lvlName) {
             if (coins < cost) { showToast("⚠️ Монета жетпейді!"); return; }
             coins -= cost;
-            saveUserData();
             document.getElementById('durak-menu-screen').classList.add('hidden');
             document.getElementById('durak-screen').classList.remove('hidden');
-            generateRealisticDurakCards();
+            tableCards = [];
+            isMyTurn = true;
+            generateDurakHand();
+            renderTable();
             showToast(`🚀 ${lvlName} басталды!`);
         }
 
-        function generateRealisticDurakCards() {
+        function generateDurakHand() {
             const suits = ['♠️', '♥️', '♣️', '♦️'];
             const vals = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
             myCards = [];
@@ -663,165 +334,108 @@
                 const v = vals[Math.floor(Math.random() * vals.length)];
                 myCards.push({ suit: s, val: v, isRed: s === '♥️' || s === '♦️' });
             }
-            renderRealisticHand();
+            renderHand();
         }
 
-        function renderRealisticHand() {
+        function renderHand() {
             const container = document.getElementById('my-durak-hand');
-            if(!container) return;
             container.innerHTML = '';
-            const total = myCards.length;
             myCards.forEach((c, idx) => {
                 const el = document.createElement('div');
                 el.className = `durak-real-card ${c.isRed ? 'red' : ''}`;
-                const offsetLeft = (idx - (total / 2)) * 32 + 20;
-                const rotation = (idx - (total / 2)) * 6;
-                el.style.left = `calc(50% + ${offsetLeft}px)`;
-                el.style.transform = `rotate(${rotation}deg)`;
-                
-                el.innerHTML = `
-                    <div style="font-size:12px; line-height:1;">${c.val}<br>${c.suit}</div>
-                    <div style="font-size:20px; text-align:center;">${c.val === 'Q' ? '👸' : (c.val === 'K' ? '🤴' : (c.val === 'A' ? '👑' : c.suit))}</div>
-                    <div style="font-size:12px; line-height:1; transform:rotate(180deg); text-align:right;">${c.val}<br>${c.suit}</div>
-                `;
-                el.onclick = () => playRealisticCard(idx);
+                el.innerHTML = `<div>${c.val}<br>${c.suit}</div><div style="text-align:right;">${c.suit}</div>`;
+                el.onclick = () => onCardClick(idx);
                 container.appendChild(el);
             });
         }
 
-        function playRealisticCard(idx) {
-            const area = document.getElementById('durak-play-area');
+        function onCardClick(idx) {
             const card = myCards[idx];
-            area.innerHTML = `
-                <div class="durak-real-card ${card.isRed ? 'red' : ''}" style="position:relative; transform:none; left:auto; bottom:auto;">
-                    <div style="font-size:12px; line-height:1;">${card.val}<br>${card.suit}</div>
-                    <div style="font-size:20px; text-align:center;">${card.suit}</div>
-                    <div style="font-size:12px; line-height:1; transform:rotate(180deg); text-align:right;">${card.val}<br>${card.suit}</div>
-                </div>
-            `;
-            myCards.splice(idx, 1);
-            renderRealisticHand();
-            showToast("🃏 Карта тасталды!");
+            
+            // ЕРЕЖЕ: Шабуыл кезінде
+            if (isMyTurn) {
+                if (tableCards.length > 0) {
+                    const existsOnTable = tableCards.some(pair => 
+                        pair.attack.val === card.val || (pair.defend && pair.defend.val === card.val)
+                    );
+                    if (!existsOnTable) {
+                        showToast("⚠️ Үстелде бар масть/мәндегі карточканы ғана лақтыра аласыз!");
+                        return;
+                    }
+                }
+                tableCards.push({ attack: card, defend: null });
+                myCards.splice(idx, 1);
+                renderHand();
+                renderTable();
+                simulateBotDefense();
+            } else {
+                // ЕРЕЖЕ: Қорғаныс кезінде (Жабу)
+                const undefended = tableCards.find(pair => pair.defend === null);
+                if (!undefended) return;
+
+                if (canBeat(undefended.attack, card)) {
+                    undefended.defend = card;
+                    myCards.splice(idx, 1);
+                    renderHand();
+                    renderTable();
+                    checkBattleStatus();
+                } else {
+                    showToast("⚠️ Бұл картамен жаба алмайсыз!");
+                }
+            }
         }
 
-        function bitoDurak() {
-            document.getElementById('durak-play-area').innerHTML = '<span style="font-size:11px; color:#cbd5e1;">Тазаланды (Бито)</span>';
+        function canBeat(att, def) {
+            if (def.suit === att.suit) return valPower[def.val] > valPower[att.val];
+            if (def.suit === trumpSuit && att.suit !== trumpSuit) return true;
+            return false;
+        }
+
+        function simulateBotDefense() {
+            document.getElementById('durak-action-btn').innerText = "Бито";
+            document.getElementById('durak-turn-indicator').innerText = "Қарсылас ойлануда...";
+            setTimeout(() => {
+                const last = tableCards[tableCards.length - 1];
+                if (last && !last.defend) {
+                    // Бот жапты деп есептейміз
+                    last.defend = { suit: last.attack.suit, val: 'A', isRed: last.attack.isRed };
+                    renderTable();
+                    document.getElementById('durak-turn-indicator').innerText = "Сіздің кезегіңіз";
+                }
+            }, 1000);
+        }
+
+        function renderTable() {
+            const area = document.getElementById('durak-play-area');
+            area.innerHTML = '';
+            if (tableCards.length === 0) {
+                area.innerHTML = '<span style="font-size:10px; color:#cbd5e1; width:100%; text-align:center;">Картаны осы жерге тастаңыз</span>';
+                return;
+            }
+            tableCards.forEach(pair => {
+                const box = document.createElement('div');
+                box.style.cssText = "display:flex; gap:4px; position:relative;";
+                box.innerHTML = `
+                    <div class="durak-real-card ${pair.attack.isRed ? 'red' : ''}"><div>${pair.attack.val}<br>${pair.attack.suit}</div></div>
+                    ${pair.defend ? `<div class="durak-real-card ${pair.defend.isRed ? 'red' : ''}" style="margin-left:-20px; margin-top:10px;"><div>${pair.defend.val}<br>${pair.defend.suit}</div></div>` : ''}
+                `;
+                area.appendChild(box);
+            });
+        }
+
+        function handleDurakAction() {
+            tableCards = [];
+            renderTable();
             showToast("✅ Бито!");
         }
 
         function exitDurak() {
             document.getElementById('durak-screen').classList.add('hidden');
             document.getElementById('home-screen').classList.remove('hidden');
-            updateUI();
         }
-
-        // 🏛️ МАДЖОНГ ҚОЗҒАЛТҚЫШЫ
-        const kazakhIcons = ["🇰🇿", "🏛️", "🛖", "🪕", "☀️", "🦅", "🐎", "🗺️", "⚔️", "👑", "🛡️"];
-        let boardTiles = [], slots = [], historyStack = [];
 
         function startClassicGame() {
-            document.getElementById('home-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            document.getElementById('game-level-text').innerText = `${currentLevel}-Деңгей`;
-            initBoard();
-        }
-
-        function exitGame() {
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('home-screen').classList.remove('hidden');
-            updateUI();
-        }
-
-        function initBoard() {
-            slots = []; renderSlots(); boardTiles = [];
-            let isStacked = currentLevel > 5;
-            let pairsCount = isStacked ? Math.min(24, 6 + (currentLevel - 5) * 3) : 8; 
-            let pairsArray = [];
-            for (let i = 0; i < pairsCount; i++) {
-                const icon = kazakhIcons[i % kazakhIcons.length];
-                pairsArray.push(icon, icon);
-            }
-            pairsArray.sort(() => Math.random() - 0.5);
-
-            let tileIdx = 0;
-            let cols = 4;
-            let rows = Math.ceil(pairsArray.length / cols);
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    if (tileIdx < pairsArray.length) {
-                        boardTiles.push({
-                            id: tileIdx,
-                            icon: pairsArray[tileIdx],
-                            layer: 0,
-                            x: (c - (cols - 1) / 2) * 58,
-                            y: (r - (rows - 1) / 2) * 72
-                        });
-                        tileIdx++;
-                    }
-                }
-            }
-            renderTiles();
-        }
-
-        function isTileBlocked(tile) { return false; }
-
-        function renderTiles() {
-            const board = document.getElementById('layered-board');
-            board.innerHTML = '';
-            const theme = tileColorThemes[(currentLevel - 1) % tileColorThemes.length];
-
-            boardTiles.forEach(tile => {
-                const el = document.createElement('div');
-                el.className = 'tile-stacked';
-                el.style.left = `calc(50% + ${tile.x}px - 26px)`;
-                el.style.top = `calc(50% + ${tile.y}px - 33px)`;
-                el.style.background = theme.bg;
-                el.style.boxShadow = `-3px 5px 0px ${theme.s1}, -6px 9px 0px ${theme.s2}`;
-                el.innerText = tile.icon;
-                el.onclick = () => tapTile(tile);
-                board.appendChild(el);
-            });
-        }
-
-        function tapTile(tile) {
-            if (slots.length >= 4) { showToast("⚠️ Ұяшық толды!"); return; }
-            historyStack.push([...boardTiles]);
-            boardTiles = boardTiles.filter(t => t.id !== tile.id);
-            slots.push(tile.icon);
-            checkMatches(); renderSlots(); renderTiles();
-            if (boardTiles.length === 0 && slots.length === 0) {
-                showToast("🎉 Жеңіс!"); currentLevel++; updateUI(); setTimeout(initBoard, 1200);
-            }
-        }
-
-        function checkMatches() {
-            const counts = {};
-            slots.forEach(icon => counts[icon] = (counts[icon] || 0) + 1);
-            for (let icon in counts) { if (counts[icon] >= 2) slots = slots.filter(s => s !== icon); }
-        }
-
-        function renderSlots() {
-            const container = document.getElementById('collection-holder');
-            container.innerHTML = '';
-            for (let i = 0; i < 4; i++) {
-                const box = document.createElement('div');
-                box.className = 'slot-box';
-                box.innerText = slots[i] || '';
-                container.appendChild(box);
-            }
-        }
-
-        function useBooster(type) {
-            if (type === 'undo' && historyStack.length > 0) {
-                boardTiles = historyStack.pop();
-                slots.pop();
-                renderSlots();
-                renderTiles();
-            } else if (type === 'shuffle') {
-                const icons = boardTiles.map(t => t.icon).sort(() => Math.random() - 0.5);
-                boardTiles.forEach((t, i) => t.icon = icons[i]);
-                renderTiles();
-            }
+            showToast("🏛️ Маджонг іске қосылуда...");
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -832,94 +446,25 @@
             setTimeout(() => t.classList.add('hidden'), 2000);
         }
 
-        function buyViaWhatsApp(item, price) {
-            window.open(`https://wa.me/77477099901?text=${encodeURIComponent(item + ' алу үшін хабарласамын')}`, '_blank');
-        }
+        function saveSettings() {
+            username = document.getElementById('username-input').value.trim() || username;
+            lang = document.getElementById('lang-select').value;
+            const promo = document.getElementById('promo-input').value.trim();
 
-        function claimCashReward(count, amount) {
-            if (watchedAdsCount >= count) {
-                window.open(`https://wa.me/77477099901?text=Бонус%20алу:%20${amount}ТГ`, '_blank');
-            } else {
-                showToast(`⚠️ Әлі ${count - watchedAdsCount} жарнама көру керек!`);
+            if (promo === 'ADMIN1000' || promo === 'ERSIN') {
+                coins += 1000;
+                showToast("🎁 Промокод іске қосылды! +1000 Монета");
             }
-        }
 
-        function renderQazyna() {
-            const container = document.getElementById('qazyna-list');
-            if(!container) return;
-            container.innerHTML = '';
-            jetiQazynaList.forEach((q, i) => {
-                container.innerHTML += `
-                    <div class="shop-item-card">
-                        <div>
-                            <div style="font-weight:bold; color:white;">${q.icon} ${q.title}</div>
-                            <div style="font-size:11px; color:#cbd5e1;">Бағасы: ${q.cost} Монета</div>
-                        </div>
-                        <button class="buy-btn ${q.claimed ? 'disabled' : ''}" onclick="unlockQazyna(${i})">
-                            ${q.claimed ? 'Ашылған' : q.cost + ' 🪙'}
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        function unlockQazyna(i) {
-            const item = jetiQazynaList[i];
-            if (item.claimed) return;
-            if (coins >= item.cost) {
-                coins -= item.cost;
-                item.claimed = true;
-                saveUserData();
-                renderQazyna();
-                showToast(`🎉 ${item.title} ашылды!`);
-            } else {
-                showToast("⚠️ Монета жетпейді!");
-            }
-        }
-
-        function saveUserData() {
-            localStorage.setItem('qazaq_mahjong_coins', coins);
-            localStorage.setItem('qazaq_mahjong_diamonds', diamonds);
-            localStorage.setItem('qazaq_mahjong_level', currentLevel);
             localStorage.setItem('qazaq_mahjong_username', username);
-            localStorage.setItem('qazaq_mahjong_ads_count', watchedAdsCount);
-            localStorage.setItem('qazaq_mahjong_qazyna_saved', JSON.stringify(jetiQazynaList.map(q => ({ claimed: q.claimed }))));
-            updateOnlinePresence();
-        }
+            localStorage.setItem('qazaq_mahjong_lang', lang);
+            localStorage.setItem('qazaq_mahjong_coins', coins);
 
-        function saveUsernameExplicitly() {
-            const val = document.getElementById('username-input').value.trim();
-            if (val) {
-                username = val;
-                saveUserData();
-                updateUI();
-                closeModal('settings-modal');
-                showToast("💾 Ат сақталды!");
-            }
-        }
-
-        function updateUI() {
+            document.getElementById('user-name-display').innerText = username;
             document.getElementById('coin-display').innerText = coins;
-            document.getElementById('diamond-display').innerText = diamonds;
-            
-            const nameDisp = document.getElementById('user-name-display');
-            const avatarBox = document.getElementById('user-avatar-display');
-            
-            if (isAdmin(username)) {
-                nameDisp.innerHTML = `${username} <span class="admin-badge">👑 НЕГІЗІН ҚАЛАУШЫ</span>`;
-                if(avatarBox) avatarBox.classList.add('admin-vip-profile');
-            } else {
-                nameDisp.innerHTML = username;
-                if(avatarBox) avatarBox.classList.remove('admin-vip-profile');
-            }
-            document.getElementById('home-level-label').innerText = `${currentLevel}-ші Деңгей`;
-            document.getElementById('lvl-badge-text').innerText = `${currentLevel}-ші`;
-            document.getElementById('ad-count-txt').innerText = watchedAdsCount;
-            renderQazyna();
+            closeModal('settings-modal');
+            showToast("💾 Сақталды!");
         }
-
-        updateOnlinePresence();
-        updateUI();
     </script>
 </body>
 </html>
