@@ -1553,20 +1553,60 @@
                 renderTiles();
                 updateUI();
             } else if (type === 'shuffle' && coins >= 15) {
-                coins -= 15;
-                const icons = boardTiles.map(t => t.icon).sort(() => Math.random() - 0.5);
-                boardTiles.forEach((t, i) => t.icon = icons[i]);
-                renderTiles();
-                updateUI()
-            if ((text.includes('Ерсін:') || text.includes('Ersin:')) && !msgElem.classList.contains('admin-chat-card-gold')) {
-                msgElem.classList.add('admin-chat-card-gold');
-                
-                // Есім жанына тәж бейджигін қыстыру
-                var strong = msgElem.querySelector('strong') || msgElem.querySelector('b');
-                if (strong && !strong.querySelector('.admin-badge-gold-v7')) {
-                    strong.innerHTML += ' <span class="admin-badge-gold-v7">👑 НЕГІЗІН ҚАЛАУШЫ</span>';
-                }
+            coins -= 15;
+            const icons = boardTiles.map(t => t.icon);
+            boardTiles.forEach((t, i) => t.icon = icons[i]);
+            renderTiles();
+            updateUI();
+        }
+    }
+
+    renderQazyna();
+    updateUI();
+
+// -------------------------------------------------------------
+// 👑 ЕРСІН - АЛТЫН РАМКА ЖӘНЕ БЕЙДЖИК
+// -------------------------------------------------------------
+(function initErsinAdminGold() {
+    function isErsinAdmin(name) {
+        if (!name) return false;
+        const clean = String(name).trim().toLowerCase();
+        return clean.includes('ерсін') || clean.includes('ersin');
+    }
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .admin-vip-profile {
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.85) !important;
+        }
+        .admin-badge-gold-v7 {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff !important;
+            font-size: 9px; font-weight: 900;
+            padding: 2px 6px; border-radius: 6px;
+            border: 1px solid #fef3c7;
+            box-shadow: 0 0 6px rgba(251, 191, 36, 0.8);
+            display: inline-flex; align-items: center; margin-left: 4px;
+        }
+    `;
+    document.head.appendChild(style);
+
+    setInterval(function() {
+        var currentName = (typeof username !== 'undefined') ? username : localStorage.getItem('qazaq_mahjong_username');
+        if (isErsinAdmin(currentName)) {
+            var avatar = document.getElementById('user-avatar-display') || document.querySelector('.avatar-box');
+            if (avatar && !avatar.classList.contains('admin-vip-profile')) {
+                avatar.classList.add('admin-vip-profile');
             }
+
+            var nameElem = document.getElementById('user-name-display');
+            if (nameElem && !nameElem.querySelector('.admin-badge-gold-v7')) {
+                nameElem.innerHTML = currentName + ' <span class="admin-badge-gold-v7">👑 НЕГІЗІН ҚАЛАУШЫ</span>';
+            }
+        }
+    }, 800);
+})();
 </script>
 </body>
 </html>
