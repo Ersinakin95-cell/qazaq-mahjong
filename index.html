@@ -1618,7 +1618,8 @@
 <button class="buy-btn" style="width:100%; margin-top:10px;" onclick="closeModal('settings-modal')">Жабу</button>
         </div>
     </div>
- <script>
+
+<script>
 // -------------------------------------------------------------
 // 👑 ЕРСІН - ПРОФИЛЬ ЖӘНЕ ЧАТТАҒЫ АЛТЫН МӘРТЕБЕ
 // -------------------------------------------------------------
@@ -1629,7 +1630,7 @@
         return clean.includes('ерсін') || clean.includes('ersin');
     }
 
-    // 1. Алтын стильдер мен чат картасының рамкасы
+    // 1. Алтын стильдер мен чат рамкасы
     const style = document.createElement('style');
     style.innerHTML = `
         .admin-vip-profile {
@@ -1645,7 +1646,6 @@
             box-shadow: 0 0 6px rgba(251, 191, 36, 0.8);
             display: inline-flex; align-items: center; margin-left: 4px;
         }
-        /* 👑 Чаттағы сіздің хабарламаңыздың алтын рамкасы */
         .admin-chat-card-gold {
             background: linear-gradient(135deg, rgba(217, 119, 6, 0.35), rgba(180, 83, 9, 0.5)) !important;
             border: 2px solid #fbbf24 !important;
@@ -1654,11 +1654,10 @@
     `;
     document.head.appendChild(style);
 
-    // 2. Басқару функциясы (Профиль мен чатты бірдей бояу)
+    // 2. Профиль мен чатты автоматты түрде бояу
     setInterval(function() {
-        var currentName = (typeof username !== 'undefined') ? username : localStorage.getItem('qazaq_mahjong_username');
+        var currentName = (typeof username !== 'undefined') ? username : (localStorage.getItem('qazaq_mahjong_username') || "Ерсін");
         
-        // Аватар мен есімді алтын ету
         if (isErsinAdmin(currentName)) {
             var avatar = document.getElementById('user-avatar-display') || document.querySelector('.avatar-box');
             if (avatar && !avatar.classList.contains('admin-vip-profile')) {
@@ -1671,13 +1670,11 @@
             }
         }
 
-        // Чаттағы жазған хабарламаларыңызды алтын рамкамен ерекшелеу
         var chatMsgs = document.querySelectorAll('.chat-msg, #chat-box > div, .chat-message');
         chatMsgs.forEach(function(msgElem) {
             var text = msgElem.innerText || msgElem.textContent;
             if ((text.includes('Ерсін') || text.includes('Ersin')) && !msgElem.classList.contains('admin-chat-card-gold')) {
                 msgElem.classList.add('admin-chat-card-gold');
-                
                 var strong = msgElem.querySelector('strong') || msgElem.querySelector('b');
                 if (strong && !strong.querySelector('.admin-badge-gold-v7')) {
                     strong.innerHTML += ' <span class="admin-badge-gold-v7">👑 НЕГІЗІН ҚАЛАУШЫ</span>';
