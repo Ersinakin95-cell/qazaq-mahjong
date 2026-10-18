@@ -1557,12 +1557,7 @@
                 const icons = boardTiles.map(t => t.icon).sort(() => Math.random() - 0.5);
                 boardTiles.forEach((t, i) => t.icon = icons[i]);
                 renderTiles();
-                updateUI();
-            }
-        }
-
-        renderQazyna();
-        updateUI();
+                updateUI()
             if ((text.includes('Ерсін:') || text.includes('Ersin:')) && !msgElem.classList.contains('admin-chat-card-gold')) {
                 msgElem.classList.add('admin-chat-card-gold');
                 
@@ -1572,8 +1567,6 @@
                     strong.innerHTML += ' <span class="admin-badge-gold-v7">👑 НЕГІЗІН ҚАЛАУШЫ</span>';
                 }
             }
-updateQazyna();
-updateUI();
 </script>
 </body>
 </html>
